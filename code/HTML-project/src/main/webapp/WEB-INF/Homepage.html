@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
+	<title>Home page</title>
+</head>
+<body>
+
+	<ul id = "menu">
+		<li><a th:href="@{/GoToHome}">Home</a></li>
+		<li><a th:href="@{/GoToCart}">Cart</a></li>
+		<li><a th:href="@{/GoToOrders}">Orders</a></li>
+		<li><a th:href="@{/Logout}">Logout</a></li>
+	</ul>
+
+	<h1>Welcome to the Home Page</h1>
+	<br>
+	
+	<form action="#" th:action="@{/GoToResults}" method="POST">
+		Search for a product: <input type="text" name="key_word"> <br>
+	 	<input type="submit" value="Search">
+	</form>
+		
+	<br>
+	
+	<table border = "1">
+		<thead>
+			<tr><th>Product code</th>
+				<th>Product name</th>
+				<th>Description</th>
+				<th>Category</th>
+				<th>Photo</th></tr>
+		</thead>
+		
+		<tbody >
+    		<tr th:each="product : ${products}">
+     			<td th:text="${product.code}">code</td>
+     			<td th:text="${product.name}">name</td>
+     			<td th:text="${product.description}">description</td>
+     			<td th:text="${product.category}">category</td>
+     			<td th:text="${product.Photo}">Photo</td>
+    		</tr>
+		</tbody>
+	</table>
+	
+</body>
+</html>

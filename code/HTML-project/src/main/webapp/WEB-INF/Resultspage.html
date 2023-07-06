@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
+	<title>Results page</title>
+</head>
+<body>
+	
+	<ul id = "menu">
+		<li><a th:href="@{/GoToHome}">Home</a></li>
+		<li><a th:href="@{/GoToCart}">Cart</a></li>
+		<li><a th:href="@{/GoToOrders}">Orders</a></li>
+		<li><a th:href="@{/Logout}">Logout</a></li>
+	</ul>
+	
+	<br>
+	
+	<form action="#" th:action="@{/GoToResults}" method="POST">
+		Search for a product: <input type="text" name="key_word"> <br>
+	 	<input type="submit" value="Search">
+	</form>
+	
+	<br>
+	
+	<table border = "1">
+		<thead>
+			<tr><th>Product code</th>
+				<th>Product name</th>
+				<th>Minimum price</th>
+		</thead>
+		
+		<tbody >
+			<div th:each="product : ${products}">
+	    		<tr>
+	     			<td>
+	     				<a th:href="@{/ProductDetails(product_code=${product.code})}">
+	     					<p th:text="${product.code}">code</p>
+	     				</a>
+	     			</td>
+	     			<td th:text="${product.name}">name</td>
+	     			<td th:text="${product.minimumPrice}">minimum price</td>
+	    		</tr>
+	    		
+	    		<div th:if="${product.supplier != null}">  <!-- TODO: CONTROLLO SE FUNZIONA QUESTO IF -->
+	     			<tr th:each="supplier : ${product.supplier}">
+	     				<td>
+	     					<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
+	     					
+	     					<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
+								<input type="number" name="quantity">
+							 	<input type="submit" value="Add to Cart">
+							</form>
+							
+	     				</td>
+	     			</tr>	
+	     		</div>
+	     		
+    		</div>
+		</tbody>
+	</table>
+</body>
+</html>
