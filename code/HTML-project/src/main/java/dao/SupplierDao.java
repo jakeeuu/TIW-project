@@ -2,6 +2,8 @@ package dao;
 
 import java.sql.Connection;
 
+import beans.CartSupplier;
+
 public class SupplierDao {
 
 	private Connection connection;
@@ -10,5 +12,7 @@ public class SupplierDao {
 		this.connection = connection;
 	}
 	
-	
+	public CartSupplier addProductToCart(String supplierCode, String productCode) {
+		
+	}
 }

@@ -37,6 +37,7 @@ public class ProductDao {
 						product.setDescription(result.getString("description"));
 						product.setCategory(result.getString("category"));
 						product.setPhoto(result.getString("photo"));
+						products.add(product);
 					}
 					return products;
 				}
