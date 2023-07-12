@@ -18,7 +18,7 @@
 	<param-value>com.mysql.cj.jdbc.Driver</param-value>
 </context-param>
 <filter-mapping> 
-    <filter-name>/LoginChecker</filter-name> 
+    <filter-name>loginChecker</filter-name> 
     <url-pattern>/GoToHome</url-pattern> 
     <url-pattern>/GoToResults</url-pattern>
     <url-pattern>/ProductDetails</url-pattern> 

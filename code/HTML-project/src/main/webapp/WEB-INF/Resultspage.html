@@ -7,10 +7,10 @@
 <body>
 	
 	<ul id = "menu">
-		<li><a th:href="@{/GoToHome}">Home</a></li>
-		<li><a th:href="@{/GoToCart}">Cart</a></li>
-		<li><a th:href="@{/GoToOrders}">Orders</a></li>
-		<li><a th:href="@{/Logout}">Logout</a></li>
+		<li><a href="@{/GoToHome}">Home</a></li>
+		<li><a href="@{/GoToCart}">Cart</a></li>
+		<li><a href="@{/GoToOrders}">Orders</a></li>
+		<li><a href="@{/Logout}">Logout</a></li>
 	</ul>
 	
 	<br>
@@ -33,7 +33,7 @@
 			<div th:each="product : ${products}">
 	    		<tr>
 	     			<td>
-	     				<a th:href="@{/ProductDetails(product_code=${product.code})}">
+	     				<a href="@{/ProductDetails(product_code=${product.code})}">
 	     					<p th:text="${product.code}">code</p>
 	     				</a>
 	     			</td>

@@ -12,7 +12,7 @@ public class SupplierDao {
 		this.connection = connection;
 	}
 	
-	public CartSupplier addProductToCart(String supplierCode, String productCode) {
+	//public CartSupplier addProductToCart(String supplierCode, String productCode) {
 		
-	}
+	//}
 }
