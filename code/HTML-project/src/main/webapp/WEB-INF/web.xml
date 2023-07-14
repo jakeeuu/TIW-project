@@ -3,7 +3,7 @@
 	
 <context-param>
 	<param-name>dbUrl</param-name>
-	<param-value>jdbc:mysql://localhost:3306/bom?serverTimezone=UTC</param-value>
+	<param-value>jdbc:mysql://localhost:3306/project_db?serverTimezone=UTC</param-value>
 </context-param>
 <context-param>
 	<param-name>dbUser</param-name>
@@ -11,14 +11,14 @@
 </context-param>
 <context-param>
 	<param-name>dbPassword</param-name>
-	<param-value>tiw</param-value> <!-- TODO!!!!       METTO PASSWORD DATA BASE -->
+	<param-value>progetto_2023</param-value> <!-- TODO!!!!       METTO PASSWORD DATA BASE -->
 </context-param>
 <context-param>
 	<param-name>dbDriver</param-name>
 	<param-value>com.mysql.cj.jdbc.Driver</param-value>
 </context-param>
 <filter-mapping> 
-    <filter-name>/LoginChecker</filter-name> 
+    <filter-name>loginChecker</filter-name> 
     <url-pattern>/GoToHome</url-pattern> 
     <url-pattern>/GoToResults</url-pattern>
     <url-pattern>/ProductDetails</url-pattern> 
