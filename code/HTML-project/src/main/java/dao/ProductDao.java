@@ -46,24 +46,24 @@ public class ProductDao {
 	
 	public ArrayList<Product> produtcsFromSearch(String keyWord) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		/////////////////////////TODO : SVILUPPO LA SEGUENTE QUERY
-		String query = 	  "A seguito dell’invio compare una pagina RISULTATI con prodotti che contengono "
-				+ "la chiave di ricerca nel nome o nella descrizione. L’elenco mostra solo il codice, "
-				+ "il nome del prodotto e il prezzo minimo di vendita del prodotto da parte dei fornitori "
-				+ "che lo vendono (lo stesso prodotto può essere  venduto da diversi fornitori a prezzi diversi e "
-				+ "l’elenco mostra il minimo valore di tali prezzi). L’elenco è ordinato in modo "
-				+ "crescente in base al prezzo minimo di vendita del prodotto da parte dei fornitori che lo offrono";
+		String query = "SELECT P.Code, P.Name, Price \r\n"
+						+"FROM product P join sold_by S on Code=ProdCode \r\n"
+						+"WHERE Name LIKE ? or Description like ? and Price = (select min(Price) from product join sold_by on Code=ProdCode where Code=P.Code ) \r\n"
+				        +"Order by price";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setString(1, keyWord);
+			pstatement.setString(1, "%" + keyWord + "%");
+			pstatement.setString(2, "%" + keyWord + "%");
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
 					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
 				else {
 					while(result.next()) {
 						Product product = new Product();
-						product.setCode(result.getString("code"));
-						product.setName(result.getString("name"));
-						product.setMinimumPrice(Integer.parseInt(result.getString("minimumPrice")));
+						product.setCode(result.getString("Code"));
+						product.setName(result.getString("Name"));
+						product.setMinimumPrice(Float.parseFloat(result.getString("Price")));
+						products.add(product);
+						
 					}
 					return products;
 				}
