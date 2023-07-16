@@ -18,25 +18,24 @@ public class ProductDao {
 	
 	public ArrayList<Product> produtcsToVisualize(User user) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		String query = 	  "SELECT TOP 5"
-						+ "DISTINCT code\r\n"
-						+ "name,description,category,photo\r\n"  ////SISTEMO QUESTA QUERY PERCHé SICURAMENTE SBAGLIATE
-						+ "FROM Visualizza JOIN Product\r\n"
-						+ "WHERE mail = ?\r\n"
-						+ "ORDER BY data ASC";
+		String query = 	"SELECT ProdCode, Name, Description,Category,Photo\r\n"
+				 		+ "FROM ProductVisualized PR\r\n"
+				 		+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date and Mail = ?)\r\n"
+				        +"Order by Date DESC";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, user.getMail());
+			pstatement.setString(2, user.getMail());
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
 					return null;           ///////////////////////TOLGOOOOOOOOOOOOOOO
 				else {
 					while(result.next()) {
 						Product product = new Product();
-						product.setCode(result.getString("code"));
-						product.setName(result.getString("name"));
-						product.setDescription(result.getString("description"));
-						product.setCategory(result.getString("category"));
-						product.setPhoto(result.getString("photo"));
+						product.setCode(result.getString("ProdCode"));
+						product.setName(result.getString("Name"));
+						product.setDescription(result.getString("Description"));
+						product.setCategory(result.getString("Category"));
+						product.setPhoto(result.getString("Photo"));
 						products.add(product);
 					}
 					return products;

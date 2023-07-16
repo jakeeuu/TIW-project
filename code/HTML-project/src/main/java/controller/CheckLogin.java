@@ -61,8 +61,8 @@ public class CheckLogin extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String mail = request.getParameter("mail");
-		String password = request.getParameter("password");
+		String mail = request.getParameter("username");
+		String password = request.getParameter("pwd");
 		
 		if (mail == null || mail.isEmpty() || password == null || password.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential");
@@ -70,7 +70,7 @@ public class CheckLogin extends HttpServlet {
 		}
 		
 		UserDao userDao = new UserDao(connection);
-		User user = new User();
+		User user;
 		try {
 			user = userDao.checkCredentials(mail, password);
 		} catch (SQLException e) {
