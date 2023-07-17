@@ -7,7 +7,7 @@ public class Product {
 	private String description;
 	private String category;
 	private String photo;
-	private int minimumPrice;
+	private float minimumPrice;
 	
 	public String getCode() {
 		return this.code;
@@ -29,7 +29,7 @@ public class Product {
 		return this.photo;
 	}
 	
-	public int getMinimumPrice() {
+	public float getMinimumPrice() {
 		return this.minimumPrice;
 	}
 	
@@ -53,7 +53,7 @@ public class Product {
 		this.photo = photo;
 	}
 	
-	public void setMinimumPrice(int minimumPrice) {
+	public void setMinimumPrice(float minimumPrice) {
 		this.minimumPrice = minimumPrice;
 	}
 }

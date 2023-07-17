@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -10,12 +11,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import beans.Product;
+import beans.User;
 import dao.ProductDao;
 import utils.ConnectionHandler;
 
@@ -56,10 +61,13 @@ public class GoToResults extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
 			return;
 		}
-		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		ProductDao productDao = new ProductDao(connection);
+		ArrayList<Product> products = new ArrayList<Product>();
+		
 		try {
-			productDao.produtcsFromSearch(keyWord);
+			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
 			return;
@@ -67,7 +75,12 @@ public class GoToResults extends HttpServlet {
 			//se mi ritorna null significa che non ha trovato nulla che corrisponda al key word
 			// come lo gestisco?? tonro alla home ?? in più mando un errore???
 		}
-		////CONTINUOOOOOOO
+		
+		String path = "/WEB-INF/Resultspage.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		ctx.setVariable("products", products);
+		templateEngine.process(path, ctx, response.getWriter());
 	}
 
 	/**

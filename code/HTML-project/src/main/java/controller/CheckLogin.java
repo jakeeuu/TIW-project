@@ -70,7 +70,7 @@ public class CheckLogin extends HttpServlet {
 		}
 		
 		UserDao userDao = new UserDao(connection);
-		User user = new User();
+		User user;
 		try {
 			user = userDao.checkCredentials(mail, password);
 		} catch (SQLException e) {

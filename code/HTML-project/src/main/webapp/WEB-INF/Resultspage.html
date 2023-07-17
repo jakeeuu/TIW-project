@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
 	<title>Results page</title>
@@ -40,8 +40,8 @@
 	     			<td th:text="${product.name}">name</td>
 	     			<td th:text="${product.minimumPrice}">minimum price</td>
 	    		</tr>
-	    		
-	    		<div th:if="${product.supplier != null}">  <!-- TODO: CONTROLLO SE FUNZIONA QUESTO IF -->
+	    													<!-- SPOILER: Qualcosa si rompe proprio qui -->
+	    		<div th:if="${product.supplier != null}">  <!-- TODO: CONTROLLO SE FUNZIONA QUESTO IF --> 
 	     			<tr th:each="supplier : ${product.supplier}">
 	     				<td>
 	     					<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
