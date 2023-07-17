@@ -22,12 +22,15 @@ public class ProductDao {
 				 		+ "FROM ProductVisualized PR\r\n"
 				 		+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date and Mail = ?)\r\n"
 				        +"Order by Date DESC";
+		String altquery = "SELECT Code, Name, Description,Category,Photo \r\n"
+						+"FROM product P \r\n"
+						+"WHERE ? > (select count(*) from product where Code < P.Code)\r\n";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, user.getMail());
 			pstatement.setString(2, user.getMail());
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
-					return null;           ///////////////////////TOLGOOOOOOOOOOOOOOO
+					return null;           // TOLGOOOOO
 				else {
 					while(result.next()) {
 						Product product = new Product();
@@ -38,11 +41,35 @@ public class ProductDao {
 						product.setPhoto(result.getString("Photo"));
 						products.add(product);
 					}
+					if(products.size() < 5) {
+						int lenght = 5-products.size();
+						try (PreparedStatement altpstatement = connection.prepareStatement(altquery);) {
+							altpstatement.setString(1,String.valueOf(lenght));
+							try (ResultSet altresult = altpstatement.executeQuery();) {
+								if (!altresult.isBeforeFirst()) {
+									System.out.println("male male");
+									return null;  //TODO : TOLGOOOO
+								}
+								else {
+									while(altresult.next()) {
+										Product product = new Product();
+										product.setCode(altresult.getString("ProdCode"));
+										product.setName(altresult.getString("Name"));
+										product.setDescription(altresult.getString("Description"));
+										product.setCategory(altresult.getString("Category"));
+										product.setPhoto(altresult.getString("Photo"));
+										products.add(product);
+									}
+								}
+							}
+						}
+					}
 					return products;
 				}
 			}
 		}
 	}
+		
 	
 	public ArrayList<Product> produtcsFromSearch(String keyWord) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
@@ -70,4 +97,32 @@ public class ProductDao {
 			}
 		}
 	}
+	
+	/*public ArrayList<> allData(int code)throws SQLException{
+		ArrayList<> products = new ArrayList<>();
+		String query = "SELECT P.Code, P.Name, Price \r\n"
+						+"FROM product P join sold_by S on Code=ProdCode \r\n"
+						+"WHERE Name LIKE ? or Description like ? and Price = (select min(Price) from product join sold_by on Code=ProdCode where Code=P.Code ) \r\n"
+				        +"Order by price";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, "%" + keyWord + "%");
+			pstatement.setString(2, "%" + keyWord + "%");
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
+				else {
+					while(result.next()) {
+						Product product = new Product();
+						product.setCode(result.getString("Code"));
+						product.setName(result.getString("Name"));
+						product.setMinimumPrice(Float.parseFloat(result.getString("Price")));
+						products.add(product);
+						
+					}
+					return products;
+				}
+			}
+		}
+	}
+	*/
 }

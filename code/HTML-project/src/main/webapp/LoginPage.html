@@ -8,9 +8,9 @@
 <body>
 
 	<h1>Login: </h1>
-	<form action="#" th:action="@{/CheckLogin}" method="POST"> <!-- Ti ho lasciato scritto così com'era ,ma qualcosa non va , mentre se scrivo action=CheckLogin funziona  -->
-		username: <input type="text" name="username" required> <br>
-		password: <input type="password" name="pwd" required><br> 
+	<form action=CheckLogin method="POST"> <!-- Ti ho lasciato scritto così com'era ,ma qualcosa non va , mentre se scrivo action=CheckLogin funziona  -->
+		username: <input type="text" name="mail" required> <br>
+		password: <input type="password" name="password" required><br> 
 	<input type="submit" value="login">
 	</form>
 	
