@@ -1,8 +1,12 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
-import beans.CartSupplier;
+import beans.Supplier;
 
 public class SupplierDao {
 
@@ -11,6 +15,33 @@ public class SupplierDao {
 	public SupplierDao(Connection connection) {
 		this.connection = connection;
 	}
+	
+	public ArrayList<Supplier> findAllSuppliers(int code)throws SQLException{
+		ArrayList<Supplier> suppliers = new ArrayList<Supplier>();
+		String query = "select SupName, Score, Price, FreeShipping \r\n"
+						+"from alldata \r\n"
+						+"where ProdCode = ? and Shipping = 0 \r\n";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(code));
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
+				else {
+					while(result.next()) {
+						Supplier supplier = new Supplier();
+						supplier.setName(result.getString("SupName"));
+						supplier.setScore(Integer.parseInt(result.getString("Score")));
+						supplier.setUnitaryPrice(Float.parseFloat(result.getString("Price")));
+						supplier.setFreeShipping(Float.parseFloat(result.getString("FreeShipping")));
+						suppliers.add(supplier);
+						
+					}
+					return suppliers;
+				}
+			}
+		}
+	}
+
 	
 	//public CartSupplier addProductToCart(String supplierCode, String productCode) {
 		

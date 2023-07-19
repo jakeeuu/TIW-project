@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import beans.CartSupplier;
+import beans.Supplier;
 import beans.User;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
@@ -44,7 +44,7 @@ public class CheckQuantity extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		ArrayList<CartSupplier> suppliers = (ArrayList<CartSupplier>) session.getAttribute("cart");
+		ArrayList<Supplier> suppliers = (ArrayList<Supplier>) session.getAttribute("cart");
 		
 		int quantity = 0;
 		String supplierCode = null;
