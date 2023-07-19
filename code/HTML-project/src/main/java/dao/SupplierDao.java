@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,9 +43,14 @@ public class SupplierDao {
 			}
 		}
 	}
-
 	
-	//public CartSupplier addProductToCart(String supplierCode, String productCode) {
-		
-	//}
+	public void insertInto(String mailUser, int prodCode,Date date) throws SQLException {
+		String query = "insert into visualize (MailUser, ProdCode, Date) values(?,?,?)";
+		try(PreparedStatement pstatement = connection.prepareStatement(query);){
+			pstatement.setString(1, mailUser);
+			pstatement.setString(2, String.valueOf(prodCode));
+			pstatement.setDate(1, new java.sql.Date(date.getTime()));
+		}
+	}
+
 }
