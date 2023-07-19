@@ -33,7 +33,7 @@
 			<div th:each="product : ${products}">
 	    		<tr>
 	     			<td>
-	     				<a th:href="@{/ProductDetails(product_code=${product.code})}">
+	     				<a th:href="@{/ProductDetails(product_code=${product.code}, key_word=${keyWord} )}">
 	     					<p th:text="${product.code}">code</p>
 	     				</a>
 	     			</td>

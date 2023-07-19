@@ -61,8 +61,7 @@ public class GoToResults extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
 			return;
 		}
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
+		
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Product> products = new ArrayList<Product>();
 		
@@ -80,6 +79,7 @@ public class GoToResults extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("products", products);
+		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

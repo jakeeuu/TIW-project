@@ -34,7 +34,7 @@ public class ProductDao {
 				else {
 					while(result.next()) {
 						Product product = new Product();
-						product.setCode(result.getString("ProdCode"));
+						product.setCode(Integer.parseInt(result.getString("ProdCode")));
 						product.setName(result.getString("Name"));
 						product.setDescription(result.getString("Description"));
 						product.setCategory(result.getString("Category"));
@@ -53,7 +53,7 @@ public class ProductDao {
 								else {
 									while(altresult.next()) {
 										Product product = new Product();
-										product.setCode(altresult.getString("ProdCode"));
+										product.setCode(Integer.parseInt(altresult.getString("ProdCode")));
 										product.setName(altresult.getString("Name"));
 										product.setDescription(altresult.getString("Description"));
 										product.setCategory(altresult.getString("Category"));
@@ -86,7 +86,7 @@ public class ProductDao {
 				else {
 					while(result.next()) {
 						Product product = new Product();
-						product.setCode(result.getString("Code"));
+						product.setCode(Integer.parseInt(result.getString("Code")));
 						product.setName(result.getString("Name"));
 						product.setMinimumPrice(Float.parseFloat(result.getString("Price")));
 						product.setDescription(result.getString("Description"));

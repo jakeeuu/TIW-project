@@ -1,15 +1,18 @@
 package beans;
 
+import java.util.ArrayList;
+
 public class Product {
 	
-	private String code;
+	private int code;
 	private String name;
 	private String description;
 	private String category;
 	private String photo;
 	private float minimumPrice;
+	private ArrayList<Supplier> suppliers;
 	
-	public String getCode() {
+	public int getCode() {
 		return this.code;
 	}
 	
@@ -33,7 +36,11 @@ public class Product {
 		return this.minimumPrice;
 	}
 	
-	public void setCode(String code) {
+	public ArrayList<Supplier> getSuppliers(){
+		return this.suppliers;
+	}
+	
+	public void setCode(int code) {
 		this.code = code;
 	}
 	
@@ -55,5 +62,9 @@ public class Product {
 	
 	public void setMinimumPrice(float minimumPrice) {
 		this.minimumPrice = minimumPrice;
+	}
+	
+	public void setSuppliers(ArrayList<Supplier> arrayList){
+		this.suppliers = arrayList;
 	}
 }
