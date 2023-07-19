@@ -18,7 +18,7 @@ public class SpendingRangesDao {
 	
 	public ArrayList<SpendingRanges> findSpendingRanges(int SupCode) throws SQLException{
 		ArrayList<SpendingRanges> spendingranges = new ArrayList<SpendingRanges>();
-		String query = "select * from spending_ranges where SupCode= 3";
+		String query = "select * from spending_ranges where SupCode= ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(SupCode));
 			try (ResultSet result = pstatement.executeQuery();) {
