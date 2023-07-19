@@ -4,20 +4,28 @@ import java.util.ArrayList;
 
 public class Supplier {
 
-	private String code;
+	private int code;
 	private String name;
 	private float unitaryPrice;
 	private double totalProductsPrice;
 	private float freeShipping;
-	//private double shippingPrice; deve diventare un array list
+	private ArrayList<SpendingRanges> spendingranges;
 	private int score;
 	
-	public String getCode(){
+	public int getCode(){
 		return this.code;
 	}
 	
 	public String getName(){
 		return this.name;
+	}
+	
+	public void setSpendingRanges(ArrayList<SpendingRanges> spendingranges){
+		this.spendingranges = spendingranges;
+	}
+	
+	public ArrayList<SpendingRanges> getSpendingRnages(){
+		return this.spendingranges;
 	}
     
 	public float getUnitaryPrice(){
@@ -42,7 +50,7 @@ public class Supplier {
 	}
 	
 	
-	public void setCode(String code) {
+	public void setCode(int code) {
 		this.code = code;
 	}
 	
