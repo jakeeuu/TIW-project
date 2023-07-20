@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Optional;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -19,7 +18,9 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import beans.CartSupplier;
 import beans.Product;
+import beans.Supplier;
 import dao.ProductDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
@@ -58,10 +59,13 @@ public class ProductDetails extends HttpServlet {
 		boolean badRequest = false;
 		String keyWord = null;
 		Integer productCode = null;
+		
+		ProductDao productDao = new ProductDao(connection);
+		
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
-			if(productCode < 0)
+			if(productCode < 0 && productDao.isValidCode(productCode))
 				badRequest = true;
 		}catch(NullPointerException | NumberFormatException e) {
 			badRequest = true;
@@ -72,7 +76,7 @@ public class ProductDetails extends HttpServlet {
 			return;
 		}
 		
-		ProductDao productDao = new ProductDao(connection);
+		
 		ArrayList<Product> products = new ArrayList<Product>();
 		
 		try {
@@ -101,6 +105,20 @@ public class ProductDetails extends HttpServlet {
 			//se mi ritorna null significa che non ha trovato nulla che corrisponda al key word
 			// come lo gestisco?? tonro alla home ?? in più mando un errore???
 		}
+		
+		HttpSession session = request.getSession();
+		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
+		
+		for(Supplier s : product.getSuppliers()) {
+			for(CartSupplier c : cart) {
+				if(c.getCode() == s.getCode()) {
+					float tmp = s.getTotalProductsPrice();
+					s.setTotalProductsPrice(tmp + c.getTotalPrice());
+				}
+			}
+		}
+		
+		
 		
 		String path = "/WEB-INF/Resultspage.html";
 		ServletContext servletContext = getServletContext();

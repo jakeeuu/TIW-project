@@ -100,4 +100,11 @@ public class ProductDao {
 			}
 		}
 	}
+	
+	
+	public boolean isValidCode(int productCode) throws SQLException{ 
+		//TODO PER CHIARA: questa è la query che mi dice se c'è un codice prodotto uguale a productCode
+		//se c'è ritorna true se no false
+		return true;
+	}	
 }

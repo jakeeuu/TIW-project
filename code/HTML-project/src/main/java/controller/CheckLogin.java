@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -10,12 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import beans.CartSupplier;
 import beans.User;
 import dao.UserDao;
 import utils.ConnectionHandler;
@@ -86,6 +89,11 @@ public class CheckLogin extends HttpServlet {
 			path = "/LoginPage.html";
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
+			if(request.getSession().getAttribute("cart") == null) {
+				ArrayList<CartSupplier> cart = new ArrayList<CartSupplier>();
+				request.getSession().setAttribute("cart", cart);
+			}
+			
 			request.getSession().setAttribute("user", user);
 			path = getServletContext().getContextPath() + "/GoToHome";
 			response.sendRedirect(path);

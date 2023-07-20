@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import beans.Supplier;
-import beans.User;
+import beans.CartSupplier;
+import beans.Product;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
 
@@ -44,16 +44,16 @@ public class CheckQuantity extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		ArrayList<Supplier> suppliers = (ArrayList<Supplier>) session.getAttribute("cart");
+		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		
 		int quantity = 0;
-		String supplierCode = null;
-		String productCode = null;
+		int supplierCode = 0;
+		int productCode = 0;
 		try {
 			quantity = Integer.parseInt(request.getParameter("quantity"));
-			supplierCode = StringEscapeUtils.escapeJava(request.getParameter("supplier_code"));
-			productCode = StringEscapeUtils.escapeJava(request.getParameter("product_code"));
-			if(quantity <= 0 || supplierCode.isEmpty() || productCode.isEmpty()) {
+			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
+			productCode = Integer.parseInt(request.getParameter("product_code"));
+			if(quantity <= 0 || productCode < 0 || supplierCode < 0) {//controllo anche che il codice prodoto e quello supplier siano validi
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 				return;
 			}
@@ -62,7 +62,35 @@ public class CheckQuantity extends HttpServlet {
 			return;
 		}
 		
+		CartSupplier cartSupplier = null;
+		for(CartSupplier c : cart) {
+			if(c.getCode() == supplierCode) {
+				cartSupplier = c;
+			}
+		}
+		
+		if(cartSupplier == null) {
+			cartSupplier = new CartSupplier();
+			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+			cartSupplier.setCode(supplierCode);
+		}
+		
+		Product product = null;
+		for(Product p : cartSupplier.getProducts()) {
+			if(p.getCode() == productCode) {
+				product = p;
+			}
+		}
+	
+		if(product == null) {
+			product = new Product();
+			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+			product.setCode(productCode);
+		}
+		
+		
 		SupplierDao supplierDao = new SupplierDao(connection);
+		
 	}
 
 	/**

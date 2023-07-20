@@ -7,8 +7,12 @@ public class CartSupplier {
 	private int code;
 	private String name;
 	private ArrayList<Product> products;
-	private int totalPrice;
-	private int shippingPrice;
+	private float totalPrice;
+	private float shippingPrice;
+	
+	public CartSupplier() {
+		totalPrice = 0;
+	}
 	
 	public int getCode() {
 		return this.code;
@@ -22,11 +26,11 @@ public class CartSupplier {
 		return this.products;
 	}
 	
-	public int getTotalPrice() {
+	public float getTotalPrice() {
 		return this.totalPrice;
 	}
 	
-	public int getShippingPrice() {
+	public float getShippingPrice() {
 		return this.shippingPrice;
 	}
 	
@@ -42,11 +46,11 @@ public class CartSupplier {
 		this.products = products;
 	}
 	
-	public void setTotalPrice(int totalPrice) {
+	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 	
-	public void setShippingPrice(int shippingPrice) {
+	public void setShippingPrice(float shippingPrice) {
 		this.shippingPrice = shippingPrice;
 	}
 }

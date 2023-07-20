@@ -9,7 +9,7 @@ public class Order {
 	private int code;
 	private String supplierName;
 	private ArrayList<Product> products;
-	private int totalPrice;
+	private float totalPrice;
 	private Date date;
 	private String address;
 	
@@ -25,7 +25,7 @@ public class Order {
 		return this.products;
 	}
 	
-	public int getTotalPrice() {
+	public float getTotalPrice() {
 		return this.totalPrice;
 	}
 	
@@ -49,7 +49,7 @@ public class Order {
 		this.products = products;
 	}
 	
-	public void setTotalPrice(int totalPrice) {
+	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
 	

@@ -7,7 +7,7 @@ public class Supplier {
 	private int code;
 	private String name;
 	private float unitaryPrice;
-	private double totalProductsPrice;
+	private float totalProductsPrice;
 	private float freeShipping;
 	private ArrayList<SpendingRanges> spendingranges;
 	private int score;
@@ -36,7 +36,7 @@ public class Supplier {
 		this.unitaryPrice = unitaryPrice;
 	}
 	
-	public double getTotalProductsPrice(){
+	public float getTotalProductsPrice(){
 		return this.totalProductsPrice;
 	}
 	
@@ -59,7 +59,7 @@ public class Supplier {
 	}
 	
 	
-	public void setTotalProductsPrice(double totalProductsPrice) {
+	public void setTotalProductsPrice(float totalProductsPrice) {
 		this.totalProductsPrice = totalProductsPrice;
 	}
 	
