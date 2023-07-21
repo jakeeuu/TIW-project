@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import beans.CartSupplier;
 import beans.Supplier;
 
 public class SupplierDao {
@@ -50,6 +51,34 @@ public class SupplierDao {
 			pstatement.setString(1, mailUser);
 			pstatement.setString(2, String.valueOf(prodCode));
 			pstatement.setDate(1, new java.sql.Date(date.getTime()));
+		}
+	}
+	
+	public CartSupplier infoCartSupplier(int prodCode, int supCode) throws SQLException{
+		String query = "Select Price,  P.Name as CName, S.Name as SName \r\n"
+						+"from (product P join sold_by  ON P.Code=ProdCode) join supplier s on S.Code=SupCode \r\n"
+						+"where P.Code = ? and S.Code=? \r\n";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(prodCode));
+			pstatement.setString(2, String.valueOf(supCode));
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return null;           
+				else {
+					CartSupplier cSup = new CartSupplier();
+					cSup.setCode(supCode);
+					cSup.setName(result.getString("SName"));
+					ArrayList<String> pNames = new ArrayList<String>();
+					pNames.add(result.getString("CName"));
+					cSup.setNameProducts(pNames);
+					ArrayList<Integer> pCodes= new ArrayList<Integer>();
+					pCodes.add(prodCode);
+					cSup.setCodeProducts(pCodes);
+					cSup.setTotalPrice(Float.parseFloat(result.getString("Price")));
+						
+					return cSup;
+				}
+			}
 		}
 	}
 

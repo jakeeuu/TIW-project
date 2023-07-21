@@ -75,18 +75,20 @@ public class CheckQuantity extends HttpServlet {
 			cartSupplier.setCode(supplierCode);
 		}
 		
-		Product product = null;
-		for(Product p : cartSupplier.getProducts()) {
-			if(p.getCode() == productCode) {
-				product = p;
+		Integer code = null;
+		for(Integer c : cartSupplier.getCodeProducts()) {
+			if(c == productCode) {
+				code = c;
 			}
 		}
 	
-		if(product == null) {
+		/*
+		if(code == null) {
 			product = new Product();
 			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 			product.setCode(productCode);
 		}
+		*/
 		
 		
 		SupplierDao supplierDao = new SupplierDao(connection);

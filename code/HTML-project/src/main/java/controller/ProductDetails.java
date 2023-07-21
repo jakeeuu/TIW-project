@@ -70,6 +70,9 @@ public class ProductDetails extends HttpServlet {
 		}catch(NullPointerException | NumberFormatException e) {
 			badRequest = true;
 			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		if(badRequest) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
