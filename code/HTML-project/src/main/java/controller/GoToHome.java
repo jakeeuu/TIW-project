@@ -31,6 +31,7 @@ public class GoToHome extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
 	private Connection connection = null;
+	private ServletContext servletContext;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -42,7 +43,7 @@ public class GoToHome extends HttpServlet {
     
     public void init() throws ServletException {
     	connection = ConnectionHandler.getConnection(getServletContext());
-		ServletContext servletContext = getServletContext();
+		servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
@@ -65,6 +66,12 @@ public class GoToHome extends HttpServlet {
 		}catch(SQLException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to visualize top five products list");
 			return;
+		}
+		
+		for(int i=0; i<products.size(); i++) {
+			String photo= products.get(i).getPhoto();
+			String totalPath = servletContext.getInitParameter("img")+ photo;
+			products.get(i).setPhoto(totalPath);
 		}
 	
 		String path = "/WEB-INF/Homepage.html";
