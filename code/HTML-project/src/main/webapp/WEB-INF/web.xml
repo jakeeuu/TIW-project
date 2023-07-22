@@ -11,11 +11,15 @@
 </context-param>
 <context-param>
 	<param-name>dbPassword</param-name>
-	<param-value>progetto_2023</param-value> <!-- TODO!!!!       METTO PASSWORD DATA BASE -->
+	<param-value>progetto_2023</param-value> 
 </context-param>
 <context-param>
 	<param-name>dbDriver</param-name>
 	<param-value>com.mysql.cj.jdbc.Driver</param-value>
+</context-param>
+<context-param>
+	<param-name>img</param-name>
+	<param-value>D:\\Politecnico\\Progetto_TIW\\Images\\</param-value>
 </context-param>
 <filter-mapping> 
     <filter-name>loginChecker</filter-name> 

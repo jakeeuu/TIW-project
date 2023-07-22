@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
 import beans.Product;
 import beans.User;
+import javax.servlet.ServletContext;
 
 public class ProductDao {
 	private Connection connection;
@@ -130,11 +132,31 @@ public class ProductDao {
 	}
 	
 	public void insertInto(String mailUser, int prodCode,Date date) throws SQLException {
-		String query = "insert into visualize (MailUser, ProdCode, Date) values(?,?,?)";
-		try(PreparedStatement pstatement = connection.prepareStatement(query);){
+		String query1= "select count(*)\r\n"
+						+ "from visualize\r\n"
+						+ "where MailUser=? and ProdCode=?";
+		String query2 = "update visualize \r\n"
+						+ "set Date= ? \r\n"
+						+ "where ProdCode = ? and MailUser=?";
+		String query3 = "insert into visualize (MailUser, ProdCode, Date) values(?,?,?)";
+		try(PreparedStatement pstatement = connection.prepareStatement(query1);){
 			pstatement.setString(1, mailUser);
 			pstatement.setString(2, String.valueOf(prodCode));
-			pstatement.setDate(1, new java.sql.Date(date.getTime()));
+			try (ResultSet result = pstatement.executeQuery();) {
+				if(result.getInt("count")>=1) {
+					try(PreparedStatement pstatement2 = connection.prepareStatement(query2);){
+						pstatement.setDate(1, date);
+						pstatement.setString(2, String.valueOf(prodCode));
+						pstatement.setString(3, mailUser);
+					}
+				}else {
+					try(PreparedStatement pstatemen3 = connection.prepareStatement(query3);){
+						pstatement.setString(1, mailUser);
+						pstatement.setString(2, String.valueOf(prodCode));
+						pstatement.setDate(3, date);
+					}
+				}
+			}
 		}
 	}
 	

@@ -31,7 +31,8 @@ import utils.ConnectionHandler;
 public class GoToResults extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
-	private Connection connection = null;   
+	private Connection connection = null;
+	private ServletContext servletContext;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -42,7 +43,7 @@ public class GoToResults extends HttpServlet {
 
     public void init() throws ServletException {
     	connection = ConnectionHandler.getConnection(getServletContext());
-		ServletContext servletContext = getServletContext();
+		servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
@@ -60,7 +61,7 @@ public class GoToResults extends HttpServlet {
 		}catch(NullPointerException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
 			return;
-		}
+		}	
 		
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Product> products = new ArrayList<Product>();
