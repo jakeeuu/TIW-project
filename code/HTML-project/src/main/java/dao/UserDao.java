@@ -35,7 +35,7 @@ public class UserDao {
 		}
 	}
 	
-	public User searchAddress(String mailUser)throws SQLException{
+	public String searchAddress(String mailUser)throws SQLException{
 		String query = "Select Address from user where Mail = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, mailUser);
@@ -43,10 +43,10 @@ public class UserDao {
 				if (!result.isBeforeFirst()) 
 					return null;           
 				else {
-					User user = new User();
-					user.setAddress(result.getString("Address"));
+					
+					return result.getString("Address");
 						
-					return user;
+					
 				}
 			}
 		}
