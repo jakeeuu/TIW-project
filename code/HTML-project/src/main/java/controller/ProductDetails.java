@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import beans.CartSupplier;
 import beans.Product;
 import beans.Supplier;
+import beans.User;
 import dao.ProductDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
@@ -109,8 +112,20 @@ public class ProductDetails extends HttpServlet {
 			// come lo gestisco?? tonro alla home ?? in più mando un errore???
 		}
 		
+		
+		
 		HttpSession session = request.getSession();
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
+		User user = (User) session.getAttribute("user");
+		String mail = user.getMail();
+		
+		Date date = new Date(System.currentTimeMillis());
+		try {
+			productDao.insertInto(mail,productCode,date);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		for(Supplier s : product.getSuppliers()) {
 			for(CartSupplier c : cart) {
