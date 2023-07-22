@@ -86,6 +86,8 @@ public class CheckQuantity extends HttpServlet {
 			cartSupplier = new CartSupplier();
 			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 			cartSupplier.setCode(supplierCode);
+		}else {
+			
 		}
 		
 		Integer code = null;
@@ -95,13 +97,14 @@ public class CheckQuantity extends HttpServlet {
 			}
 		}
 	
-		/*
+		Product product = null;
 		if(code == null) {
 			product = new Product();
 			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 			product.setCode(productCode);
+		}else {
+			
 		}
-		*/
 		
 		
 		
