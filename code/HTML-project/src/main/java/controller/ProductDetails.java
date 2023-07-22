@@ -65,7 +65,7 @@ public class ProductDetails extends HttpServlet {
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
-			if(productCode < 0 && productDao.isValidCode(productCode))
+			if(productCode < 0 || !productDao.isValidCode(productCode))
 				badRequest = true;
 		}catch(NullPointerException | NumberFormatException e) {
 			badRequest = true;

@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import beans.CartSupplier;
 import beans.Product;
+import dao.ProductDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
 
@@ -49,15 +50,27 @@ public class CheckQuantity extends HttpServlet {
 		int quantity = 0;
 		int supplierCode = 0;
 		int productCode = 0;
+		boolean badRequest = false;
+		
+		ProductDao productDao = new ProductDao(connection);
+		SupplierDao supplierDao = new SupplierDao(connection);
+		
 		try {
 			quantity = Integer.parseInt(request.getParameter("quantity"));
 			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
-			if(quantity <= 0 || productCode < 0 || supplierCode < 0) {//controllo anche che il codice prodoto e quello supplier siano validi
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
-				return;
+			if(quantity <= 0 || productCode < 0 || supplierCode < 0 || !productDao.isValidCode(productCode) || !supplierDao.isValidCode(supplierCode)) {
+				badRequest = true;
 			}
 		}catch(NumberFormatException | NullPointerException e) {
+			badRequest = true;
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(badRequest) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
 			return;
 		}
@@ -91,7 +104,7 @@ public class CheckQuantity extends HttpServlet {
 		*/
 		
 		
-		SupplierDao supplierDao = new SupplierDao(connection);
+		
 		
 	}
 
