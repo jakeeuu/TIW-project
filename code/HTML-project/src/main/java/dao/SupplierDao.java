@@ -81,5 +81,23 @@ public class SupplierDao {
 			}
 		}
 	}
+	
+	public boolean isValidCode(int supCode) throws SQLException{ 
+		String query= "select count(*) from orders where Code = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(supCode) );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return false;           
+				else {
+					if (result.getInt("count") == 1) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			}
+		}
+	}	
 
 }

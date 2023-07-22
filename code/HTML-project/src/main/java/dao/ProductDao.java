@@ -132,6 +132,20 @@ public class ProductDao {
 	public boolean isValidCode(int productCode) throws SQLException{ 
 		//TODO PER CHIARA: questa è la query che mi dice se c'è un codice prodotto uguale a productCode
 		//se c'è ritorna true se no false
-		return true;
+		String query= "select count(*) from product where Code = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(productCode) );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return false;           
+				else {
+					if (result.getInt("count") == 1) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			}
+		}
 	}	
 }
