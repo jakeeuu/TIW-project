@@ -101,6 +101,33 @@ public class ProductDao {
 		}
 	}
 	
+	public ArrayList<Product> productInOrders(int orderCode)throws SQLException{
+		ArrayList<Product> products = new ArrayList<Product>();
+		String query = "select P.Code, P.Name, P.Description, P.Category, P.Photo \r\n"
+						+"from (product P join composed C on P.Code=ProductCode) join orders O on O.Code=OrderCode \r\n"
+						+"where OrderCode = ? \r\n";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(orderCode) );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return null;           
+				else {
+					while(result.next()) {
+						Product product = new Product();
+						product.setCode(Integer.parseInt(result.getString("Code")));
+						product.setName(result.getString("Name"));
+						product.setDescription(result.getString("Description"));
+						product.setCategory(result.getString("Category"));
+						product.setPhoto(result.getString("Photo"));
+						products.add(product);
+						
+					}
+					return products;
+				}
+			}
+		}
+	}
+	
 	
 	public boolean isValidCode(int productCode) throws SQLException{ 
 		//TODO PER CHIARA: questa è la query che mi dice se c'è un codice prodotto uguale a productCode
