@@ -1,6 +1,7 @@
 package beans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CartSupplier {
 
@@ -8,6 +9,7 @@ public class CartSupplier {
 	private String name;
 	private ArrayList<String> prodName;
 	private ArrayList<Integer> prodCode;
+	private HashMap<Integer, Integer> prodCounter;
 	private float totalPrice;
 	private float shippingPrice;
 	
@@ -35,12 +37,16 @@ public class CartSupplier {
 		return this.shippingPrice;
 	}
 	
-	public ArrayList<String> getProducts(){
-		return this.prodName;
-	}
-	
 	public ArrayList<Integer> getCodeProducts(){
 		return this.prodCode;
+	}
+	
+	public Integer getProdCounter(int prod) {
+		return this.prodCounter.get(prod);
+	}
+	
+	public void setProdCounter(int prod, int quantity) {
+		this.prodCounter.put(prod,quantity);
 	}
 	
 	public void setCode(int code) {

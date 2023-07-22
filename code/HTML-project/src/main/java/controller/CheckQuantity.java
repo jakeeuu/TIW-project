@@ -16,7 +16,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import beans.CartSupplier;
 import beans.Product;
+import beans.SpendingRanges;
 import dao.ProductDao;
+import dao.SpendingRangesDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
 
@@ -82,33 +84,80 @@ public class CheckQuantity extends HttpServlet {
 			}
 		}
 		
-		if(cartSupplier == null) {
-			cartSupplier = new CartSupplier();
-			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-			cartSupplier.setCode(supplierCode);
-		}else {
-			
-		}
-		
 		Integer code = null;
 		for(Integer c : cartSupplier.getCodeProducts()) {
 			if(c == productCode) {
 				code = c;
 			}
 		}
-	
-		Product product = null;
-		if(code == null) {
-			product = new Product();
-			//CONTINUOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-			product.setCode(productCode);
+		
+		CartSupplier newSupplier = null;
+		try {
+			newSupplier = supplierDao.infoCartSupplier(productCode, supplierCode);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(cartSupplier == null) {
+			cartSupplier = newSupplier;
+			float tmp = cartSupplier.getTotalPrice();
+			cartSupplier.setTotalPrice(quantity * tmp);
+			cartSupplier.setProdCounter(productCode, quantity);
+			
 		}else {
+			if(code == null) {
+				cartSupplier.getCodeProducts().add(newSupplier.getCodeProducts().get(0));
+				cartSupplier.getNameProducts().add(newSupplier.getNameProducts().get(0));
+			}
+			
+			float tmp = cartSupplier.getTotalPrice();
+			cartSupplier.setTotalPrice(quantity * newSupplier.getTotalPrice() + tmp);
+			int prevQuant = cartSupplier.getProdCounter(productCode);
+			cartSupplier.setProdCounter(productCode,quantity + prevQuant);
 			
 		}
 		
+		if(cartSupplier.getShippingPrice() != 0) {
+			
+			Float freeShipping = null;
+			try {
+				freeShipping = supplierDao.supplierFreeShipping(supplierCode);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(cartSupplier.getTotalPrice() >= freeShipping) {
+				cartSupplier.setShippingPrice(0);
+			}else {
+				SpendingRangesDao spendingRangesDao = new SpendingRangesDao(connection);
+				ArrayList<SpendingRanges> spendingRanges = null;
+				try {
+					spendingRanges = spendingRangesDao.findSpendingRanges(supplierCode);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				int total = 0;
+				int i = 0;
+				while(cartSupplier.getProdCounter(i) != null) {
+					total = total + cartSupplier.getProdCounter(i);
+					i++;
+				}
+				
+				for(SpendingRanges sp : spendingRanges) {
+					if(total > sp.getMinimummN() && total < sp.getMaximumN()) {
+						cartSupplier.setShippingPrice(sp.getPrice());
+					}
+				}
+			}
+		}
 		
-		
-		
+		String ctxpath = getServletContext().getContextPath();
+		String path = ctxpath + "/GoToCart";
+		response.sendRedirect(path);
 	}
 
 	/**
