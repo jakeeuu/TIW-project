@@ -3,12 +3,14 @@ package beans;
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class Order {
 
 	private int code;
 	private String supplierName;
 	private ArrayList<Product> products;
+	private HashMap<Integer,Integer> quantity;
 	private float totalPrice;
 	private Date date;
 	private String address;
@@ -37,6 +39,10 @@ public class Order {
 		return this.address;
 	}
 	
+	public HashMap<Integer, Integer> getQuantity(){
+		return this.quantity;
+	}
+	
 	public void setCode(int code) {
 		this.code = code;
 	}
@@ -60,4 +66,9 @@ public class Order {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
+	public void setQuantity(HashMap<Integer, Integer> quantity){
+		this.quantity = quantity;
+	}
+	
 }
