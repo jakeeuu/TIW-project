@@ -12,6 +12,7 @@
 				username: <input type="text" name="mail" required> <br>
 				password: <input type="password" name="password" required><br> 
 			<input type="submit" value="login">
+			<p th:class="error" th:text="${error}"></p>
 			</form>
 	</div>
 
