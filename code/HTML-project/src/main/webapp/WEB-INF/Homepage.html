@@ -6,25 +6,31 @@
 	<title>Home page</title>
 </head>
 <body>
-
-	<ul id = "menu">
-		<li><a th:href="@{/GoToHome}">Home</a></li>
-		<li><a th:href="@{/GoToCart}">Cart</a></li>
-		<li><a th:href="@{/GoToOrders}">Orders</a></li>
-		<li><a th:href="@{/Logout}">Logout</a></li>
-	</ul>
-
-	<h1>Welcome to the Home Page</h1>
-	<br>
+	<div class = "link">
+		<ul id = "menu">
+			<li class = "active"><a th:href="@{/GoToHome}">Home</a></li>
+			<li><a th:href="@{/GoToCart}">Cart</a></li>
+			<li><a th:href="@{/GoToOrders}">Orders</a></li>
+			<li><a th:href="@{/Logout}">Logout</a></li>
+		</ul>
+	</div>
+	
+	
+	<div class = "title">
+		<h1>Welcome to the Home Page</h1>
+		<br>
+	</div>
+	
 	
 	<form action="#" th:action="@{/GoToResults}" method="POST">
-		Search for a product: <input type="text" name="key_word"> <br>
-	 	<input type="submit" value="Search">
+		Search for a product: <input type="text" name="key_word"> 
+	 	<input  type="submit" value="Search" >
 	</form>
 		
 	<br>
 	
-	<table border = "1">
+	
+		<table id="tabella" border = "1">
 		<thead>
 			<tr><th>Product code</th>
 				<th>Product name</th>
@@ -43,6 +49,8 @@
     		</tr>
 		</tbody>
 	</table>
+	
+	
 	
 </body>
 </html>

@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
-	<link rel="stylesheet" th:href="@{/CSS/Loginpage.css}" href="../CSS/Loginpage.css">
+	<link rel="stylesheet" href="/HTML-project/src/main/webapp/CSS/Loginpage.css">
 	<title>Login page</title>
 </head>
 <body>
-	<div class = page>
+	<div class = "container">
 			<h1>Login: </h1>
 			<form action=CheckLogin method="POST"> <!-- Ti ho lasciato scritto così com'era ,ma qualcosa non va , mentre se scrivo action=CheckLogin funziona  -->
 				username: <input type="text" name="mail" required> <br>

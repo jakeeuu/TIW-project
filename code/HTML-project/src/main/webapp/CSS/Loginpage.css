@@ -1,5 +1,6 @@
-.page{
+.container{
 	display: flex;
-	flex-flow: column wrap;
-	justify-content: center;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    justify-content: center;
 }
