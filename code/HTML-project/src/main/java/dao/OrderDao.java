@@ -31,6 +31,8 @@ public class OrderDao {
 		}
 	}
 	
+	
+	
 	public ArrayList<Order> printOrders (String mailUser)throws SQLException {
 		ArrayList<Order> orders = new ArrayList<Order>();
 		String query = "select O.Code, Supplier,Total, Date, U.Address \r\n"
@@ -79,4 +81,6 @@ public class OrderDao {
 			}
 		}
 	}
+	
+	
 }
