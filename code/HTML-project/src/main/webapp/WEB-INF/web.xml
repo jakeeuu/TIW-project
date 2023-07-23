@@ -19,7 +19,7 @@
 </context-param>
 <context-param>
 	<param-name>img</param-name>
-	<param-value>D:\\Politecnico\\Progetto_TIW\\Images\\</param-value>
+	<param-value>C:\\Users\\balla\\OneDrive\\Desktop\\secondo semestre\\Progetto_TIW\\Images\\</param-value>
 </context-param>
 <filter-mapping> 
     <filter-name>loginChecker</filter-name> 
