@@ -33,7 +33,7 @@
 	     			<td th:text="${product.shippingPrice}">shipping price</td>
 	     			<td>
 		     			<form action="#" th:action="@{/CreateOrder}" method="POST">
-		     				<button type="submit" name="codeSupplier" value="${cartSupplier.code}">Order</button>
+		     				<button type="submit" name="supplier_code" value="${cartSupplier.code}">Order</button>
 		     			</form>
 	     			</td>
 	    		</tr>

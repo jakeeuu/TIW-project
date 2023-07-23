@@ -1,11 +1,20 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+
+import utils.ConnectionHandler;
 
 /**
  * Servlet implementation class CreateOrder
@@ -13,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/CreateOrder")
 public class CreateOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private Connection connection = null;   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -22,6 +31,9 @@ public class CreateOrder extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public void init() throws ServletException {
+    	connection = ConnectionHandler.getConnection(getServletContext());
+	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -38,4 +50,12 @@ public class CreateOrder extends HttpServlet {
 		doGet(request, response);
 	}
 
+	@Override
+	public void destroy() {
+		try {
+			ConnectionHandler.closeConnection(connection);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

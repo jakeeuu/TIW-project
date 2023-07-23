@@ -32,7 +32,7 @@ public class OrderDao {
 	
 	public ArrayList<Order> printOrders (String mailUser)throws SQLException {
 		ArrayList<Order> orders = new ArrayList<Order>();
-		String query = "select O.Code, Supplier, Date, U.Address \r\n"
+		String query = "select O.Code, Supplier,Total, Date, U.Address \r\n"
 						+"from orders O join user U on MailUser = Mail \r\n"
 						+"where Mail = ? \r\n"
 						+"order by Date \r\n";
@@ -46,6 +46,7 @@ public class OrderDao {
 						Order order = new Order();
 						order.setCode(Integer.parseInt(result.getString("Code")));
 						order.setSupplierName(result.getString("Supplier"));
+						order.setTotalPrice(Float.parseFloat(result.getString("Total")));
 						order.setDate(result.getDate("Date"));
 						order.setAddress(result.getString("Address"));
 						orders.add(order);
