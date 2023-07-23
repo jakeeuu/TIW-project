@@ -66,7 +66,8 @@ public class SupplierDao {
 					pCodes.add(prodCode);
 					cSup.setCodeProducts(pCodes);
 					cSup.setTotalPrice(Float.parseFloat(result.getString("Price")));
-						
+					cSup.setProdCounter(prodCode, 1);
+					
 					return cSup;
 				}
 			}
@@ -74,7 +75,7 @@ public class SupplierDao {
 	}
 	
 	public boolean isValidCode(int supCode) throws SQLException{ 
-		String query= "select count(*) from orders where Code = ?";
+		String query= "select count(*) from supplier where Code = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(supCode) );
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -86,6 +87,20 @@ public class SupplierDao {
 					}else {
 						return false;
 					}
+				}
+			}
+		}
+	}
+	
+	public Float supplierFreeShipping(int supCode) throws SQLException{ 
+		String query= "select FreeShipping from supplier where Code = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(supCode) );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return null;           
+				else {
+					return Float.parseFloat(result.getString("FreeShipping"));
 				}
 			}
 		}

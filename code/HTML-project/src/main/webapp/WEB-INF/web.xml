@@ -25,6 +25,7 @@
     <filter-name>loginChecker</filter-name> 
     <url-pattern>/GoToHome</url-pattern> 
     <url-pattern>/GoToResults</url-pattern>
+    <url-pattern>/GoToCart</url-pattern>
     <url-pattern>/ProductDetails</url-pattern> 
     <url-pattern>/CheckQuantity</url-pattern>
 </filter-mapping>
