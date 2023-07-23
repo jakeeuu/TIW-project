@@ -168,12 +168,14 @@ public class ProductDao {
 						pstatement.setDate(1, date);
 						pstatement.setString(2, String.valueOf(prodCode));
 						pstatement.setString(3, mailUser);
+						pstatement.executeUpdate();
 					}
 				}else {
 					try(PreparedStatement pstatemen3 = connection.prepareStatement(query3);){
 						pstatement.setString(1, mailUser);
 						pstatement.setString(2, String.valueOf(prodCode));
 						pstatement.setDate(3, date);
+						pstatement.executeUpdate();
 					}
 				}
 			}
