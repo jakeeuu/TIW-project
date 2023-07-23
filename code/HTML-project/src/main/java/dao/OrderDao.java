@@ -52,10 +52,6 @@ public class OrderDao {
 		}
 	}
 	
-	//ottenere codice ordine di quello appena inserito
-	// inserimento in composed 
-	// 8.3 numero 36
-	
 	public void generalOrderUpdate(String mailUser, String supName,float total, Date date, String address,HashMap<Integer, Integer> pq) throws SQLException{
 		
 		try {
