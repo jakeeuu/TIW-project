@@ -30,8 +30,30 @@ public class ProductDao {
 			pstatement.setString(1, user.getMail());
 			pstatement.setString(2, user.getMail());
 			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) 
-					return null;           // TOLGOOOOO
+				if (!result.isBeforeFirst()) {
+					int lenght = 5;
+					try (PreparedStatement altpstatement = connection.prepareStatement(altquery);) {
+						altpstatement.setString(1,String.valueOf(lenght));
+						try (ResultSet altresult = altpstatement.executeQuery();) {
+							if (!altresult.isBeforeFirst()) {
+								return null;  //TODO : TOLGOOOO
+							}
+							else {
+								while(altresult.next()) {
+									Product product = new Product();
+									product.setCode(Integer.parseInt(altresult.getString("ProdCode")));
+									product.setName(altresult.getString("Name"));
+									product.setDescription(altresult.getString("Description"));
+									product.setCategory(altresult.getString("Category"));
+									product.setPhoto(altresult.getString("Photo"));
+									products.add(product);
+								}
+							}
+						}
+					}
+					return products;
+						        
+				}
 				else {
 					while(result.next()) {
 						Product product = new Product();
