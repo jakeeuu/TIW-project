@@ -26,8 +26,56 @@ public class OrderDao {
 			pstatement.setString(4, String.valueOf(total));
 			pstatement.setDate(5, new java.sql.Date(date.getTime()));
 			pstatement.setString(6,address);
+			pstatement.executeUpdate();
 		}
 	}
+	
+	public int findOrderCode(String mailUser) throws SQLException {
+		int num;
+		String query= "SELECT Code FROM orders  O WHERE MailUser = ? and Date >= ALL(Select Date from orders where MailUser=O.MailUser)";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, mailUser);
+			try (ResultSet result = pstatement.executeQuery();) {
+				num = Integer.parseInt(result.getString("Code"));
+				return num;
+			}
+		}
+	}
+	
+	public void insertInComposed(int orderCode, int productCode, int quantity) throws SQLException {
+		String query = "insert into composed (OrderCode, ProductCode, Qauntity) values(?,?,?)";
+		try(PreparedStatement pstatement = connection.prepareStatement(query);){
+			pstatement.setString(1, String.valueOf(orderCode));
+			pstatement.setString(2, String.valueOf(productCode));
+			pstatement.setString(3, String.valueOf(quantity));
+			pstatement.executeUpdate();
+		}
+	}
+	
+	//ottenere codice ordine di quello appena inserito
+	// inserimento in composed 
+	// 8.3 numero 36
+	
+	public void generalOrderUpdate(String mailUser, String supName,float total, Date date, String address,HashMap<Integer, Integer> pq) throws SQLException{
+		
+		try {
+			connection.setAutoCommit(false);
+			insertOrder(mailUser , supName , total , date, address);
+			int num = findOrderCode(mailUser);
+			for (HashMap.Entry<Integer, Integer> entry : pq.entrySet()) {
+	            int key = entry.getKey();
+	            int value = entry.getValue();
+	            insertInComposed(num,key, value);
+	        }
+		}catch(SQLException e){
+			throw e;
+		}finally {
+			connection.setAutoCommit(true);
+		}
+		
+	}
+	
+	
 	
 	public ArrayList<Order> printOrders (String mailUser)throws SQLException {
 		ArrayList<Order> orders = new ArrayList<Order>();
@@ -77,4 +125,6 @@ public class OrderDao {
 			}
 		}
 	}
+	
+	
 }

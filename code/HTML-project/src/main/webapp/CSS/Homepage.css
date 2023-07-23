@@ -9,10 +9,20 @@
     justify-content: center;
     
 }
-
-table#tabella{
-	 
+table {
+    border: 1px solid #000;
+    background-color: #FF831C;
+   
 }
+tr {
+    background-color: #e2f8fa;
+}
+th {
+    background-color: #54BAE2;
+    border: 1px solid #fff;
+    color: white;
+}
+
 
 ul#menu {
     font-family: Verdana, sans-serif;
