@@ -52,8 +52,7 @@ public class OrderDao {
 		}
 	}
 	
-	public void generalOrderUpdate(String mailUser, String supName,float total, Date date, String address,HashMap<Integer, Integer> pq) throws SQLException{
-		
+	public void generalOrderUpdate(String mailUser, String supName,float total,Date date, String address,HashMap<Integer, Integer> pq) throws SQLException{
 		try {
 			connection.setAutoCommit(false);
 			insertOrder(mailUser , supName , total , date, address);
@@ -63,7 +62,9 @@ public class OrderDao {
 	            int value = entry.getValue();
 	            insertInComposed(num,key, value);
 	        }
+			connection.commit();
 		}catch(SQLException e){
+			connection.rollback();
 			throw e;
 		}finally {
 			connection.setAutoCommit(true);

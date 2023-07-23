@@ -45,8 +45,16 @@ public class CartSupplier {
 		return this.prodCounter.get(prod);
 	}
 	
+	public HashMap<Integer,Integer> getProdCounter(){
+		return this.prodCounter;
+	}
+	
 	public void setProdCounter(int prod, int quantity) {
 		this.prodCounter.put(prod,quantity);
+	}
+	
+	public void setProdCounter(HashMap<Integer,Integer> prodCounter){
+		this.prodCounter = prodCounter;
 	}
 	
 	public void setCode(int code) {

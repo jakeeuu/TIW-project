@@ -58,6 +58,10 @@ public class GoToResults extends HttpServlet {
 		String keyWord = null;
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
+			if(keyWord.isEmpty()) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
+				return;
+			}	
 		}catch(NullPointerException e) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
 			return;

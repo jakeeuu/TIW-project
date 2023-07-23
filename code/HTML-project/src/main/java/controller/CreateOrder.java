@@ -3,17 +3,19 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
+import beans.CartSupplier;
+import beans.User;
+import dao.OrderDao;
 import utils.ConnectionHandler;
 
 /**
@@ -39,7 +41,48 @@ public class CreateOrder extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
+		Integer supplierCode = null;
+		CartSupplier cartSupplier = null;
+		boolean badRequest = false;
 		
+		try {
+			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
+			for(CartSupplier sp : cart) {
+				if(sp.getCode() == supplierCode) {
+					cartSupplier = sp;
+				}
+			}
+			if(cartSupplier == null || supplierCode < 0) {
+				badRequest = true;
+			}
+		}catch(NumberFormatException | NullPointerException e) {
+			badRequest = true;
+			e.printStackTrace();
+		}
+		if(badRequest == true) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error in supplier code");
+			return;
+		}
+		
+		OrderDao orderDao = new OrderDao(connection);
+		Date date = new Date(System.currentTimeMillis());
+		float total = cartSupplier.getTotalPrice() + cartSupplier.getShippingPrice();
+		
+		try {
+			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), cartSupplier.getProdCounter());
+			cart.remove(cartSupplier);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		String ctxpath = getServletContext().getContextPath();
+		String path = ctxpath + "/GoToOrder";
+		response.sendRedirect(path);
 	}
 
 	/**
