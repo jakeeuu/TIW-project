@@ -4,8 +4,6 @@
 
 .link{
 	display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
     justify-content: center;
     
 }
@@ -53,4 +51,8 @@ ul#menu li a {
 ul#menu li.active, ul#menu li:hover {
     background-color: #54BAE2;
     border-bottom: 5px solid #FF831C;
+}
+
+.error{
+	color : red;
 }

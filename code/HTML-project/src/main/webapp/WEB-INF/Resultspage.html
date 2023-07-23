@@ -2,21 +2,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
+	<link rel="stylesheet" th:href="@{/CSS/style.css}" href="../CSS/style.css">
 	<title>Results page</title>
 </head>
 <body>
-	
-	<ul id = "menu">
-		<li><a th:href="@{/GoToHome}">Home</a></li>
-		<li><a th:href="@{/GoToCart}">Cart</a></li>
-		<li><a th:href="@{/GoToOrders}">Orders</a></li>
-		<li><a th:href="@{/Logout}">Logout</a></li>
-	</ul>
+	<div class = "link">
+		<ul id = "menu">
+			<li class = "active"><a th:href="@{/GoToHome}">Home</a></li>
+			<li><a th:href="@{/GoToCart}">Cart</a></li>
+			<li><a th:href="@{/GoToOrders}">Orders</a></li>
+			<li><a th:href="@{/Logout}">Logout</a></li>
+		</ul>
+	</div>
+
 	
 	<br>
 	
 	<form action="#" th:action="@{/GoToResults}" method="POST">
-		Search for a product: <input type="text" name="key_word"> <br>
+		Search for a product: <input type="text" name="key_word"> 
 	 	<input type="submit" value="Search">
 	</form>
 	
