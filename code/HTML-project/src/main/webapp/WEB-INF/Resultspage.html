@@ -41,20 +41,24 @@
 	     			<td th:text="${product.name}">name</td>
 	     			<td th:text="${product.minimumPrice}">minimum price</td>
 	    		</tr>
-	    													<!-- SPOILER: Qualcosa si rompe proprio qui -->
-	    		<div th:if="${product.supplier != null}">  <!-- TODO: CONTROLLO SE FUNZIONA QUESTO IF --> 
-	     			<tr th:each="supplier : ${product.supplier}">
-	     				<td>
-	     					<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
-	     					
-	     					<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
-								<input type="number" name="quantity">
-							 	<input type="submit" value="Add to Cart">
-							</form>
-							
-	     				</td>
-	     			</tr>	
-	     		</div>
+	    		 											
+     			<tr th:each="supplier : ${product.suppliers}">
+     				<td colspan="3">
+     					<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
+     					<p>
+	     					<span th:text="${supplier.name}"></span>
+	     					<span th:text="${supplier.score}"></span>
+	     					<span th:text="${supplier.unitaryPrice}"></span>
+	     					<span th:text="${supplier.freeShipping}"></span>
+	     					<span th:text="${supplier.totalProductsPrice}"></span>
+     					</p>
+     					<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
+							<input type="number" name="quantity">
+						 	<input type="submit" value="Add to Cart">
+						</form>
+						
+     				</td>
+     			</tr>	
 	     		
     		</div>
 		</tbody>

@@ -15,6 +15,7 @@ public class CartSupplier {
 	
 	public CartSupplier() {
 		totalPrice = 0;
+		this.prodCounter = new HashMap<Integer, Integer>();
 	}
 	
 	public int getCode() {

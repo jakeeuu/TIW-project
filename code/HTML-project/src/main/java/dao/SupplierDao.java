@@ -47,7 +47,7 @@ public class SupplierDao {
 	
 	public CartSupplier infoCartSupplier(int prodCode, int supCode) throws SQLException{
 		String query = "Select Price,  P.Name as CName, S.Name as SName \r\n"
-						+"from (product P join sold_by  ON P.Code=ProdCode) join supplier s on S.Code=SupCode \r\n"
+						+"from (product P join sold_by  on P.Code=ProdCode) join supplier S on S.Code=SupCode \r\n"
 						+"where P.Code = ? and S.Code=?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(prodCode));
@@ -56,6 +56,7 @@ public class SupplierDao {
 				if (!result.isBeforeFirst()) 
 					return null;           
 				else {
+					result.next();
 					CartSupplier cSup = new CartSupplier();
 					cSup.setCode(supCode);
 					cSup.setName(result.getString("SName"));
@@ -82,7 +83,8 @@ public class SupplierDao {
 				if (!result.isBeforeFirst()) 
 					return false;           
 				else {
-					if (result.getInt("count") == 1) {
+					result.next();
+					if (result.getInt("count(*)") == 1) {
 						return true;
 					}else {
 						return false;
@@ -100,6 +102,7 @@ public class SupplierDao {
 				if (!result.isBeforeFirst()) 
 					return null;           
 				else {
+					result.next();
 					return Float.parseFloat(result.getString("FreeShipping"));
 				}
 			}

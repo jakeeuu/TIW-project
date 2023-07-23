@@ -29,8 +29,8 @@
 				<tr>
 	     			<td th:text="${cartSupplier.code}">code</td>
 	     			<td th:text="${cartSupplier.name}">name</td>
-	     			<td th:text="${product.totalPrice}">total price</td>
-	     			<td th:text="${product.shippingPrice}">shipping price</td>
+	     			<td th:text="${cartSupplier.totalPrice}">total price</td>
+	     			<td th:text="${cartSupplier.shippingPrice}">shipping price</td>
 	     			<td>
 		     			<form action="#" th:action="@{/CreateOrder}" method="POST">
 		     				<button type="submit" name="supplier_code" value="${cartSupplier.code}">Order</button>
@@ -39,7 +39,7 @@
 	    		</tr>
 	    		<tr>
 	    			<td colspan="5">
-	    				<ul th:each="code : ${cartSupplier.prodCode}" th:each="name : ${cartSupplier.prodName}" th:each="counter : ${cartSupplier.prodCounter}">
+						<ul th:each="code : ${cartSupplier.prodCode}, name : ${cartSupplier.prodName}, counter : ${cartSupplier.prodCounter}">
 							<li>
 								<p th:text="${counter.value}">quantity </p><p> x </p>
 								<p th:text="${code}">product code </p>

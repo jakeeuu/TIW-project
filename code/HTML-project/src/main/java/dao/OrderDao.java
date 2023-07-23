@@ -36,6 +36,7 @@ public class OrderDao {
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, mailUser);
 			try (ResultSet result = pstatement.executeQuery();) {
+				result.next();
 				num = Integer.parseInt(result.getString("Code"));
 				return num;
 			}

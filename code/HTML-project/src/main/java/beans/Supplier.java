@@ -68,7 +68,7 @@ public class Supplier {
 		this.score=score;
 	}
 	
-	public int getScore(int score) {
+	public int getScore() {
 		return this.score;
 	}
 }

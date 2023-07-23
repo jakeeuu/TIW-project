@@ -43,7 +43,7 @@ public class UserDao {
 				if (!result.isBeforeFirst()) 
 					return null;           
 				else {
-					
+					result.next();
 					return result.getString("Address");
 						
 					

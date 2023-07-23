@@ -49,6 +49,7 @@ public class CheckQuantity extends HttpServlet {
 		HttpSession session = request.getSession();
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		
+		
 		int quantity = 0;
 		int supplierCode = 0;
 		int productCode = 0;
@@ -84,13 +85,6 @@ public class CheckQuantity extends HttpServlet {
 			}
 		}
 		
-		Integer code = null;
-		for(Integer c : cartSupplier.getCodeProducts()) {
-			if(c == productCode) {
-				code = c;
-			}
-		}
-		
 		CartSupplier newSupplier = null;
 		try {
 			newSupplier = supplierDao.infoCartSupplier(productCode, supplierCode);
@@ -104,8 +98,17 @@ public class CheckQuantity extends HttpServlet {
 			float tmp = cartSupplier.getTotalPrice();
 			cartSupplier.setTotalPrice(quantity * tmp);
 			cartSupplier.setProdCounter(productCode, quantity);
+			cart.add(cartSupplier);
 			
 		}else {
+			
+			Integer code = null;
+			for(Integer c : cartSupplier.getCodeProducts()) {
+				if(c == productCode) {
+					code = c;
+				}
+			}
+			
 			if(code == null) {
 				cartSupplier.getCodeProducts().add(newSupplier.getCodeProducts().get(0));
 				cartSupplier.getNameProducts().add(newSupplier.getNameProducts().get(0));
@@ -117,6 +120,7 @@ public class CheckQuantity extends HttpServlet {
 			cartSupplier.setProdCounter(productCode,quantity + prevQuant);
 			
 		}
+		
 		
 		if(cartSupplier.getShippingPrice() != 0) {
 			
