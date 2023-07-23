@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.sql.Date;
 
 import beans.Product;
@@ -17,42 +18,18 @@ public class ProductDao {
 		this.connection = connection;
 	}
 	
-	public ArrayList<Product> produtcsToVisualize(User user) throws SQLException{
+	public ArrayList<Product> memoryProducts(User user) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
 		String query = 	"SELECT ProdCode, Name, Description,Category,Photo\r\n"
 				 		+ "FROM ProductVisualized PR\r\n"
 				 		+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date and Mail = ?)\r\n"
 				        +"Order by Date DESC";
-		String altquery = "SELECT Code, Name, Description,Category,Photo \r\n"
-						+"FROM product P \r\n"
-						+"WHERE ? > (select count(*) from product where Code < P.Code)\r\n";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, user.getMail());
 			pstatement.setString(2, user.getMail());
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) {
-					int lenght = 5;
-					try (PreparedStatement altpstatement = connection.prepareStatement(altquery);) {
-						altpstatement.setString(1,String.valueOf(lenght));
-						try (ResultSet altresult = altpstatement.executeQuery();) {
-							if (!altresult.isBeforeFirst()) {
-								return null;  //TODO : TOLGOOOO
-							}
-							else {
-								while(altresult.next()) {
-									Product product = new Product();
-									product.setCode(Integer.parseInt(altresult.getString("ProdCode")));
-									product.setName(altresult.getString("Name"));
-									product.setDescription(altresult.getString("Description"));
-									product.setCategory(altresult.getString("Category"));
-									product.setPhoto(altresult.getString("Photo"));
-									products.add(product);
-								}
-							}
-						}
-					}
-					return products;
-						        
+					return null;	        
 				}
 				else {
 					while(result.next()) {
@@ -64,33 +41,59 @@ public class ProductDao {
 						product.setPhoto(result.getString("Photo"));
 						products.add(product);
 					}
-					if(products.size() < 5) {
-						int lenght = 5-products.size();
-						try (PreparedStatement altpstatement = connection.prepareStatement(altquery);) {
-							altpstatement.setString(1,String.valueOf(lenght));
-							try (ResultSet altresult = altpstatement.executeQuery();) {
-								if (!altresult.isBeforeFirst()) {
-									System.out.println("male male");
-									return null;  //TODO : TOLGOOOO
-								}
-								else {
-									while(altresult.next()) {
-										Product product = new Product();
-										product.setCode(Integer.parseInt(altresult.getString("ProdCode")));
-										product.setName(altresult.getString("Name"));
-										product.setDescription(altresult.getString("Description"));
-										product.setCategory(altresult.getString("Category"));
-										product.setPhoto(altresult.getString("Photo"));
-										products.add(product);
-									}
-								}
-							}
-						}
+					return products;
+				}
+			}
+		}
+	}
+	
+	public ArrayList<Product> defaultProducts(int num) throws SQLException{
+		ArrayList<Product> products = new ArrayList<Product>();
+		String query = "SELECT Code, Name, Description,Category,Photo \r\n"
+						+"FROM product P \r\n"
+						+"WHERE ? > (select count(*) from product where Code < P.Code)";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(num));
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) {
+					return null;	        
+				}
+				else {
+					while(result.next()) {
+						Product product = new Product();
+						product.setCode(Integer.parseInt(result.getString("Code")));
+						product.setName(result.getString("Name"));
+						product.setDescription(result.getString("Description"));
+						product.setCategory(result.getString("Category"));
+						product.setPhoto(result.getString("Photo"));
+						products.add(product);
 					}
 					return products;
 				}
 			}
 		}
+	}
+	
+	public ArrayList<Product> produtcsToVisualize(User user) throws SQLException{
+		ArrayList<Product> products1 = new ArrayList<Product>();
+		ArrayList<Product> products2 = new ArrayList<Product>();
+		
+		int lenght;
+		products1 = memoryProducts(user);
+		if(products1 == null) {
+			lenght = 5;
+			products2 = defaultProducts(lenght);
+		}
+		else if(products1.size() < 5) {
+			lenght = 5-products1.size();
+			products2 = defaultProducts(lenght);
+			products1.addAll(products2);
+		}
+		
+		
+		if(products1 != null)
+			return products1;
+		else return products2;
 	}
 		
 	
@@ -128,7 +131,7 @@ public class ProductDao {
 		ArrayList<Product> products = new ArrayList<Product>();
 		String query = "select P.Code, P.Name, P.Description, P.Category, P.Photo \r\n"
 						+"from (product P join composed C on P.Code=ProductCode) join orders O on O.Code=OrderCode \r\n"
-						+"where OrderCode = ? \r\n";
+						+"where OrderCode = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(orderCode) );
 			try (ResultSet result = pstatement.executeQuery();) {

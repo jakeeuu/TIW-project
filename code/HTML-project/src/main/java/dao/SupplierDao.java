@@ -22,7 +22,7 @@ public class SupplierDao {
 		ArrayList<Supplier> suppliers = new ArrayList<Supplier>();
 		String query = "select SupCode,SupName, Score, Price, FreeShipping \r\n"
 						+"from alldata \r\n"
-						+"where ProdCode = ? \r\n";
+						+"where ProdCode = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(code));
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -48,7 +48,7 @@ public class SupplierDao {
 	public CartSupplier infoCartSupplier(int prodCode, int supCode) throws SQLException{
 		String query = "Select Price,  P.Name as CName, S.Name as SName \r\n"
 						+"from (product P join sold_by  ON P.Code=ProdCode) join supplier s on S.Code=SupCode \r\n"
-						+"where P.Code = ? and S.Code=? \r\n";
+						+"where P.Code = ? and S.Code=?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(prodCode));
 			pstatement.setString(2, String.valueOf(supCode));

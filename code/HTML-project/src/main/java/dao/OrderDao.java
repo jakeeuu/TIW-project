@@ -79,7 +79,7 @@ public class OrderDao {
 		String query = "select O.Code, Supplier,Total, Date, U.Address \r\n"
 						+"from orders O join user U on MailUser = Mail \r\n"
 						+"where Mail = ? \r\n"
-						+"order by Date \r\n";
+						+"order by Date";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, mailUser);
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -107,7 +107,7 @@ public class OrderDao {
 		String query = "select ProductCode, Quantity \r\n"
 						+"from composed \r\n" 
 						+"where OrderCode = ? \r\n"
-						+"group by ProductCode \r\n";
+						+"group by ProductCode";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(orderCode));
 			try (ResultSet result = pstatement.executeQuery();) {
