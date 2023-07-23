@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -13,11 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import beans.Order;
 import beans.User;
 import dao.OrderDao;
+import dao.ProductDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
 
@@ -81,7 +85,31 @@ public class GoToOrder extends HttpServlet {
 		}
 		
 		OrderDao orderDao = new OrderDao(connection);
+		ProductDao productDao = new ProductDao(connection);
+		ArrayList<Order> orders = new ArrayList<Order>();
 		
+		try {
+			orders = orderDao.printOrders(mail);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		for(Order order : orders) {
+			try {
+				order.setProducts(productDao.productInOrders(order.getCode()));
+				order.setQuantity(orderDao.productsQuantity(order.getCode()));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		String path = "/WEB-INF/Orderpage.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		ctx.setVariable("orders", orders);
+		templateEngine.process(path, ctx, response.getWriter());
 	}
 
 	/**
