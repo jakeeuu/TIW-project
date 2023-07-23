@@ -10,10 +10,46 @@
 		<li><a th:href="@{/GoToHome}">Home</a></li>
 		<li><a th:href="@{/GoToCart}">Cart</a></li>
 		<li><a th:href="@{/GoToOrders}">Orders</a></li>
+		<li><a th:href="@{/Logout}">Logout</a></li>
 	</ul>
 	
 	<h1>Your cart: </h1>
 	<br>
 	
+	<table border = "1">
+		<thead>
+			<tr><th>Supplier code</th>
+				<th>Supplier name</th>
+				<th>Total price</th>
+				<th>Shipping price</th>
+		</thead>
+		
+		<tbody >
+			<div th:each="cartSupplier : ${cart}">
+				<tr>
+	     			<td th:text="${cartSupplier.code}">code</td>
+	     			<td th:text="${cartSupplier.name}">name</td>
+	     			<td th:text="${product.totalPrice}">total price</td>
+	     			<td th:text="${product.shippingPrice}">shipping price</td>
+	     			<td>
+		     			<form action="#" th:action="@{/CreateOrder}" method="POST">
+		     				<button type="submit" name="codeSupplier" value="${cartSupplier.code}">Order</button>
+		     			</form>
+	     			</td>
+	    		</tr>
+	    		<tr>
+	    			<td colspan="5">
+	    				<ul th:each="code : ${cartSupplier.prodCode}" th:each="name : ${cartSupplier.prodName}" th:each="counter : ${cartSupplier.prodCounter}">
+							<li>
+								<p th:text="${counter.value}">quantity </p><p> x </p>
+								<p th:text="${code}">product code </p>
+								<p th:text="${name}">product name</p>
+							</li>
+						</ul>
+	    			</td>
+	    		</tr>
+			</div>
+		</tbody>
+	</table>
 </body>
 </html>
