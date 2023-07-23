@@ -8,9 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import beans.CartSupplier;
 import beans.Order;
-import beans.User;
 
 public class OrderDao {
 	private Connection connection;
