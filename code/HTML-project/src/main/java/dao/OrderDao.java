@@ -61,9 +61,9 @@ public class OrderDao {
 	
 	public HashMap<Integer,Integer> productsQuantity (int orderCode)throws SQLException {
 		HashMap<Integer, Integer> quantity = new HashMap<Integer, Integer>();
-		String query = "select P.Code, C.Quantity \r\n"
+		String query = "select ProductCode, Quantity \r\n"
 						+"from composed \r\n" 
-						+"where OrderCode = ?"
+						+"where OrderCode = ? \r\n"
 						+"group by ProductCode \r\n";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(orderCode));
