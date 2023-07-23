@@ -2,17 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
-<meta/>
-<title>Login page</title>
+	<link rel="stylesheet" th:href="@{/CSS/Loginpage.css}" href="../CSS/Loginpage.css">
+	<title>Login page</title>
 </head>
 <body>
+	<div class = page>
+			<h1>Login: </h1>
+			<form action=CheckLogin method="POST"> <!-- Ti ho lasciato scritto così com'era ,ma qualcosa non va , mentre se scrivo action=CheckLogin funziona  -->
+				username: <input type="text" name="mail" required> <br>
+				password: <input type="password" name="password" required><br> 
+			<input type="submit" value="login">
+			</form>
+	</div>
 
-	<h1>Login: </h1>
-	<form action=CheckLogin method="POST"> <!-- Ti ho lasciato scritto così com'era ,ma qualcosa non va , mentre se scrivo action=CheckLogin funziona  -->
-		username: <input type="text" name="mail" required> <br>
-		password: <input type="password" name="password" required><br> 
-	<input type="submit" value="login">
-	</form>
 	
 </body>
 </html>

@@ -68,11 +68,14 @@ public class GoToHome extends HttpServlet {
 			return;
 		}
 		
-		for(int i=0; i<products.size(); i++) {
-			String photo= products.get(i).getPhoto();
-			String totalPath = servletContext.getInitParameter("img")+ photo;
-			products.get(i).setPhoto(totalPath);
+		if(products != null) {
+			for(int i=0; i<products.size(); i++) {
+				String photo= products.get(i).getPhoto();
+				String totalPath = servletContext.getInitParameter("img")+ photo;
+				products.get(i).setPhoto(totalPath);
+			}
 		}
+	
 	
 		String path = "/WEB-INF/Homepage.html";
 		ServletContext servletContext = getServletContext();
