@@ -90,7 +90,6 @@ public class ProductDao {
 			products1.addAll(products2);
 		}
 		
-		
 		if(products1 != null)
 			return products1;
 		else return products2;
