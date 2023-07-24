@@ -98,10 +98,10 @@ public class ProductDao {
 	
 	public ArrayList<Product> produtcsFromSearch(String keyWord) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		String query = "SELECT P.Code, P.Name, Price, P.Description, P.Category, P.Photo \r\n"
+		String query = "SELECT P.Code, P.Name, Price, P.Description, P.Category, P.Photo \r\n" 
 						+"FROM product P join sold_by S on Code=ProdCode \r\n"
-						+"WHERE Name LIKE ? or Description like ? and Price = (select min(Price) from product join sold_by on Code=ProdCode where Code=P.Code ) \r\n"
-				        +"Order by price";
+						+"WHERE (Name LIKE ? or Description like ?) and S.Price = (select min(Price) from sold_by  where ProdCode=S.ProdCode )\r\n"
+						+"Order by price";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, "%" + keyWord + "%");
 			pstatement.setString(2, "%" + keyWord + "%");

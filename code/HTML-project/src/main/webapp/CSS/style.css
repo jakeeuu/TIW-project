@@ -54,5 +54,6 @@ ul#menu li.active, ul#menu li:hover {
 }
 
 .error{
-	color : red;
+	text-align: center;
+    color: red;
 }
