@@ -29,8 +29,9 @@
 		
 	<br>
 	
+	<p th:class="error" th:text="${error}"></p>
 	
-		<table border = "1">
+	<table border = "1" th:if="${error} == null">
 		<thead>
 			<tr><th>Product code</th>
 				<th>Product name</th>

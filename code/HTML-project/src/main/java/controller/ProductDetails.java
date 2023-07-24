@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.sql.Date;
 
@@ -120,8 +121,9 @@ public class ProductDetails extends HttpServlet {
 		String mail = user.getMail();
 		
 		Date date = new Date(System.currentTimeMillis());
+		Time time = new Time(date.getTime());
 		try {
-			productDao.insertInto(mail,productCode,date);
+			productDao.insertInto(mail,productCode,date, time);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

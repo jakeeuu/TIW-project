@@ -57,20 +57,23 @@ public class GoToHome extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		User user = (User) session.getAttribute("user");
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Product> products = new ArrayList<Product>();
 		
+		
+		String path;
 		try {
 			products = productDao.produtcsToVisualize(user);
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to visualize top five products list");
+			ctx.setVariable("error", "Not possible to visualize top five products list for a db problem");
+			path = "/LoginPage.html";
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		}
 	
-		String path = "/WEB-INF/Homepage.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		path = "/WEB-INF/Homepage.html";
 		ctx.setVariable("products", products);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
