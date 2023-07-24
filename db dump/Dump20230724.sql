@@ -127,7 +127,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (0,'Manuale del giocatore','Manuale fondamentale per la creazione di personaggi di D&D','Giochi','Manuale_del_giocatore'),(1,'Spazzola','Spazzola per capelli ricci. Professionale','Igiene','Spazzola'),(2,'Unico anello','Un anello per domarli, un anello per trovarli, un anello per ghermirli e nel buio incatenarli','Lusso','Unico_anello'),(3,'Morte nera','Set lego della morte nera di Star wars','Giochi','Morte_nera'),(4,'Borraccia','Borraccia da un litro , sportiva','Alimentazione','Borraccia'),(5,'Kinder Joy Harry Potter','Fantastici funko pop di Harry Potter all\'interno','Alimentazione','Kinder_joy'),(6,'Tostapane','Tostapane da non condividere con le coinquiline','Elettrodomestici','Tostapane'),(7,'Pacchetto carte pokemon','Gotta Catch Em All','Giochi','Carte_Pokemon'),(8,'Millennium Falcon ','Astronave guidata da Han Solo in Star wars','Giochi','Millennium_falcon'),(9,'Fantastici 4 action figure','Divertiti con i tuoi eroi preferiti della Marvel','Giochi','Fantastici_4');
+INSERT INTO `product` VALUES (0,'Manuale del giocatore','Manuale fondamentale per la creazione di personaggi di D&D','Giochi','Manuale_del_giocatore.jpg'),(1,'Spazzola','Spazzola per capelli ricci. Professionale','Igiene','Spazzola.jpeg'),(2,'Unico anello','Un anello per domarli, un anello per trovarli, un anello per ghermirli e nel buio incatenarli','Lusso','Unico_anello.jpeg'),(3,'Morte nera','Set lego della morte nera di Star wars','Giochi','Morte_nera.jpeg'),(4,'Borraccia','Borraccia da un litro , sportiva','Alimentazione','Borraccia.jpeg'),(5,'Kinder Joy Harry Potter','Fantastici funko pop di Harry Potter all\'interno','Alimentazione','Kinder_joy.jpeg'),(6,'Tostapane','Tostapane da non condividere con le coinquiline','Elettrodomestici','Tostapane.jpeg'),(7,'Pacchetto carte pokemon','Gotta Catch Em All','Giochi','Carte_Pokemon.jpeg'),(8,'Millennium Falcon ','Astronave guidata da Han Solo in Star wars','Giochi','Millennium_falcon.jpeg'),(9,'Fantastici 4 action figure','Divertiti con i tuoi eroi preferiti della Marvel','Giochi','Fantastici_4.jpeg');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -284,7 +284,7 @@ CREATE TABLE `visualize` (
 
 LOCK TABLES `visualize` WRITE;
 /*!40000 ALTER TABLE `visualize` DISABLE KEYS */;
-INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-02-18'),('chiara@gmail.com',1,'2022-04-02'),('chiara@gmail.com',2,'2023-04-02'),('chiara@gmail.com',3,'2023-07-16'),('chiara@gmail.com',4,'2023-06-09'),('chiara@gmail.com',5,'2021-12-12'),('chiara@gmail.com',6,'2022-12-25'),('chiara@gmail.com',7,'2023-05-04');
+INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-02-18'),('chiara@gmail.com',1,'2022-04-02'),('chiara@gmail.com',2,'2023-04-02'),('chiara@gmail.com',3,'2023-07-24'),('chiara@gmail.com',4,'2023-06-09'),('chiara@gmail.com',5,'2021-12-12'),('chiara@gmail.com',6,'2022-12-25'),('chiara@gmail.com',7,'2023-05-04');
 /*!40000 ALTER TABLE `visualize` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,4 +333,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-23  9:46:56
+-- Dump completed on 2023-07-24 10:35:48
