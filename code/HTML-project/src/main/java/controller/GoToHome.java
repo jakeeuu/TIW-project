@@ -67,15 +67,6 @@ public class GoToHome extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to visualize top five products list");
 			return;
 		}
-		
-		if(products != null) {
-			for(int i=0; i<products.size(); i++) {
-				String photo= products.get(i).getPhoto();
-				String totalPath = servletContext.getInitParameter("img")+ photo;
-				products.get(i).setPhoto(totalPath);
-			}
-		}
-	
 	
 		String path = "/WEB-INF/Homepage.html";
 		ServletContext servletContext = getServletContext();

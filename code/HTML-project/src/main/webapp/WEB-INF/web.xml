@@ -18,8 +18,8 @@
 	<param-value>com.mysql.cj.jdbc.Driver</param-value>
 </context-param>
 <context-param>
-	<param-name>img</param-name>
-	<param-value>C:\\Users\\balla\\OneDrive\\Desktop\\secondo semestre\\TIW-project\\Images\\</param-value>
+	<param-name>imgFolderPath</param-name>
+	<param-value>C:\Users\balla\OneDrive\Desktop\secondo semestre\TIW-project\Images\</param-value>
 </context-param>
 <filter-mapping> 
     <filter-name>loginChecker</filter-name> 
@@ -30,6 +30,7 @@
     <url-pattern>/ProductDetails</url-pattern> 
     <url-pattern>/CheckQuantity</url-pattern>
     <url-pattern>/CreateOrder</url-pattern>
+    <url-pattern>/GetImage</url-pattern>
 </filter-mapping>
 <welcome-file-list>
    	<welcome-file>LoginPage.html</welcome-file>
