@@ -7,6 +7,15 @@
     justify-content: center;
 }
 
+
+.login{
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	flex-direction: column; /* Imposta il layout in colonna */
+  	height: 70vh;
+}
+
 table {
     border: 1px solid #000;
     background-color: #FF831C;

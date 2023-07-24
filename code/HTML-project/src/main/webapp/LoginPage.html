@@ -6,11 +6,9 @@
 	<title>Login page</title>
 </head>
 <body>
-		<div class = "title">
-			<h1>Login: </h1>
-		</div>
 		
-		<div class= "container">
+		<div class= "login">
+			<h1>Login: </h1>
 			<form action=CheckLogin method="POST"> 
 				username: <input type="text" name="mail" required> <br>
 				password: <input type="password" name="password" required><br> 
@@ -18,9 +16,5 @@
 			<p th:class="error" th:text="${error}"></p>
 			</form>
 		</div>
-		
-	
-
-	
 </body>
 </html>
