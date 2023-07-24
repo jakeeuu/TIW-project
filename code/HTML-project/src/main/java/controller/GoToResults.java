@@ -55,17 +55,26 @@ public class GoToResults extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		String keyWord = null;
+		String error = null;
+		String path = "/WEB-INF/Resultspage.html";
+		
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			if(keyWord.isEmpty()) {
-				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
-				return;
+				error = "You have to write something into the search box";
 			}	
 		}catch(NullPointerException e) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
+			error = "You have to write something into the search box";
+		}
+		
+		if(error != null) {
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
-		}	
+		}
+		
 		
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Product> products = new ArrayList<Product>();
@@ -73,16 +82,20 @@ public class GoToResults extends HttpServlet {
 		try {
 			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
-			return;
+			error = "db problem during the search of key word";
 		} catch (NullPointerException e) {
-			//se mi ritorna null significa che non ha trovato nulla che corrisponda al key word
-			// come lo gestisco?? tonro alla home ?? in più mando un errore???
+			error = "no match was found for the key word";
+		}
+	
+		if(error != null) {
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
+			return;
 		}
 		
-		String path = "/WEB-INF/Resultspage.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		String clickError = StringEscapeUtils.escapeJava(request.getParameter("click_error"));
+		if(clickError != null)
+			ctx.setVariable("clickError", clickError);
 		ctx.setVariable("products", products);
 		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
