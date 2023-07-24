@@ -2,21 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
+	<link rel="stylesheet" th:href="@{/CSS/style.css}" href="../CSS/style.css">
 	<title>Cart Page</title>
 </head>
 <body>
+	<div class = "container">
+		<ul id = "menu">
+			<li><a th:href="@{/GoToHome}">Home</a></li>
+			<li><a th:href="@{/GoToCart}">Cart</a></li>
+			<li><a th:href="@{/GoToOrders}">Orders</a></li>
+			<li><a th:href="@{/Logout}">Logout</a></li>
+		</ul>
+	</div>
 	
-	<ul id = "menu">
-		<li><a th:href="@{/GoToHome}">Home</a></li>
-		<li><a th:href="@{/GoToCart}">Cart</a></li>
-		<li><a th:href="@{/GoToOrders}">Orders</a></li>
-		<li><a th:href="@{/Logout}">Logout</a></li>
-	</ul>
-	
-	<h1>Your cart: </h1>
+	<div class="title">
+		<h1>Your cart: </h1>
+	</div>
+
 	<br>
 	
-	<table border = "1">
+	<div class = "container">
+		<table border = "1">
 		<thead>
 			<tr><th>Supplier code</th>
 				<th>Supplier name</th>
@@ -51,5 +57,8 @@
 			</div>
 		</tbody>
 	</table>
+	</div>
+	
+	
 </body>
 </html>

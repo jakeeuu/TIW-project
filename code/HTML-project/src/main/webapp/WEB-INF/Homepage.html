@@ -6,7 +6,7 @@
 	<title>Home page</title>
 </head>
 <body>
-	<div class = "link">
+	<div class = "container">
 		<ul id = "menu">
 			<li class = "active"><a th:href="@{/GoToHome}">Home</a></li>
 			<li><a th:href="@{/GoToCart}">Cart</a></li>
@@ -21,36 +21,39 @@
 		<br>
 	</div>
 	
-	
-	<form action="#" th:action="@{/GoToResults}" method="POST">
-		Search for a product: <input type="text" name="key_word"> 
-	 	<input  type="submit" value="Search" >
-	</form>
-		
+	<div class="container">
+		<form action="#" th:action="@{/GoToResults}" method="POST">
+			Search for a product: <input type="text" name="key_word"> 
+ 			<input  type="submit" value="Search" >
+			</form>
+	</div>
+
 	<br>
 	
-	
-		<table border = "1">
-		<thead>
-			<tr><th>Product code</th>
-				<th>Product name</th>
-				<th>Description</th>
-				<th>Category</th>
-				<th>Photo</th></tr>
-		</thead>
+	<div class="container">
+			<table border = "1" >
+			<thead>
+				<tr><th>Product code</th>
+					<th>Product name</th>
+					<th>Description</th>
+					<th>Category</th>
+					<th>Photo</th></tr>
+			</thead>
 		
-		<tbody >
-    		<tr th:each="product : ${products}">
-     			<td th:text="${product.code}">code</td>
-     			<td th:text="${product.name}">name</td>
-     			<td th:text="${product.description}">description</td>
-     			<td th:text="${product.category}">category</td>
-     			<td>
-     				<img th:src="@{/GetImage(image = ${product.photo})}" alt="image" style="width: 300px; height: 200px">
-     			</td>
-    		</tr>
-		</tbody>
-	</table>
+			<tbody >
+    			<tr th:each="product : ${products}">
+     				<td th:text="${product.code}">code</td>  
+     				<td th:text="${product.name}">name</td>
+     				<td th:text="${product.description}">description</td>
+     				<td th:text="${product.category}">category</td>
+     				<td class="image-cell">
+     					<img th:src="@{/GetImage(image = ${product.photo})}" alt="image">
+     				</td>
+    			</tr>
+			</tbody>
+		</table>
+	</div>
+	
 	
 	
 	
