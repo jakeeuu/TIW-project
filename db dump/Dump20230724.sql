@@ -146,7 +146,8 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `Description`,
  1 AS `Category`,
  1 AS `Photo`,
- 1 AS `Date`*/;
+ 1 AS `Date`,
+ 1 AS `Time`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -270,7 +271,8 @@ CREATE TABLE `visualize` (
   `MailUser` varchar(30) NOT NULL,
   `ProdCode` int NOT NULL,
   `Date` date NOT NULL,
-  PRIMARY KEY (`MailUser`,`ProdCode`,`Date`),
+  `Time` time NOT NULL,
+  PRIMARY KEY (`MailUser`,`ProdCode`,`Date`,`Time`),
   KEY `MailUser` (`MailUser`),
   KEY `ProdCode` (`ProdCode`),
   CONSTRAINT `visualize_ibfk_1` FOREIGN KEY (`MailUser`) REFERENCES `user` (`Mail`),
@@ -284,7 +286,7 @@ CREATE TABLE `visualize` (
 
 LOCK TABLES `visualize` WRITE;
 /*!40000 ALTER TABLE `visualize` DISABLE KEYS */;
-INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-02-18'),('chiara@gmail.com',1,'2022-04-02'),('chiara@gmail.com',2,'2023-04-02'),('chiara@gmail.com',3,'2023-07-24'),('chiara@gmail.com',4,'2023-06-09'),('chiara@gmail.com',5,'2021-12-12'),('chiara@gmail.com',6,'2022-12-25'),('chiara@gmail.com',7,'2023-05-04');
+INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-07-24','12:00:00'),('chiara@gmail.com',1,'2023-07-24','09:00:00'),('chiara@gmail.com',2,'2023-07-24','08:28:00'),('chiara@gmail.com',3,'2023-07-24','15:00:00'),('chiara@gmail.com',4,'2023-07-24','11:29:41'),('chiara@gmail.com',5,'2021-12-12','09:33:04'),('chiara@gmail.com',6,'2023-07-24','10:02:02'),('chiara@gmail.com',7,'2023-05-04','17:00:00'),('chiara@gmail.com',8,'2023-07-24','11:29:03');
 /*!40000 ALTER TABLE `visualize` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +321,7 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `productvisualized` (`Mail`,`ProdCode`,`Name`,`Description`,`Category`,`Photo`,`Date`) AS select `user`.`Mail` AS `Mail`,`product`.`Code` AS `code`,`product`.`Name` AS `name`,`product`.`Description` AS `description`,`product`.`Category` AS `Category`,`product`.`Photo` AS `Photo`,`visualize`.`Date` AS `Date` from ((`visualize` join `product` on((`visualize`.`ProdCode` = `product`.`Code`))) join `user` on((`visualize`.`MailUser` = `user`.`Mail`))) */;
+/*!50001 VIEW `productvisualized` (`Mail`,`ProdCode`,`Name`,`Description`,`Category`,`Photo`,`Date`,`Time`) AS select `user`.`Mail` AS `Mail`,`product`.`Code` AS `code`,`product`.`Name` AS `name`,`product`.`Description` AS `description`,`product`.`Category` AS `Category`,`product`.`Photo` AS `Photo`,`visualize`.`Date` AS `Date`,`visualize`.`Time` AS `Time` from ((`visualize` join `product` on((`visualize`.`ProdCode` = `product`.`Code`))) join `user` on((`visualize`.`MailUser` = `user`.`Mail`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -333,4 +335,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-24 10:35:48
+-- Dump completed on 2023-07-24 11:35:52
