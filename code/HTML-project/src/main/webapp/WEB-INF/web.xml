@@ -19,7 +19,7 @@
 </context-param>
 <context-param>
 	<param-name>imgFolderPath</param-name>
-	<param-value>C:\Users\balla\OneDrive\Desktop\secondo semestre\TIW-project\Images\</param-value>
+	<param-value>C:\Users\balla\OneDrive\Desktop\secondo semestre\TIW-project\images\</param-value>
 </context-param>
 <filter-mapping> 
     <filter-name>loginChecker</filter-name> 

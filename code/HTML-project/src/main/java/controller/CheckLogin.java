@@ -31,7 +31,7 @@ public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private Connection connection = null;
 	private TemplateEngine templateEngine;
-    
+    private ServletContext servletContext;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,7 +43,7 @@ public class CheckLogin extends HttpServlet {
     
     public void init() throws ServletException {
     	connection = ConnectionHandler.getConnection(getServletContext());
-		ServletContext servletContext = getServletContext();
+		servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
@@ -66,26 +66,28 @@ public class CheckLogin extends HttpServlet {
 		
 		String mail = request.getParameter("mail");
 		String password = request.getParameter("password");
+		String error = null;
 		
 		if (mail == null || mail.isEmpty() || password == null || password.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential");
-			return;
+			error = "Missing credential";
 		}
 		
 		UserDao userDao = new UserDao(connection);
-		User user;
+		User user = null;
 		try {
 			user = userDao.checkCredentials(mail, password);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failure in database credential checking");
-			return;
+			error = "Failure in database credential checking";
+		}
+		
+		if(user == null) {
+			error = "Incorrect mail or password";
 		}
 		
 		String path;
-		if (user == null) {
-			ServletContext servletContext = getServletContext();
+		if (error != null) {
 			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("error", "Incorrect mail or password");
+			ctx.setVariable("error", error);
 			path = "/LoginPage.html";
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
@@ -95,7 +97,7 @@ public class CheckLogin extends HttpServlet {
 			}
 			
 			request.getSession().setAttribute("user", user);
-			path = getServletContext().getContextPath() + "/GoToHome";
+			path = servletContext.getContextPath() + "/GoToHome";
 			response.sendRedirect(path);
 		}
 	}
