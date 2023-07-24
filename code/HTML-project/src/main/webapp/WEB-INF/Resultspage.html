@@ -6,7 +6,7 @@
 	<title>Results page</title>
 </head>
 <body>
-	<div class = "link">
+	<div class = "container">
 		<ul id = "menu">
 			<li class = "active"><a th:href="@{/GoToHome}">Home</a></li>
 			<li><a th:href="@{/GoToCart}">Cart</a></li>
@@ -18,53 +18,57 @@
 	
 	<br>
 	
-	<form action="#" th:action="@{/GoToResults}" method="POST">
-		Search for a product: <input type="text" name="key_word"> 
-	 	<input type="submit" value="Search">
-	</form>
+	<div class = "container">
+		<form action="#" th:action="@{/GoToResults}" method="POST">
+			Search for a product: <input type="text" name="key_word"> 
+	 		<input type="submit" value="Search">
+		</form>
+	</div>
 	
 	
 	<br>
 	
-	<table border = "1">
-		<thead>
-			<tr><th>Product code</th>
-				<th>Product name</th>
-				<th>Minimum price</th>
-		</thead>
+	<div class = "container">
+		<table border = "1">
+			<thead>
+				<tr><th>Product code</th>
+					<th>Product name</th>
+					<th>Minimum price</th>
+			</thead>
 		
-		<tbody >
-			<div th:each="product : ${products}">
-	    		<tr>
-	     			<td>
-	     				<a th:href="@{/ProductDetails(product_code=${product.code}, key_word=${keyWord} )}">
-	     					<p th:text="${product.code}">code</p>
-	     				</a>
-	     			</td>
-	     			<td th:text="${product.name}">name</td>
-	     			<td th:text="${product.minimumPrice}">minimum price</td>
-	    		</tr>
+			<tbody >
+				<div th:each="product : ${products}">
+	    			<tr>
+	     				<td>
+	     					<a th:href="@{/ProductDetails(product_code=${product.code}, key_word=${keyWord} )}">
+	     						<p th:text="${product.code}">code</p>
+	     					</a>
+	     				</td>
+	     				<td th:text="${product.name}">name</td>
+	     				<td th:text="${product.minimumPrice}">minimum price</td>
+	    			</tr>
 	    		 											
-     			<tr th:each="supplier : ${product.suppliers}">
-     				<td colspan="3">
-     					<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
-     					<p>
-	     					<span th:text="${supplier.name}"></span>
-	     					<span th:text="${supplier.score}"></span>
-	     					<span th:text="${supplier.unitaryPrice}"></span>
-	     					<span th:text="${supplier.freeShipping}"></span>
-	     					<span th:text="${supplier.totalProductsPrice}"></span>
-     					</p>
-     					<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
-							<input type="number" name="quantity">
-						 	<input type="submit" value="Add to Cart">
-						</form>
+     				<tr th:each="supplier : ${product.suppliers}">
+     					<td colspan="3">
+     						<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
+     						<p>
+	     						<span th:text="${supplier.name}"></span>
+	     						<span th:text="${supplier.score}"></span>
+	     						<span th:text="${supplier.unitaryPrice}"></span>
+	     						<span th:text="${supplier.freeShipping}"></span>
+	     						<span th:text="${supplier.totalProductsPrice}"></span>
+     						</p>
+     						<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
+								<input type="number" name="quantity">
+						 		<input type="submit" value="Add to Cart">
+							</form>
 						
-     				</td>
-     			</tr>	
+     					</td>
+     				</tr>	
 	     		
-    		</div>
-		</tbody>
-	</table>
+    				</div>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

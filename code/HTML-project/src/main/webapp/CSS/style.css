@@ -2,15 +2,14 @@
 	text-align: center;
 }
 
-.link{
+.container{
 	display: flex;
     justify-content: center;
-    
 }
+
 table {
     border: 1px solid #000;
     background-color: #FF831C;
-   
 }
 tr {
     background-color: #e2f8fa;
@@ -56,4 +55,15 @@ ul#menu li.active, ul#menu li:hover {
 .error{
 	text-align: center;
     color: red;
+}
+
+.image-cell {
+  width: 20%; /* Imposta la larghezza della colonna delle immagini al 30% della larghezza della tabella */
+}
+
+img {
+  width: 100%; /* Imposta la larghezza dell'immagine al 100% della larghezza della cella delle immagini */
+  height: auto; /* L'altezza verrà calcolata in modo proporzionale mantenendo l'aspetto originale */
+  display: block; /* Consente di centrare l'immagine orizzontalmente nella cella */
+  margin: 0 auto; /* Centra l'immagine orizzontalmente nella cella */
 }
