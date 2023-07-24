@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.sql.Date;
@@ -20,10 +21,10 @@ public class ProductDao {
 	
 	public ArrayList<Product> memoryProducts(User user) throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		String query = 	"SELECT ProdCode, Name, Description,Category,Photo\r\n"
-				 		+ "FROM ProductVisualized PR\r\n"
-				 		+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date and Mail = ?)\r\n"
-				        +"Order by Date DESC";
+		String query = "SELECT ProdCode, Name, Description,Category,Photo \r\n"
+						+"FROM productVisualized PR \r\n"
+						+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date or (Date = PR.Date and Time > PR.TIME) and Mail = ?) \r\n"
+						+"Order by Date DESC , Time DESC";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, user.getMail());
 			pstatement.setString(2, user.getMail());
@@ -153,14 +154,14 @@ public class ProductDao {
 		}
 	}
 	
-	public void insertInto(String mailUser, int prodCode,Date date) throws SQLException {
+	public void insertInto(String mailUser, int prodCode,Date date, Time time) throws SQLException {
 		String query1= "select count(*)\r\n"
 						+ "from visualize\r\n"
 						+ "where MailUser=? and ProdCode=?";
 		String query2 = "update visualize \r\n"
-						+ "set Date= ? \r\n"
+						+ "set Date= ?, Time = ? \r\n"
 						+ "where ProdCode = ? and MailUser= ?";
-		String query3 = "insert into visualize (MailUser, ProdCode, Date) values(?,?,?)";
+		String query3 = "insert into visualize (MailUser, ProdCode, Date, Time) values(?,?,?,?)";
 		try(PreparedStatement pstatement = connection.prepareStatement(query1);){
 			pstatement.setString(1, mailUser);
 			pstatement.setString(2, String.valueOf(prodCode));
@@ -169,8 +170,9 @@ public class ProductDao {
 				if(result.getInt("count(*)")>=1) {
 					try(PreparedStatement pstatement2 = connection.prepareStatement(query2);){
 						pstatement2.setDate(1, date);
-						pstatement2.setString(2, String.valueOf(prodCode));
-						pstatement2.setString(3, mailUser);
+						pstatement2.setTime(2, time);
+						pstatement2.setString(3, String.valueOf(prodCode));
+						pstatement2.setString(4, mailUser);
 						pstatement2.executeUpdate();
 					}
 				}else {
@@ -178,6 +180,7 @@ public class ProductDao {
 						pstatement3.setString(1, mailUser);
 						pstatement3.setString(2, String.valueOf(prodCode));
 						pstatement3.setDate(3, date);
+						pstatement3.setTime(4, time);
 						pstatement3.executeUpdate();
 					}
 				}
