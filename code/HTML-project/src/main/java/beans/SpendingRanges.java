@@ -1,40 +1,40 @@
 package beans;
 
 public class SpendingRanges {
-	private int SupCode;
-	private float Price;
-	private int MaximumN;
-	private int MinimumN;
+	private int supCode;
+	private float price;
+	private int maximumN;
+	private int minimumN;
 	
 	public void setSupCode(int code) {
-		this.SupCode = code;
+		this.supCode = code;
 	}
 	
 	public int getSupCode() {
-		return this.SupCode;
+		return this.supCode;
 	}
 	
 	public void setPrice(float price) {
-		this.Price = price;
+		this.price = price;
 	}
 	
 	public float getPrice() {
-		return this.Price;
+		return this.price;
 	}
 	
 	public void setMaximumN(int num) {
-		this.MaximumN = num;
+		this.maximumN = num;
 	}
 	
 	public int getMaximumN() {
-		return this.MaximumN;
+		return this.maximumN;
 	}
 	
 	public void setMinimumN(int num) {
-		this.MinimumN = num;
+		this.minimumN = num;
 	}
 	
-	public int getMinimummN() {
-		return this.MinimumN;
+	public int getMinimumN() {
+		return this.minimumN;
 	}
 }

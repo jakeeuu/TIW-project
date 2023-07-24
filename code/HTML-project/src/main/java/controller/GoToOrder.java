@@ -19,6 +19,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import beans.Order;
+import beans.Product;
 import beans.User;
 import dao.OrderDao;
 import dao.ProductDao;
@@ -61,29 +62,6 @@ public class GoToOrder extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		String mail = user.getMail();
 		
-		int supplierCode = 0;
-		boolean badRequest = false;
-		
-		SupplierDao supplierDao = new SupplierDao(connection);
-		
-		try {
-			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
-			if(supplierCode < 0 || !supplierDao.isValidCode(supplierCode)) {
-				badRequest = true;
-			}
-		}catch(NumberFormatException | NullPointerException e) {
-			badRequest = true;
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if(badRequest) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
-			return;
-		}
-		
 		OrderDao orderDao = new OrderDao(connection);
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Order> orders = new ArrayList<Order>();
@@ -98,7 +76,10 @@ public class GoToOrder extends HttpServlet {
 		for(Order order : orders) {
 			try {
 				order.setProducts(productDao.productInOrders(order.getCode()));
-				order.setQuantity(orderDao.productsQuantity(order.getCode()));
+				/*order.setQuantity(orderDao.productsQuantity(order.getCode()));
+				for(Product p : order.getProducts()) {
+					p.setPrice(productDao.getPrice(order.);
+				}*/
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

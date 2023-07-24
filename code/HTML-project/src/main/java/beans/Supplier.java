@@ -9,7 +9,7 @@ public class Supplier {
 	private float unitaryPrice;
 	private float totalProductsPrice;
 	private float freeShipping;
-	private ArrayList<SpendingRanges> spendingranges;
+	private ArrayList<SpendingRanges> spendingRanges;
 	private int score;
 	
 	public int getCode(){
@@ -21,11 +21,11 @@ public class Supplier {
 	}
 	
 	public void setSpendingRanges(ArrayList<SpendingRanges> spendingranges){
-		this.spendingranges = spendingranges;
+		this.spendingRanges = spendingranges;
 	}
 	
-	public ArrayList<SpendingRanges> getSpendingRnages(){
-		return this.spendingranges;
+	public ArrayList<SpendingRanges> getSpendingRanges(){
+		return this.spendingRanges;
 	}
     
 	public float getUnitaryPrice(){

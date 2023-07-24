@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.sql.Date;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.CartSupplier;
+import beans.Product;
 import beans.User;
 import dao.OrderDao;
 import utils.ConnectionHandler;
@@ -71,8 +73,13 @@ public class CreateOrder extends HttpServlet {
 		Date date = new Date(System.currentTimeMillis());
 		float total = cartSupplier.getTotalPrice() + cartSupplier.getShippingPrice();
 		
+		HashMap<Integer,Integer> counter = new HashMap<Integer,Integer>();
+		for(Product p : cartSupplier.getProducts()) {
+			counter.put(p.getCode(),p.getQuantity());
+		}
+		
 		try {
-			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), cartSupplier.getProdCounter());
+			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), counter);
 			cart.remove(cartSupplier);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -7,15 +7,13 @@ public class CartSupplier {
 
 	private int code;
 	private String name;
-	private ArrayList<String> prodName;
-	private ArrayList<Integer> prodCode;
-	private HashMap<Integer, Integer> prodCounter;
+	private ArrayList<Product> products;
 	private float totalPrice;
 	private float shippingPrice;
 	
 	public CartSupplier() {
 		totalPrice = 0;
-		this.prodCounter = new HashMap<Integer, Integer>();
+		this.products = new ArrayList<Product>();
 	}
 	
 	public int getCode() {
@@ -26,10 +24,6 @@ public class CartSupplier {
 		return this.name;
 	}
 	
-	public ArrayList<String> getNameProducts(){
-		return this.prodName;
-	}
-	
 	public float getTotalPrice() {
 		return this.totalPrice;
 	}
@@ -38,24 +32,16 @@ public class CartSupplier {
 		return this.shippingPrice;
 	}
 	
-	public ArrayList<Integer> getCodeProducts(){
-		return this.prodCode;
+	public ArrayList<Product> getProducts(){
+		return this.products;
 	}
 	
-	public Integer getProdCounter(int prod) {
-		return this.prodCounter.get(prod);
-	}
-	
-	public HashMap<Integer,Integer> getProdCounter(){
-		return this.prodCounter;
-	}
-	
-	public void setProdCounter(int prod, int quantity) {
-		this.prodCounter.put(prod,quantity);
-	}
-	
-	public void setProdCounter(HashMap<Integer,Integer> prodCounter){
-		this.prodCounter = prodCounter;
+	public Product getProduct(int code) {
+		for(Product p : this.products) {
+			if(p.getCode() == code)
+				return p;
+		}
+		return null;
 	}
 	
 	public void setCode(int code) {
@@ -66,10 +52,6 @@ public class CartSupplier {
 		this.name = name;
 	}
 	
-	public void setNameProducts(ArrayList<String> prodName) {
-		this.prodName = prodName;
-	}
-	
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
@@ -78,7 +60,12 @@ public class CartSupplier {
 		this.shippingPrice = shippingPrice;
 	}
 	
-	public void setCodeProducts(ArrayList<Integer> prodCode){
-		this.prodCode = prodCode;
+	public void setProducts(ArrayList<Product> products) {
+		this.products = products;
 	}
+	
+	public void setProduct(Product product) {
+		this.products.add(product);
+	}
+
 }

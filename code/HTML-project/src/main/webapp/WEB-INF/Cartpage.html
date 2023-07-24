@@ -9,54 +9,53 @@
 	<div class = "container">
 		<ul id = "menu">
 			<li><a th:href="@{/GoToHome}">Home</a></li>
-			<li><a th:href="@{/GoToCart}">Cart</a></li>
-			<li><a th:href="@{/GoToOrders}">Orders</a></li>
+			<li class = "active"><a th:href="@{/GoToCart}">Cart</a></li>
+			<li><a th:href="@{/GoToOrder}">Orders</a></li>
 			<li><a th:href="@{/Logout}">Logout</a></li>
 		</ul>
 	</div>
 	
 	<div class="title">
-		<h1>Your cart: </h1>
+		<h1 th:if="${not #lists.isEmpty(cart)}">Your cart: </h1>
+		<h1 th:if="${#lists.isEmpty(cart)}">Your cart is empty</h1>
 	</div>
 
 	<br>
 	
-	<div class = "container">
+	<div class = "container" th:if="${not #lists.isEmpty(cart)}">
 		<table border = "1">
-		<thead>
-			<tr><th>Supplier code</th>
-				<th>Supplier name</th>
-				<th>Total price</th>
-				<th>Shipping price</th>
-		</thead>
-		
-		<tbody >
-			<div th:each="cartSupplier : ${cart}">
-				<tr>
-	     			<td th:text="${cartSupplier.code}">code</td>
-	     			<td th:text="${cartSupplier.name}">name</td>
-	     			<td th:text="${cartSupplier.totalPrice}">total price</td>
-	     			<td th:text="${cartSupplier.shippingPrice}">shipping price</td>
-	     			<td>
-		     			<form action="#" th:action="@{/CreateOrder}" method="POST">
-		     				<button type="submit" name="supplier_code" value="${cartSupplier.code}">Order</button>
-		     			</form>
-	     			</td>
-	    		</tr>
-	    		<tr>
-	    			<td colspan="5">
-						<ul th:each="code : ${cartSupplier.prodCode}, name : ${cartSupplier.prodName}, counter : ${cartSupplier.prodCounter}">
-							<li>
-								<p th:text="${counter.value}">quantity </p><p> x </p>
-								<p th:text="${code}">product code </p>
-								<p th:text="${name}">product name</p>
-							</li>
-						</ul>
-	    			</td>
-	    		</tr>
-			</div>
-		</tbody>
-	</table>
+			<thead>
+				<tr><th>Supplier code</th>
+					<th>Supplier name</th>
+					<th>Total price</th>
+					<th>Shipping price</th>
+			</thead>
+			
+			<tbody >
+				<div th:each="cartSupplier : ${cart}">
+					<tr>
+		     			<td th:text="${cartSupplier.code}">code</td>
+		     			<td th:text="${cartSupplier.name}">name</td>
+		     			<td th:text="${cartSupplier.totalPrice}">total price</td>
+		     			<td th:text="${cartSupplier.shippingPrice}">shipping price</td>
+		     			<td>
+			     			<form action="#" th:action="@{/CreateOrder}" method="POST">
+			     				<button type="submit" name="supplier_code" th:value="${cartSupplier.code} ">Order</button>
+			     			</form>
+		     			</td>
+		    		</tr>
+		    		<tr th:each="product : ${cartSupplier.products}">
+		    			<td colspan="5" >
+							<p>
+								<span th:text="${product.quantity}"></span><span> x </span>
+								<span th:text="${product.name}"></span>
+								<span> ( product code: </span><span th:text="${product.code}"></span><span> ) </span>
+							</p>
+		    			</td>
+		    		</tr>
+				</div>
+			</tbody>
+		</table>
 	</div>
 	
 	

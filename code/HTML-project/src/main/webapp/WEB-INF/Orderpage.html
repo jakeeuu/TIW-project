@@ -2,50 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8"/>
+	<link rel="stylesheet" th:href="@{/CSS/style.css}" href="../CSS/style.css">
 	<title>Order page</title>
 </head>
 <body>
-	<ul id = "menu">
-		<li><a th:href="@{/GoToHome}">Home</a></li>
-		<li><a th:href="@{/GoToCart}">Cart</a></li>
-		<li><a th:href="@{/GoToOrders}">Orders</a></li>
-		<li><a th:href="@{/Logout}">Logout</a></li>
-	</ul>
+	<div class = "container">
+		<ul id = "menu">
+			<li><a th:href="@{/GoToHome}">Home</a></li>
+			<li><a th:href="@{/GoToCart}">Cart</a></li>
+			<li class = "active"><a th:href="@{/GoToOrder}">Orders</a></li>
+			<li><a th:href="@{/Logout}">Logout</a></li>
+		</ul>
+	</div>
 	
-	<h1>Your order: </h1>
+	<div class="title">
+		<h1 th:if="${not #lists.isEmpty(orders)}">Your orders: </h1>
+		<h1 th:if="${#lists.isEmpty(orders)}">You have no orders</h1>
+	</div>
+	
 	<br>
 	
-	<table border = "1">
-		<thead>
-			<tr><th>Order code</th>
-				<th>Supplier name</th>
-				<th>Total price</th>
-				<th>Date</th>
-				<th>Address</th>
-		</thead>
-		
-		<tbody >
-			<div th:each="order : ${orders}">
-				<tr>
-	     			<td th:text="${order.code}">code</td>
-	     			<td th:text="${order.supplierName}">supplierName</td>
-	     			<td th:text="${order.totalPrice}">total price</td>
-	     			<td th:text="${order.date}">date</td>
-	     			<td th:text="${order.address}">address</td>
-	    		</tr>
-	    		<tr>
-	    			<td colspan="5">
-	    				<ul th:each="product : ${order.products}" th:each="quantity : ${order.quantity}">
-							<li>
-								<p th:text="${quantity.value}">quantity </p><p> x </p>
-								<p th:text="${product.code}">product code </p>
-								<p th:text="${product.name}">product name</p>
-							</li>
-						</ul>
-	    			</td>
-	    		</tr>
-			</div>
-		</tbody>
-	</table>
+	<div class = "container" th:if="${not #lists.isEmpty(cart)}">
+		<table border = "1">
+			<thead>
+				<tr><th>Order code</th>
+					<th>Supplier name</th>
+					<th>Total price</th>
+					<th>Date</th>
+					<th>Address</th>
+			</thead>
+			
+			<tbody >
+				<div th:each="order : ${orders}">
+					<tr>
+		     			<td th:text="${order.code}">code</td>
+		     			<td th:text="${order.supplierName}">supplierName</td>
+		     			<td th:text="${order.totalPrice}">total price</td>
+		     			<td th:text="${order.date}">date</td>
+		     			<td th:text="${order.address}">address</td>
+		    		</tr>
+		    		<tr th:each="product : ${order.products}">
+		    			<td colspan="5">
+		    				<p>
+								<span th:text="${product.quantity}"></span><span> x </span>
+								<span th:text="${product.name}"></span>
+								<span> ( product code: </span><span th:text="${product.code}"></span><span> ) </span>
+							</p>
+		    			</td>
+		    		</tr>
+				</div>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

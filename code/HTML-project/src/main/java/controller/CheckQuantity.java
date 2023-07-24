@@ -97,27 +97,26 @@ public class CheckQuantity extends HttpServlet {
 			cartSupplier = newSupplier;
 			float tmp = cartSupplier.getTotalPrice();
 			cartSupplier.setTotalPrice(quantity * tmp);
-			cartSupplier.setProdCounter(productCode, quantity);
+			cartSupplier.getProduct(productCode).setQuantity(quantity);
 			cart.add(cartSupplier);
 			
 		}else {
 			
-			Integer code = null;
-			for(Integer c : cartSupplier.getCodeProducts()) {
-				if(c == productCode) {
-					code = c;
+			Product product = null;
+			for(Product p : cartSupplier.getProducts()) {
+				if(p.getCode() == productCode) {
+					product = p;
 				}
 			}
 			
-			if(code == null) {
-				cartSupplier.getCodeProducts().add(newSupplier.getCodeProducts().get(0));
-				cartSupplier.getNameProducts().add(newSupplier.getNameProducts().get(0));
+			if(product == null) {
+				cartSupplier.setProduct(newSupplier.getProduct(productCode));
 			}
 			
 			float tmp = cartSupplier.getTotalPrice();
 			cartSupplier.setTotalPrice(quantity * newSupplier.getTotalPrice() + tmp);
-			int prevQuant = cartSupplier.getProdCounter(productCode);
-			cartSupplier.setProdCounter(productCode,quantity + prevQuant);
+			int prevQuant = cartSupplier.getProduct(productCode).getQuantity();
+			cartSupplier.getProduct(productCode).setQuantity(quantity + prevQuant);
 			
 		}
 		
@@ -146,13 +145,13 @@ public class CheckQuantity extends HttpServlet {
 				
 				int total = 0;
 				int i = 0;
-				while(cartSupplier.getProdCounter(i) != null) {
-					total = total + cartSupplier.getProdCounter(i);
+				while(cartSupplier.getProducts().get(i) != null) {
+					total = total + cartSupplier.getProducts().get(i).getQuantity();
 					i++;
 				}
 				
 				for(SpendingRanges sp : spendingRanges) {
-					if(total > sp.getMinimummN() && total < sp.getMaximumN()) {
+					if(total >= sp.getMinimumN() && total <= sp.getMaximumN()) {
 						cartSupplier.setShippingPrice(sp.getPrice());
 					}
 				}

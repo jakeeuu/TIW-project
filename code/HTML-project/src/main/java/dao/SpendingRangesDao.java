@@ -30,7 +30,11 @@ public class SpendingRangesDao {
 						spendingrange.setSupCode(Integer.parseInt(result.getString("SupCode")));
 						spendingrange.setPrice(Float.parseFloat(result.getString("Price")));
 						spendingrange.setMinimumN(Integer.parseInt(result.getString("MinimumN")));
-						spendingrange.setMaximumN(Integer.parseInt(result.getString("MaximumN")));
+						if(result.getString("MaximumN") != null) {
+							spendingrange.setMaximumN(Integer.parseInt(result.getString("MaximumN")));
+						}else {
+							spendingrange.setMaximumN(Integer.parseInt(result.getString("MinimumN")));
+						}	
 						spendingranges.add(spendingrange);
 						
 					}

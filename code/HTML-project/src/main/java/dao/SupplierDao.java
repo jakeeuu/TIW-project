@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import beans.CartSupplier;
+import beans.Product;
 import beans.Supplier;
 
 public class SupplierDao {
@@ -46,7 +47,7 @@ public class SupplierDao {
 	}
 	
 	public CartSupplier infoCartSupplier(int prodCode, int supCode) throws SQLException{
-		String query = "Select Price,  P.Name as CName, S.Name as SName \r\n"
+		String query = "Select Price, P.Name, S.Name \r\n"
 						+"from (product P join sold_by  on P.Code=ProdCode) join supplier S on S.Code=SupCode \r\n"
 						+"where P.Code = ? and S.Code=?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
@@ -59,16 +60,14 @@ public class SupplierDao {
 					result.next();
 					CartSupplier cSup = new CartSupplier();
 					cSup.setCode(supCode);
-					cSup.setName(result.getString("SName"));
-					ArrayList<String> pNames = new ArrayList<String>();
-					pNames.add(result.getString("CName"));
-					cSup.setNameProducts(pNames);
-					ArrayList<Integer> pCodes= new ArrayList<Integer>();
-					pCodes.add(prodCode);
-					cSup.setCodeProducts(pCodes);
+					cSup.setName(result.getString("S.Name"));
+					Product product = new Product();
+					cSup.setProduct(product);
+					product.setName(result.getString("P.Name"));
+					product.setCode(prodCode);
 					cSup.setTotalPrice(Float.parseFloat(result.getString("Price")));
-					cSup.setProdCounter(prodCode, 1);
-					
+					product.setPrice(Float.parseFloat(result.getString("Price")));
+					product.setQuantity(1);
 					return cSup;
 				}
 			}

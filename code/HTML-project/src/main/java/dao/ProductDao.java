@@ -129,7 +129,7 @@ public class ProductDao {
 	
 	public ArrayList<Product> productInOrders(int orderCode)throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		String query = "select P.Code, P.Name, P.Description, P.Category, P.Photo \r\n"
+		String query = "select P.Code, P.Name, Quantity  \r\n"
 						+"from (product P join composed C on P.Code=ProductCode) join orders O on O.Code=OrderCode \r\n"
 						+"where OrderCode = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
@@ -142,9 +142,7 @@ public class ProductDao {
 						Product product = new Product();
 						product.setCode(Integer.parseInt(result.getString("Code")));
 						product.setName(result.getString("Name"));
-						product.setDescription(result.getString("Description"));
-						product.setCategory(result.getString("Category"));
-						product.setPhoto(result.getString("Photo"));
+						product.setQuantity(Integer.parseInt(result.getString("Quantity")));
 						products.add(product);
 						
 					}

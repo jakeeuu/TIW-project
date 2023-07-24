@@ -11,6 +11,8 @@ public class Product {
 	private String photo;
 	private float minimumPrice;
 	private ArrayList<Supplier> suppliers;
+	private int quantity;
+	private float price;
 	
 	public int getCode() {
 		return this.code;
@@ -40,6 +42,14 @@ public class Product {
 		return this.suppliers;
 	}
 	
+	public int getQuantity() {
+		return this.quantity;
+	}
+	
+	public float getPrice() {
+		return this.price;
+	}
+	
 	public void setCode(int code) {
 		this.code = code;
 	}
@@ -56,7 +66,7 @@ public class Product {
 		this.category = category;
 	}
 	
-	public void setPhoto(String photo) { ////////////////////////////TODO : in questo setter metto il path per la directory delle immagini già impostato
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 	
@@ -66,5 +76,13 @@ public class Product {
 	
 	public void setSuppliers(ArrayList<Supplier> arrayList){
 		this.suppliers = arrayList;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	public void setPrice(float price) {
+		this.price = price;
 	}
 }

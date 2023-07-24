@@ -10,7 +10,7 @@
 		<ul id = "menu">
 			<li><a th:href="@{/GoToHome}">Home</a></li>
 			<li><a th:href="@{/GoToCart}">Cart</a></li>
-			<li><a th:href="@{/GoToOrders}">Orders</a></li>
+			<li><a th:href="@{/GoToOrder}">Orders</a></li>
 			<li><a th:href="@{/Logout}">Logout</a></li>
 		</ul>
 	</div>
@@ -52,17 +52,46 @@
 	     				<td th:text="${product.name}">name</td>
 	     				<td th:text="${product.minimumPrice}">minimum price</td>
 	    			</tr>
-	    		 											
+	    		 	<tr th:if="${not #lists.isEmpty(product.suppliers)}">
+	    		 		
+	    		 		<td>
+	    		 			<b>description:</b>
+	    		 			<p th:text="${product.description}"></p>
+	    		 		</td>
+     					<td>
+     						<b>category:</b>
+     						<p th:text="${product.category}"></p>
+     					</td>
+     					<td class="image-cell">
+     						<img th:src="@{/GetImage(image = ${product.photo})}" alt="image">
+     					</td>
+     					
+	    		 	</tr>									
      				<tr th:each="supplier : ${product.suppliers}">
      					<td colspan="3">
      						<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
      						<p>
-	     						<span th:text="${supplier.name}"></span>
-	     						<span th:text="${supplier.score}"></span>
-	     						<span th:text="${supplier.unitaryPrice}"></span>
-	     						<span th:text="${supplier.freeShipping}"></span>
-	     						<span th:text="${supplier.totalProductsPrice}"></span>
+     							<b>Supplier name: </b><span th:text="${supplier.name}"></span>
      						</p>
+     						<p>
+	     						<b>score: </b><span th:text="${supplier.score}"></span>
+	     						<b>price: </b><span th:text="${supplier.unitaryPrice}"></span><span>$</span>
+	     						<b>Total in cart: </b><span th:text="${supplier.totalProductsPrice}"></span><span>$</span>
+	     						<b>Minimum price for free shipping: </b><span th:text="${supplier.freeShipping}"></span><span>$</span>
+     						</p>
+     						
+     						<b>Spending ranges: </b>
+    						<ul>
+								<li th:each="range : ${supplier.spendingRanges}">
+									<div th:if="${range.minimumN} != ${range.maximumN}">
+										<p><span th:text="${range.minimumN}"></span><span> - </span><span th:text="${range.maximumN}"></span><span> products = </span><span th:text="${range.price}"></span><span>$</span></p>
+									</div>
+									<div th:if="${range.minimumN} == ${range.maximumN}">
+										<p><span>More than </span><span th:text="${range.minimumN}"></span><span> products = </span><span th:text="${range.price}"></span><span>$</span></p>
+									</div>
+								</li>
+							</ul>
+							
      						<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
 								<input type="number" name="quantity">
 						 		<input type="submit" value="Add to Cart">

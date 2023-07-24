@@ -26,6 +26,7 @@ import beans.Product;
 import beans.Supplier;
 import beans.User;
 import dao.ProductDao;
+import dao.SpendingRangesDao;
 import dao.SupplierDao;
 import utils.ConnectionHandler;
 
@@ -110,8 +111,12 @@ public class ProductDetails extends HttpServlet {
 		}
 		
 		SupplierDao supplierDao = new SupplierDao(connection);
+		SpendingRangesDao spendigRangesDao = new SpendingRangesDao(connection);
 		try {
 			product.setSuppliers(supplierDao.findAllSuppliers(productCode));
+			for(Supplier s : product.getSuppliers()) {
+				s.setSpendingRanges(spendigRangesDao.findSpendingRanges(s.getCode()));
+			}
 		}catch (SQLException e) {
 			clickError = "db error, click again";
 		} catch (NullPointerException e) {
