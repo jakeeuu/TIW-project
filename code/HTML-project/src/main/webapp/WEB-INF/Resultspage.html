@@ -8,7 +8,7 @@
 <body>
 	<div class = "container">
 		<ul id = "menu">
-			<li class = "active"><a th:href="@{/GoToHome}">Home</a></li>
+			<li><a th:href="@{/GoToHome}">Home</a></li>
 			<li><a th:href="@{/GoToCart}">Cart</a></li>
 			<li><a th:href="@{/GoToOrders}">Orders</a></li>
 			<li><a th:href="@{/Logout}">Logout</a></li>
@@ -28,8 +28,13 @@
 	
 	<br>
 	
-	<div class = "container">
-		<table border = "1">
+	<p th:class="error" th:text="${error}"></p>
+	
+	<p th:class="error" th:text="${clickError}"></p>
+	<br th:if="${clickError} != null">
+	
+	<div class = "container" >
+		<table border = "1" th:if="${error} == null">
 			<thead>
 				<tr><th>Product code</th>
 					<th>Product name</th>

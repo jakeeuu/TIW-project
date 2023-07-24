@@ -36,11 +36,12 @@ import utils.ConnectionHandler;
 public class ProductDetails extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
-	private Connection connection = null;     
+	private Connection connection = null;
+	private ServletContext servletContext;
 	
 	public void init() throws ServletException {
     	connection = ConnectionHandler.getConnection(getServletContext());
-		ServletContext servletContext = getServletContext();
+		servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
@@ -60,26 +61,30 @@ public class ProductDetails extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		boolean badRequest = false;
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		String path = servletContext.getContextPath() + "/GoToResults";
 		String keyWord = null;
 		Integer productCode = null;
 		
 		ProductDao productDao = new ProductDao(connection);
+		String clickError = null;
+		
 		
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
-			if(productCode < 0 || !productDao.isValidCode(productCode))
-				badRequest = true;
+			if(productCode < 0 || !productDao.isValidCode(productCode)) 
+				clickError = "this product code is invalid, click again";
+			if(keyWord.isEmpty())
+				response.sendRedirect(path);
 		}catch(NullPointerException | NumberFormatException e) {
-			badRequest = true;
-			e.printStackTrace();
+			clickError = "this product code is invalid, click again";
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			clickError = "db error, click again";
 		}
-		if(badRequest) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "You have to write something into the search box");
+		if(clickError!=null) {
+			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
+			response.sendRedirect(path);
 			return;
 		}
 		
@@ -89,11 +94,13 @@ public class ProductDetails extends HttpServlet {
 		try {
 			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
+			clickError = "db error, click again";
+			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
+			response.sendRedirect(path);
 			return;
 		} catch (NullPointerException e) {
-			//se mi ritorna null significa che non ha trovato nulla che corrisponda al key word
-			// come lo gestisco?? tonro alla home ?? in più mando un errore???
+			path = path + "?key_word=" + keyWord;
+			response.sendRedirect(path);
 		}
 		
 		Product product = null;
@@ -106,13 +113,15 @@ public class ProductDetails extends HttpServlet {
 		try {
 			product.setSuppliers(supplierDao.findAllSuppliers(productCode));
 		}catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Not possible to create mission");
-			return;
+			clickError = "db error, click again";
 		} catch (NullPointerException e) {
-			//se mi ritorna null significa che non ha trovato nulla che corrisponda al key word
-			// come lo gestisco?? tonro alla home ?? in più mando un errore???
+			clickError = "no supplier match for the code";
 		}
-		
+		if(clickError!=null) {
+			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
+			response.sendRedirect(path);
+			return;
+		}
 		
 		
 		HttpSession session = request.getSession();
@@ -125,8 +134,10 @@ public class ProductDetails extends HttpServlet {
 		try {
 			productDao.insertInto(mail,productCode,date, time);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			clickError = "db error, click again";
+			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
+			response.sendRedirect(path);
+			return;
 		}
 		
 		for(Supplier s : product.getSuppliers()) {
@@ -138,11 +149,7 @@ public class ProductDetails extends HttpServlet {
 			}
 		}
 		
-		
-		
-		String path = "/WEB-INF/Resultspage.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		path = "/WEB-INF/Resultspage.html";
 		ctx.setVariable("products", products);
 		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
