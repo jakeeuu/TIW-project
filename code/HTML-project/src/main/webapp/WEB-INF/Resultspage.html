@@ -75,11 +75,15 @@
      						</p>
      						<p>
 	     						<b>score: </b><span th:text="${supplier.score}"></span>
-	     						<b>price: </b><span th:text="${supplier.unitaryPrice}"></span><span>$</span>
-	     						<b>Total in cart: </b><span th:text="${supplier.totalProductsPrice}"></span><span>$</span>
-	     						<b>Minimum price for free shipping: </b><span th:text="${supplier.freeShipping}"></span><span>$</span>
+	     						<b>  price: </b><span th:text="${supplier.unitaryPrice}"></span><span>$</span>
+	     						<b>  Total in cart: </b><span th:text="${supplier.totalProductsPrice}"></span><span>$</span>
      						</p>
-     						
+     						<p>
+     							<b>Product already in cart: </b><span th:text="${supplier.totalNumber}"></span>
+     						</p>
+     						<p>
+     							<b>Minimum price for free shipping: </b><span th:text="${supplier.freeShipping}"></span><span>$</span>
+     						</p>
      						<b>Spending ranges: </b>
     						<ul>
 								<li th:each="range : ${supplier.spendingRanges}">

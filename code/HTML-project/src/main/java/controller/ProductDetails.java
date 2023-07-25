@@ -150,6 +150,7 @@ public class ProductDetails extends HttpServlet {
 				if(c.getCode() == s.getCode()) {
 					float tmp = s.getTotalProductsPrice();
 					s.setTotalProductsPrice(tmp + c.getTotalPrice());
+					s.setTotalNumber(c.getTotalNumber());
 				}
 			}
 		}

@@ -11,6 +11,7 @@ public class Supplier {
 	private float freeShipping;
 	private ArrayList<SpendingRanges> spendingRanges;
 	private int score;
+	private int totalNumber;
 	
 	public int getCode(){
 		return this.code;
@@ -70,5 +71,13 @@ public class Supplier {
 	
 	public int getScore() {
 		return this.score;
+	}
+	
+	public int getTotalNumber() {
+		return this.totalNumber;
+	}
+	
+	public void setTotalNumber(int totalNumber) {
+		this.totalNumber = totalNumber;
 	}
 }
