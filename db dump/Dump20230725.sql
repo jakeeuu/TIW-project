@@ -66,7 +66,7 @@ CREATE TABLE `composed` (
 
 LOCK TABLES `composed` WRITE;
 /*!40000 ALTER TABLE `composed` DISABLE KEYS */;
-INSERT INTO `composed` VALUES (1,0,1),(2,9,1);
+INSERT INTO `composed` VALUES (1,0,1),(2,9,1),(4,7,4),(4,8,3);
 /*!40000 ALTER TABLE `composed` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,14 +84,17 @@ CREATE TABLE `orders` (
   `Total` float NOT NULL,
   `Date` date NOT NULL,
   `Address` varchar(50) NOT NULL,
+  `SupCode` int NOT NULL,
   PRIMARY KEY (`Code`),
   KEY `MailUser_idx` (`MailUser`),
   KEY `Supplier_idx` (`Supplier`) /*!80000 INVISIBLE */,
   KEY `Address_idx` (`Address`),
+  KEY `SupCode_idx` (`SupCode`),
   CONSTRAINT `Address` FOREIGN KEY (`Address`) REFERENCES `user` (`Address`),
   CONSTRAINT `MailUser` FOREIGN KEY (`MailUser`) REFERENCES `user` (`Mail`),
+  CONSTRAINT `SCode` FOREIGN KEY (`SupCode`) REFERENCES `supplier` (`Code`),
   CONSTRAINT `Supplier` FOREIGN KEY (`Supplier`) REFERENCES `supplier` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +103,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'chiara@gmail.com','Fantasia Store',25,'2023-07-15','Via Dante Alighieri'),(2,'jack@gmail.com','Ebay',159.99,'2023-07-17','Via Eugenio Montale');
+INSERT INTO `orders` VALUES (1,'chiara@gmail.com','Fantasia Store',25,'2023-07-15','Via Dante Alighieri',2),(2,'jack@gmail.com','Ebay',159.99,'2023-07-17','Via Eugenio Montale',1),(4,'chiara@gmail.com','Il covo del nerd',20,'2023-07-25','Via Dante Alighieri',4),(5,'chiara@gmail.com','Feltrinelli',1050,'2023-07-25','Via Dante Alighieri',5);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,7 +289,7 @@ CREATE TABLE `visualize` (
 
 LOCK TABLES `visualize` WRITE;
 /*!40000 ALTER TABLE `visualize` DISABLE KEYS */;
-INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-07-24','12:00:00'),('chiara@gmail.com',1,'2023-07-24','09:00:00'),('chiara@gmail.com',2,'2023-07-24','08:28:00'),('chiara@gmail.com',3,'2023-07-24','15:00:00'),('chiara@gmail.com',4,'2023-07-24','11:29:41'),('chiara@gmail.com',5,'2021-12-12','09:33:04'),('chiara@gmail.com',6,'2023-07-24','10:02:02'),('chiara@gmail.com',7,'2023-05-04','17:00:00'),('chiara@gmail.com',8,'2023-07-24','11:29:03');
+INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-07-24','11:54:50'),('chiara@gmail.com',1,'2023-07-24','09:00:00'),('chiara@gmail.com',2,'2023-07-24','08:28:00'),('chiara@gmail.com',3,'2023-07-24','17:03:54'),('chiara@gmail.com',4,'2023-07-25','09:52:21'),('betti@gmail.com',5,'2023-07-24','11:48:10'),('chiara@gmail.com',5,'2021-12-12','09:33:04'),('chiara@gmail.com',6,'2023-07-24','17:50:27'),('chiara@gmail.com',7,'2023-07-25','10:12:05'),('chiara@gmail.com',8,'2023-07-25','11:14:39');
 /*!40000 ALTER TABLE `visualize` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -335,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-24 11:35:52
+-- Dump completed on 2023-07-25 11:18:00
