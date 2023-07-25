@@ -21,6 +21,8 @@
 	</div>
 	
 	<br>
+	<p th:class="error" th:text="${error}"></p>
+	<br>
 	
 	<div class = "container" th:if="${not #lists.isEmpty(orders)}">
 		<table border = "1">

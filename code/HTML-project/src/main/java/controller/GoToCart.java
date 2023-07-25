@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -51,12 +52,17 @@ public class GoToCart extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		HttpSession session = request.getSession();
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		
 		String path = "/WEB-INF/Cartpage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		
+		String error = StringEscapeUtils.escapeJava(request.getParameter("error"));
+		if(error != null)
+			ctx.setVariable("error", error);
 		ctx.setVariable("cart", cart);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
