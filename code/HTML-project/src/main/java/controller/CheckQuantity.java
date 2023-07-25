@@ -152,7 +152,7 @@ public class CheckQuantity extends HttpServlet {
 				}
 				
 				for(SpendingRanges sp : spendingRanges) {
-					if(total >= sp.getMinimumN() && total <= sp.getMaximumN()) {
+					if((total >= sp.getMinimumN() && sp.getMaximumN() == sp.getMinimumN()) || (total >= sp.getMinimumN() && total <= sp.getMaximumN())) {
 						cartSupplier.setShippingPrice(sp.getPrice());
 					}
 				}
