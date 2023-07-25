@@ -66,7 +66,7 @@ CREATE TABLE `composed` (
 
 LOCK TABLES `composed` WRITE;
 /*!40000 ALTER TABLE `composed` DISABLE KEYS */;
-INSERT INTO `composed` VALUES (1,0,1),(2,9,1),(4,7,4),(4,8,3);
+INSERT INTO `composed` VALUES (1,0,1),(2,9,1),(7,2,2),(8,3,1),(11,5,1),(12,9,3);
 /*!40000 ALTER TABLE `composed` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +94,7 @@ CREATE TABLE `orders` (
   CONSTRAINT `MailUser` FOREIGN KEY (`MailUser`) REFERENCES `user` (`Mail`),
   CONSTRAINT `SCode` FOREIGN KEY (`SupCode`) REFERENCES `supplier` (`Code`),
   CONSTRAINT `Supplier` FOREIGN KEY (`Supplier`) REFERENCES `supplier` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -103,7 +103,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,'chiara@gmail.com','Fantasia Store',25,'2023-07-15','Via Dante Alighieri',2),(2,'jack@gmail.com','Ebay',159.99,'2023-07-17','Via Eugenio Montale',1),(4,'chiara@gmail.com','Il covo del nerd',20,'2023-07-25','Via Dante Alighieri',4),(5,'chiara@gmail.com','Feltrinelli',1050,'2023-07-25','Via Dante Alighieri',5);
+INSERT INTO `orders` VALUES (1,'chiara@gmail.com','Fantasia Store',25,'2023-07-15','Via Dante Alighieri',2),(2,'jack@gmail.com','Ebay',159.99,'2023-07-17','Via Eugenio Montale',1),(7,'chiara@gmail.com','Ebay',4000,'2023-07-25','Via Dante Alighieri',1),(8,'chiara@gmail.com','Star shop',168,'2023-07-25','Via Dante Alighieri',3),(11,'chiara@gmail.com','Kinder ',2,'2023-07-25','Via Dante Alighieri',14),(12,'chiara@gmail.com','Ebay',452.97,'2023-07-25','Via Dante Alighieri',1);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,7 +289,7 @@ CREATE TABLE `visualize` (
 
 LOCK TABLES `visualize` WRITE;
 /*!40000 ALTER TABLE `visualize` DISABLE KEYS */;
-INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-07-24','11:54:50'),('chiara@gmail.com',1,'2023-07-24','09:00:00'),('chiara@gmail.com',2,'2023-07-24','08:28:00'),('chiara@gmail.com',3,'2023-07-24','17:03:54'),('chiara@gmail.com',4,'2023-07-25','09:52:21'),('betti@gmail.com',5,'2023-07-24','11:48:10'),('chiara@gmail.com',5,'2021-12-12','09:33:04'),('chiara@gmail.com',6,'2023-07-24','17:50:27'),('chiara@gmail.com',7,'2023-07-25','10:12:05'),('chiara@gmail.com',8,'2023-07-25','11:14:39');
+INSERT INTO `visualize` VALUES ('chiara@gmail.com',0,'2023-07-24','11:54:50'),('chiara@gmail.com',1,'2023-07-24','09:00:00'),('chiara@gmail.com',2,'2023-07-25','11:30:27'),('chiara@gmail.com',3,'2023-07-25','11:35:24'),('chiara@gmail.com',4,'2023-07-25','09:52:21'),('betti@gmail.com',5,'2023-07-24','11:48:10'),('chiara@gmail.com',5,'2023-07-25','11:44:47'),('chiara@gmail.com',6,'2023-07-25','11:28:23'),('chiara@gmail.com',7,'2023-07-25','10:12:05'),('chiara@gmail.com',8,'2023-07-25','11:14:39'),('chiara@gmail.com',9,'2023-07-25','12:06:55');
 /*!40000 ALTER TABLE `visualize` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,4 +338,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-25 11:18:00
+-- Dump completed on 2023-07-25 12:10:38
