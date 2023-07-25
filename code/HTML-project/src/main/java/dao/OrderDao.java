@@ -33,7 +33,7 @@ public class OrderDao {
 	
 	public int findOrderCode(String mailUser) throws SQLException {
 		int num;
-		String query= "SELECT Code FROM orders  O WHERE MailUser = ? and Date >= ALL(Select Date from orders where MailUser=O.MailUser)";
+		String query= "SELECT Code FROM orders  O WHERE MailUser = ? and Code>= ALL(Select Code from orders where MailUser=O.MailUser)";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, mailUser);
 			try (ResultSet result = pstatement.executeQuery();) {
