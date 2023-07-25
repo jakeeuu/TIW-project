@@ -18,6 +18,7 @@ import beans.CartSupplier;
 import beans.Product;
 import beans.User;
 import dao.OrderDao;
+import dao.SupplierDao;
 import utils.ConnectionHandler;
 
 /**
@@ -48,7 +49,8 @@ public class CreateOrder extends HttpServlet {
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		Integer supplierCode = null;
 		CartSupplier cartSupplier = null;
-		boolean badRequest = false;
+		SupplierDao supplierDao = new SupplierDao(connection);
+		String error = null;
 		
 		try {
 			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
@@ -57,15 +59,17 @@ public class CreateOrder extends HttpServlet {
 					cartSupplier = sp;
 				}
 			}
-			if(cartSupplier == null || supplierCode < 0) {
-				badRequest = true;
+			if(supplierCode < 0 || !supplierDao.isValidCode(supplierCode)) {
+				error = "this supplier code is invalid, click again";
 			}
 		}catch(NumberFormatException | NullPointerException e) {
-			badRequest = true;
-			e.printStackTrace();
+			error = "this supplier code is invalid, click again";
+		} catch (SQLException e) {
+			error = "db error, click again";
 		}
-		if(badRequest == true) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "error in supplier code");
+		if(error != null) {
+			String path = getServletContext().getContextPath() + "/GoToCart?error=" + error;
+			response.sendRedirect(path);
 			return;
 		}
 		
@@ -82,8 +86,10 @@ public class CreateOrder extends HttpServlet {
 			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), counter);
 			cart.remove(cartSupplier);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			error = "db error, click again";
+			String path = getServletContext().getContextPath() + "/GoToCart?error=" + error;
+			response.sendRedirect(path);
+			return;
 		}
 		
 		

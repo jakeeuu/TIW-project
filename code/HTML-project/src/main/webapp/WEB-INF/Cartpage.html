@@ -21,6 +21,8 @@
 	</div>
 
 	<br>
+	<p th:class="error" th:text="${error}"></p>
+	<br>
 	
 	<div class = "container" th:if="${not #lists.isEmpty(cart)}">
 		<table border = "1">
@@ -34,10 +36,10 @@
 			<tbody >
 				<div th:each="cartSupplier : ${cart}">
 					<tr>
-		     			<td th:text="${cartSupplier.code}">code</td>
-		     			<td th:text="${cartSupplier.name}">name</td>
-		     			<td th:text="${cartSupplier.totalPrice}">total price</td>
-		     			<td th:text="${cartSupplier.shippingPrice}">shipping price</td>
+		     			<td th:text="${cartSupplier.code}"></td>
+		     			<td th:text="${cartSupplier.name}"></td>
+		     			<td th:text="${cartSupplier.totalPrice}"></td>
+		     			<td th:text="${cartSupplier.shippingPrice}"></td>
 		     			<td>
 			     			<form action="#" th:action="@{/CreateOrder}" method="POST">
 			     				<button type="submit" name="supplier_code" th:value="${cartSupplier.code} ">Order</button>

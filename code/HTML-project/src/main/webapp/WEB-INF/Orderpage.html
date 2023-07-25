@@ -35,11 +35,11 @@
 			<tbody >
 				<div th:each="order : ${orders}">
 					<tr>
-		     			<td th:text="${order.code}">code</td>
-		     			<td th:text="${order.supplierName}">supplierName</td>
-		     			<td th:text="${order.totalPrice}">total price</td>
-		     			<td th:text="${order.date}">date</td>
-		     			<td th:text="${order.address}">address</td>
+		     			<td th:text="${order.code}"></td>
+		     			<td th:text="${order.supplierName}"></td>
+		     			<td th:text="${order.totalPrice}"></td>
+		     			<td th:text="${order.date}"></td>
+		     			<td th:text="${order.address}"></td>
 		    		</tr>
 		    		<tr th:each="product : ${order.products}">
 		    			<td colspan="5">
