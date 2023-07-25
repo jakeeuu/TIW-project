@@ -44,6 +44,14 @@ public class CartSupplier {
 		return null;
 	}
 	
+	public int getTotalNumber() {
+		int total = 0;
+		for(Product p : products) {
+			total = total + p.getQuantity();
+		}
+		return total;
+	}
+	
 	public void setCode(int code) {
 		this.code = code;
 	}
