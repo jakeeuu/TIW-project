@@ -17,8 +17,8 @@ public class OrderDao {
 		this.connection = connection;
 	}
 	
-	public void insertOrder(String mailUser, String supName,float total, Date date, String address) throws SQLException {
-		String query = "insert into orders (Code, MailUser, Supplier, Total, Date, Address) values(?,?,?,?,?,?)";
+	public void insertOrder(String mailUser, String supName,float total, Date date, String address,int supCode) throws SQLException {
+		String query = "insert into orders (Code, MailUser, Supplier, Total, Date, Address, SupCode) values(?,?,?,?,?,?,?)";
 		try(PreparedStatement pstatement = connection.prepareStatement(query);){
 			pstatement.setString(1, null); //prova per l'autoincremento
 			pstatement.setString(2, mailUser);
@@ -26,6 +26,7 @@ public class OrderDao {
 			pstatement.setString(4, String.valueOf(total));
 			pstatement.setDate(5, new java.sql.Date(date.getTime()));
 			pstatement.setString(6,address);
+			pstatement.setString(7,String.valueOf(supCode));
 			pstatement.executeUpdate();
 		}
 	}
@@ -44,7 +45,7 @@ public class OrderDao {
 	}
 	
 	public void insertInComposed(int orderCode, int productCode, int quantity) throws SQLException {
-		String query = "insert into composed (OrderCode, ProductCode, Qauntity) values(?,?,?)";
+		String query = "insert into composed (OrderCode, ProductCode, Quantity) values(?,?,?)";
 		try(PreparedStatement pstatement = connection.prepareStatement(query);){
 			pstatement.setString(1, String.valueOf(orderCode));
 			pstatement.setString(2, String.valueOf(productCode));
@@ -53,10 +54,10 @@ public class OrderDao {
 		}
 	}
 	
-	public void generalOrderUpdate(String mailUser, String supName,float total,Date date, String address,HashMap<Integer, Integer> pq) throws SQLException{
+	public void generalOrderUpdate(String mailUser, String supName,float total,Date date, String address,int supCode,HashMap<Integer, Integer> pq) throws SQLException{
 		try {
 			connection.setAutoCommit(false);
-			insertOrder(mailUser , supName , total , date, address);
+			insertOrder(mailUser , supName , total , date, address, supCode);
 			int num = findOrderCode(mailUser);
 			for (HashMap.Entry<Integer, Integer> entry : pq.entrySet()) {
 	            int key = entry.getKey();

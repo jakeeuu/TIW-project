@@ -127,10 +127,11 @@ public class ProductDao {
 		}
 	}
 	
+	
 	public ArrayList<Product> productInOrders(int orderCode)throws SQLException{
 		ArrayList<Product> products = new ArrayList<Product>();
-		String query = "select P.Code, P.Name, Quantity  \r\n"
-						+"from (product P join composed C on P.Code=ProductCode) join orders O on O.Code=OrderCode \r\n"
+		String query = "select P.Code, P.Name, Quantity, Price \r\n"
+						+"from (product P join composed C on P.Code=ProductCode) join orders O on O.Code=OrderCode join sold_by S on S.ProdCode=P.Code and S.SupCode=O.SupCode\r\n"
 						+"where OrderCode = ?";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(orderCode) );
@@ -143,6 +144,7 @@ public class ProductDao {
 						product.setCode(Integer.parseInt(result.getString("Code")));
 						product.setName(result.getString("Name"));
 						product.setQuantity(Integer.parseInt(result.getString("Quantity")));
+						product.setPrice(Float.parseFloat(result.getString("Price")));
 						products.add(product);
 						
 					}
@@ -151,6 +153,8 @@ public class ProductDao {
 			}
 		}
 	}
+	
+	
 	
 	public void insertInto(String mailUser, int prodCode,Date date, Time time) throws SQLException {
 		String query1= "select count(*)\r\n"

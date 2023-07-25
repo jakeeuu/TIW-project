@@ -83,7 +83,7 @@ public class CreateOrder extends HttpServlet {
 		}
 		
 		try {
-			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), counter);
+			orderDao.generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), cartSupplier.getCode() ,counter);
 			cart.remove(cartSupplier);
 		} catch (SQLException e) {
 			error = "db error, click again";
