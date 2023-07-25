@@ -111,13 +111,14 @@ public class CheckQuantity extends HttpServlet {
 			
 			if(product == null) {
 				cartSupplier.setProduct(newSupplier.getProduct(productCode));
+				cartSupplier.getProduct(productCode).setQuantity(quantity);
+			}else {
+				int prevQuant = cartSupplier.getProduct(productCode).getQuantity();
+				cartSupplier.getProduct(productCode).setQuantity(quantity + prevQuant);
 			}
 			
 			float tmp = cartSupplier.getTotalPrice();
 			cartSupplier.setTotalPrice(quantity * newSupplier.getTotalPrice() + tmp);
-			int prevQuant = cartSupplier.getProduct(productCode).getQuantity();
-			cartSupplier.getProduct(productCode).setQuantity(quantity + prevQuant);
-			
 		}
 		
 		
