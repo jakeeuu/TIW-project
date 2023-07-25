@@ -21,6 +21,8 @@
 	</div>
 	
 	<br>
+	<p th:class="error" th:text="${error}"></p>
+	<br>
 	
 	<div class = "container" th:if="${not #lists.isEmpty(orders)}">
 		<table border = "1">
@@ -35,19 +37,23 @@
 			<tbody >
 				<div th:each="order : ${orders}">
 					<tr>
-		     			<td th:text="${order.code}">code</td>
-		     			<td th:text="${order.supplierName}">supplierName</td>
-		     			<td th:text="${order.totalPrice}">total price</td>
-		     			<td th:text="${order.date}">date</td>
-		     			<td th:text="${order.address}">address</td>
+		     			<td th:text="${order.code}"></td>
+		     			<td th:text="${order.supplierName}"></td>
+		     			<td th:text="${order.totalPrice}"></td>
+		     			<td th:text="${order.date}"></td>
+		     			<td th:text="${order.address}"></td>
 		    		</tr>
 		    		<tr th:each="product : ${order.products}">
-		    			<td colspan="5">
+		    			<td colspan="3">
 		    				<p>
 								<span th:text="${product.quantity}"></span><span> x </span>
 								<span th:text="${product.name}"></span>
 								<span> ( product code: </span><span th:text="${product.code}"></span><span> ) </span>
 							</p>
+		    			</td>
+		    			<td colspan="2">
+		    				<b> product price: </b>
+		    				<p><span th:text="${product.price}"></span><span> $</span></p>
 		    			</td>
 		    		</tr>
 				</div>

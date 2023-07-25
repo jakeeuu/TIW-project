@@ -58,9 +58,14 @@ public class GoToOrder extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String path = "/WEB-INF/Orderpage.html";
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		String mail = user.getMail();
+		String error = null;
 		
 		OrderDao orderDao = new OrderDao(connection);
 		ProductDao productDao = new ProductDao(connection);
@@ -69,26 +74,23 @@ public class GoToOrder extends HttpServlet {
 		try {
 			orders = orderDao.printOrders(mail);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			error = "db error";
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
+			return;
 		}
 		
 		for(Order order : orders) {
 			try {
 				order.setProducts(productDao.productInOrders(order.getCode()));
-				/*order.setQuantity(orderDao.productsQuantity(order.getCode()));
-				for(Product p : order.getProducts()) {
-					p.setPrice(productDao.getPrice(order.);
-				}*/
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				error = "db error";
+				ctx.setVariable("error", error);
+				templateEngine.process(path, ctx, response.getWriter());
+				return;
 			}
 		}
 		
-		String path = "/WEB-INF/Orderpage.html";
-		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("orders", orders);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
