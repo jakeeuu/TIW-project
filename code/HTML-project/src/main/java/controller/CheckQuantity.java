@@ -88,6 +88,7 @@ public class CheckQuantity extends HttpServlet {
 		CartSupplier newSupplier = null;
 		try {
 			newSupplier = supplierDao.infoCartSupplier(productCode, supplierCode);
+			newSupplier.setShippingPrice(-1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -146,7 +147,8 @@ public class CheckQuantity extends HttpServlet {
 				
 				int total = 0;
 				int i = 0;
-				while(cartSupplier.getProducts().get(i) != null) {
+				int size = cartSupplier.getProducts().size();
+				while(i<size) {
 					total = total + cartSupplier.getProducts().get(i).getQuantity();
 					i++;
 				}

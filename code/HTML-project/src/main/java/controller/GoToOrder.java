@@ -80,14 +80,16 @@ public class GoToOrder extends HttpServlet {
 			return;
 		}
 		
-		for(Order order : orders) {
-			try {
-				order.setProducts(productDao.productInOrders(order.getCode()));
-			} catch (SQLException e) {
-				error = "db error";
-				ctx.setVariable("error", error);
-				templateEngine.process(path, ctx, response.getWriter());
-				return;
+		if(orders != null) {
+			for(Order order : orders) {
+				try {
+					order.setProducts(productDao.productInOrders(order.getCode()));
+				} catch (SQLException e) {
+					error = "db error";
+					ctx.setVariable("error", error);
+					templateEngine.process(path, ctx, response.getWriter());
+					return;
+				}
 			}
 		}
 		
