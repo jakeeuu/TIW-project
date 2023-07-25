@@ -76,10 +76,6 @@ public class GoToOrder extends HttpServlet {
 		for(Order order : orders) {
 			try {
 				order.setProducts(productDao.productInOrders(order.getCode()));
-				/*order.setQuantity(orderDao.productsQuantity(order.getCode()));
-				for(Product p : order.getProducts()) {
-					p.setPrice(productDao.getPrice(order.);
-				}*/
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

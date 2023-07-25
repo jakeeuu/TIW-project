@@ -42,12 +42,16 @@
 		     			<td th:text="${order.address}"></td>
 		    		</tr>
 		    		<tr th:each="product : ${order.products}">
-		    			<td colspan="5">
+		    			<td colspan="3">
 		    				<p>
 								<span th:text="${product.quantity}"></span><span> x </span>
 								<span th:text="${product.name}"></span>
 								<span> ( product code: </span><span th:text="${product.code}"></span><span> ) </span>
 							</p>
+		    			</td>
+		    			<td colspan="2">
+		    				<b> product price: </b>
+		    				<p><span th:text="${product.price}"></span><span> $</span></p>
 		    			</td>
 		    		</tr>
 				</div>
