@@ -46,11 +46,15 @@
 	    			<tr>
 	     				<td>
 	     					<a th:href="@{/ProductDetails(product_code=${product.code}, key_word=${keyWord} )}">
-	     						<p th:text="${product.code}">code</p>
+	     						<p th:text="${product.code}"></p>
 	     					</a>
 	     				</td>
-	     				<td th:text="${product.name}">name</td>
-	     				<td th:text="${product.minimumPrice}">minimum price</td>
+	     				<td>
+	     					<a th:href="@{/ProductDetails(product_code=${product.code}, key_word=${keyWord} )}">
+	     						<p th:text="${product.name}"></p>
+	     					</a>
+	     				</td>
+	     				<td th:text="${product.minimumPrice}"></td>
 	    			</tr>
 	    		 	<tr th:if="${not #lists.isEmpty(product.suppliers)}">
 	    		 		
