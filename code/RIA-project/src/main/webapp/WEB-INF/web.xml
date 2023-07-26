@@ -19,7 +19,7 @@
 </context-param>
 <context-param>
 	<param-name>imgFolderPath</param-name>
-	<param-value>C:\Users\balla\OneDrive\Desktop\secondo semestre\TIW-project\images\</param-value>
+	<param-value>D:\Politecnico\Progetto_TIW\images\</param-value>
 </context-param>
 <welcome-file-list>
    	<welcome-file>LoginPage.html</welcome-file>
