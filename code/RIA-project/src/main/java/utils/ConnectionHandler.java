@@ -26,7 +26,7 @@ public class ConnectionHandler {
 		}
 		return connection;
 	}
-
+////////77
 	public static void closeConnection(Connection connection) throws SQLException {
 		if (connection != null) {
 			connection.close();
