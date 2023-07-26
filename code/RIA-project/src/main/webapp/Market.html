@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="ISO-8859-1">
+    <title>Home</title>
+
+        
+   <link href="css/style.css" rel="stylesheet" type="text/css" />
+   
+  	<script src="javascript/management.js" charset="utf-8" defer></script> 
+    <script src="javascript/utils.js" charset="utf-8" defer></script>
+    <title>Market</title>
+
+</head>
+
+<body>
+	<div class = "container">
+		<ul id = "menu">
+			<li class = "active"><a href="#" id="goToHome">Home</a></li>
+			<li><a href="#" id="goToCart">Cart</a></li>
+			<li><a href="#" id = "goToOrder">Orders</a></li>
+			<li><a href="Logout">Logout</a></li>
+		</ul>
+	</div>
+	
+	
+	<div id="homePage">
+		<h1 class="title">Welcome to the Home Page</h1>
+		<br>
+	
+	
+		<div class="container">
+			<form action="#" id="goToResults">
+				Search for a product: <input type="text" name="key_word"> 
+ 				<input  type="submit" value="Search" >
+				</form>
+		</div>
+
+		<br>
+	
+		<p class="error" id="error"></p>
+	
+		<div class="container">
+				<table border = "1" id="tableProdVis">
+				<thead>
+					<tr><th>Product code</th>
+						<th>Product name</th>
+						<th>Description</th>
+						<th>Category</th>
+						<th>Photo</th></tr>
+				</thead>
+				<tbody id = "prodVisContent">  <!-- si occupa del contenuto javaScript -->
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div id="resultPage">
+		<div class = "container">
+			<form action="#" id="goToResults" >
+				Search for a product: <input type="text" name="key_word"> 
+	 			<input type="submit" value="Search">
+			</form>
+		</div>
+	
+	
+		<br>
+	
+		<p class="error" id= "error"></p>
+	
+
+	
+		<div class = "container" >
+			<table border = "1" id="tableResults">
+				<thead>
+					<tr><th>Product code</th>
+						<th>Product name</th>
+						<th>Minimum price</th>
+				</thead>
+		
+				<tbody id="bodyResults" >
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div id="cartPage">
+		<div class="title">
+			<h1 id="normalTitleCart">Your cart: </h1>
+			<h1 id="emptyTitleCart">Your cart is empty</h1>
+		</div>
+	
+		<br>
+		<p class="error" id="error"></p>
+		<br>
+		
+		<div class = "container" id="checkCart">
+			<table border = "1">
+				<thead>
+					<tr><th>Supplier code</th>
+						<th>Supplier name</th>
+						<th>Total price</th>
+						<th>Shipping price</th>
+				</thead>
+				
+				<tbody id="bodyCart">
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div id="orderPage">
+		<div class="title">
+			<h1 id="normalTitleOrders">Your orders: </h1>
+			<h1 id="emptyTitleOrders">You have no orders</h1>
+		</div>
+		
+		<br>
+		<p class="error" id="error"></p>
+		<br>
+		
+		<div class = "container" id="checkOrders">
+			<table border = "1">
+				<thead>
+					<tr><th>Order code</th>
+						<th>Supplier name</th>
+						<th>Total price</th>
+						<th>Date</th>
+						<th>Address</th>
+				</thead>
+				
+				<tbody id="bodyOrders" >
+				</tbody>
+			</table>
+		</div>
+	</div>
+		
+	
+</body>
+</html>
+	
