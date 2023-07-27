@@ -288,59 +288,59 @@
 			text.textContent = rightProduct.description; //funziona?? fare check
 			detailsRow.appendChild(text);
 
-			/*
-				var cell = document.createElement("tr");
-				cell.textContent = rightProduct.category;
-			detailsRow.appendChild(cell);
+			var text = document.getElementById("category");
+			text.textContent = rightProduct.category; 
+			detailsRow.appendChild(text);
 
-				var cell = document.createElement("tr");
-				cell.textContent = rightProduct.photo;
-			detailsRow.appendChild(cell);
+			var text = document.getElementById("photo");
+			text.textContent = rightProduct.photo;  //da rivedere
+			detailsRow.appendChild(text);
 
 			var nextRow = rightRow.nextElementSibling;
 			rightRow.parentNode.insertBefore(detailsRow, nextRow);
-			*/  // anche qui si sostituisce con la roba nel template
 
 
 			suppliers.forEach(function(s){
-				/*
-				row = document.
+				var row = document.getElementById("bodySupplier"); 
 				row.setAttribute("id", "sup" + s.code);  //lo metto pure io magari è utile 
+				
+				var text = document.getElementById("sup_name");
+				text.textContent = s.name;  
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.name;
-				row.appendChild(cell);
+				
+				var text = document.getElementById("sup_score");
+				text.textContent = s.score;  
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.score;
-				row.appendChild(cell);
+				var text = document.getElementById("sup_unitaryPrice");
+				text.textContent = s.unitaryPrice;
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.unitaryPrice;
-				row.appendChild(cell);
+				var text = document.getElementById("sup_totalProductsPrice");
+				text.textContent = s.totalProductsPrice;
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.totalProductsPrice;
-				row.appendChild(cell);
+				var text = document.getElementById("sup_totalProductsPrice");
+				text.textContent = s.totalProductsPrice;
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.totalProductsPrice;
-				row.appendChild(cell);
+				var text = document.getElementById("sup_totalNumber");
+				text.textContent = s.totalNumber;
+				row.appendChild(text);
 
-					var cell = document.createElement("td");
-					cell.textContent = s.totalNumber;
-				row.appendChild(cell);
-
-					var cell = document.createElement("td");
-					cell.textContent = s.freeShipping;
-				row.appendChild(cell);
-
+				var text = document.getElementById("sup_freeShipping");
+				text.textContent = s.freeShipping;
+				row.appendChild(text);
+				
+				/*
 				supplier.spendingRanges.forEach(function(s){
-					var cell = document.createElement("td");
-					cell.textContent = 
+					var text = document.                            //Continuareeeee
+					row.appendChild(text);
     						
 				}
-				*/ // penso di prendere direttamente dal template
+				*/
+				
 
 				
 			});
