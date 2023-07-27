@@ -19,8 +19,15 @@
 </context-param>
 <context-param>
 	<param-name>imgFolderPath</param-name>
-	<param-value>D:\Politecnico\Progetto_TIW\images\</param-value>
+	<param-value>C:\Users\balla\OneDrive\Desktop\secondo semestre\TIW-project\images\</param-value>
 </context-param>
+<filter-mapping> 
+    <filter-name>loginChecker</filter-name>
+    <url-pattern>/GoToHome</url-pattern>
+    <url-pattern>/GoToResults</url-pattern>
+    <url-pattern>/ProductDetails</url-pattern> 
+    <url-pattern>/CheckQuantity</url-pattern>
+</filter-mapping>
 <welcome-file-list>
    	<welcome-file>LoginPage.html</welcome-file>
 </welcome-file-list>

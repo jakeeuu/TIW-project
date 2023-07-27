@@ -40,14 +40,15 @@ public class LoginChecker extends HttpFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
-		
+
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String loginpath = req.getServletContext().getContextPath() + "/LoginPage.html";
 
 		HttpSession session = req.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
-			res.sendRedirect(loginpath);
+			res.setStatus(403);
+			res.setHeader("Location", loginpath);
 			return;
 		}
 		// pass the request along the filter chain
