@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import com.google.gson.Gson;
 
 import beans.CartSupplier;
 import beans.Product;
@@ -28,7 +28,7 @@ import utils.ConnectionHandler;
 @WebServlet("/CheckQuantity")
 public class CheckQuantity extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection = null;   
+	private Connection connection = null;     
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -38,22 +38,19 @@ public class CheckQuantity extends HttpServlet {
     }
     
     public void init() throws ServletException {
-    	connection = ConnectionHandler.getConnection(getServletContext());
+		connection = ConnectionHandler.getConnection(getServletContext());
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
-		
 		
 		Integer quantity = null;
 		Integer supplierCode = null;
 		Integer productCode = null;
-		boolean badRequest = false;
 		
 		ProductDao productDao = new ProductDao(connection);
 		SupplierDao supplierDao = new SupplierDao(connection);
@@ -63,18 +60,17 @@ public class CheckQuantity extends HttpServlet {
 			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
 			if(quantity <= 0 || productCode < 0 || supplierCode < 0 || !productDao.isValidCode(productCode) || !supplierDao.isValidCode(supplierCode)) {
-				badRequest = true;
+				response.setStatus(403);
+				response.getWriter().println("Incorrect param values");
+				return;
 			}
 		}catch(NumberFormatException | NullPointerException e) {
-			badRequest = true;
-			e.printStackTrace();
+			response.setStatus(403);
+			response.getWriter().println("Incorrect param values");
+			return;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		if(badRequest) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+			response.setStatus(403);
+			response.getWriter().println("db error, click again");
 			return;
 		}
 		
@@ -90,8 +86,9 @@ public class CheckQuantity extends HttpServlet {
 			newSupplier = supplierDao.infoCartSupplier(productCode, supplierCode);
 			newSupplier.setShippingPrice(-1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			response.setStatus(403);
+			response.getWriter().println("db error, click again");
+			return;
 		}
 		
 		if(cartSupplier == null) {
@@ -161,9 +158,11 @@ public class CheckQuantity extends HttpServlet {
 			}
 		}
 		
-		String ctxpath = getServletContext().getContextPath();
-		String path = ctxpath + "/GoToCart";
-		response.sendRedirect(path);
+		String json = new Gson().toJson(cart);
+		response.setStatus(200);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	/**
