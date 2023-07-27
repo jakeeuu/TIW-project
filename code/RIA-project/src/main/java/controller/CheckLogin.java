@@ -82,6 +82,7 @@ public class CheckLogin extends HttpServlet {
 			}
 			
 			String json = new Gson().toJson(cart);
+			response.setStatus(200);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);

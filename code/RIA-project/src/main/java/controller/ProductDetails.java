@@ -115,6 +115,7 @@ public class ProductDetails extends HttpServlet {
 		}
 		
 		String json = new Gson().toJson(suppliers);
+		response.setStatus(200);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);
