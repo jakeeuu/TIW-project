@@ -31,10 +31,12 @@
 	
 	
 		<div class="container">
-			<form action="#" id="goToResults">
-				Search for a product: <input type="text" name="key_word"> 
- 				<input  type="submit" value="Search" >
-				</form>
+			<form action="#" id="searchForm">
+			 	<fieldset>
+					Search for a product: <input type="text" name="key_word" required> 
+					<input  type="submit" value="Search" >
+				</fieldset>
+			</form>
 		</div>
 
 		<br>
@@ -42,7 +44,7 @@
 		<p class="error" id="error"></p>
 	
 		<div class="container">
-				<table border = "1" id="tableProdVis">
+				<table border = "1" id="prodVisTable">
 				<thead>
 					<tr><th>Product code</th>
 						<th>Product name</th>
@@ -50,7 +52,7 @@
 						<th>Category</th>
 						<th>Photo</th></tr>
 				</thead>
-				<tbody id = "prodVisContent">
+				<tbody id = "prodVisBody">
 					<tr>
 						<td id="pr_code"></td>
 						<td id="pr_name"></td>
