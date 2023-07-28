@@ -158,7 +158,7 @@
 				var eventfieldset = e.target.closest("fieldset");
 				if(eventfieldset.elements[0].checkValidity()){
 					var self = this;
-					makeCall("POST", "Result?key_word=" + /*aggiungo qui la chiave di ricerca del form*/, e.target.closest("form"),
+					makeCall("POST", "Result?key_word=" + "/*aggiungo qui la chiave di ricerca del form*/", e.target.closest("form"),
 						function(req) {
 							if (req.readyState == 4) {
 								var message = req.responseText;
@@ -187,7 +187,7 @@
 				}else{
 					eventfieldset.elements[0].reportValidity();
 				}
-			}	
+			});	
 		}
 	}
 
