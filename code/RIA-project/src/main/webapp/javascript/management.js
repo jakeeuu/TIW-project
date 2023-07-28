@@ -600,9 +600,9 @@
 						cell.appendChild(paragraph);	
 					self.body.appendChild(row);
 				});
-
-
+				
 			});
+			this.container.style.visibility = "visible";
 		}
 
 
@@ -639,8 +639,7 @@
 					} else {
 						self.alert.textContent = "Something went wrong while exchanging messages with the server";
 					}
-				},JSONvalue
-			);
+				},JSONvalue);
 		}
 		
 	}
@@ -747,9 +746,8 @@
 						cell.appendChild(paragraph);	
 					self.body.appendChild(row);
 				});
-
-
 			});
+			this.container.style.visibility = "visible";
 		}
 	}
 	
