@@ -268,87 +268,207 @@
 
 
 		this.updateSupplier = function (products, suppliers, productCode){
-			var row, cell, img;
+			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4;
 			this.body.innerHTML="";
 			
 			var self = this;
 
-			var rightRow = document.getElementById("productCode"); 
+			rightRow = document.getElementById("productCode"); 
 
 			i = 0;
 			while(products[i].code != productCode){
 				i++
 			}
 
-			var rightProduct = products[i];
+			rightProduct = products[i];
 
-			var detailsRow = document.getElementById("moreDetails"); 
+			detailsRow = document.createElement("tr"); 
 
-			var text = document.getElementById("description");
-			text.textContent = rightProduct.description; //funziona?? fare check
-			detailsRow.appendChild(text);
+			cell = document.createElement("td");
+			des = document.cretateElement("b");
+			des.textContent = "description:";
+			cell.appendChild(des);
+			text = document.createElement("p");
+			text.textContent = rightProduct.description; 
+			cell.appendChild(text);
+			detailsRow.appendChild(cell);
 
-			var text = document.getElementById("category");
+			cell = document.createElement("td");
+			des = document.cretateElement("b");
+			des.textContent = "category:";
+			cell.appendChild(des);
+			text = document.createElement("p");
 			text.textContent = rightProduct.category; 
-			detailsRow.appendChild(text);
+			cell.appendChild(text);
+			detailsRow.appendChild(cell);
 
-			var text = document.getElementById("photo");
-			text.textContent = rightProduct.photo;  //da rivedere
-			detailsRow.appendChild(text);
+			cell = document.createElement("td");
+			text = document.createElement("img");
+			text.src = rightProduct.photo; 
 
-			var nextRow = rightRow.nextElementSibling;
+			nextRow = rightRow.nextElementSibling;
 			rightRow.parentNode.insertBefore(detailsRow, nextRow);
 
 
 			suppliers.forEach(function(s){
-				var row = document.getElementById("bodySupplier"); 
+				row = document.createElement("tr"); 
 				row.setAttribute("id", "sup" + s.code);  //lo metto pure io magari è utile 
 				
-				var text = document.getElementById("sup_name");
-				text.textContent = s.name;  
-				row.appendChild(text);
-
+				cell = document.createElement("td");
+				cell.colspan = "3";
+				row.appendChild(cell);
 				
-				var text = document.getElementById("sup_score");
-				text.textContent = s.score;  
-				row.appendChild(text);
-
-				var text = document.getElementById("sup_unitaryPrice");
-				text.textContent = s.unitaryPrice;
-				row.appendChild(text);
-
-				var text = document.getElementById("sup_totalProductsPrice");
-				text.textContent = s.totalProductsPrice;
-				row.appendChild(text);
-
-				var text = document.getElementById("sup_totalProductsPrice");
-				text.textContent = s.totalProductsPrice;
-				row.appendChild(text);
-
-				var text = document.getElementById("sup_totalNumber");
-				text.textContent = s.totalNumber;
-				row.appendChild(text);
-
-				var text = document.getElementById("sup_freeShipping");
-				text.textContent = s.freeShipping;
-				row.appendChild(text);
+				//-----------------------------
 				
-				/*
-				supplier.spendingRanges.forEach(function(s){
-					var text = document.                            //Continuareeeee
-					row.appendChild(text);
-    						
-				}
-				*/
+				el1 = document.createElement("p");
+				cell.appendChild(el1);
 				
-
+				el2 = document.createElement("b");
+				el2.textContent = "Supplier name: ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.name;
+				el1.appendChild(el2);
+				
+				//--------------------------------------------
+				el1 = document.createElement("p");
+				cell.appendChild(el1);
+				
+				el2 = document.createElement("b");
+				el2.textContent = "score: ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.score;
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("b");
+				el2.textContent = "price: ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.unitaryPrice;
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = "$";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("b");
+				el2.textContent = "Total in cart: ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.totalProductsPrice;
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = "$";
+				el1.appendChild(el2);
+				
+				//---------------------------------------------
+				
+				el1 = document.createElement("p");
+				cell.appendChild(el1);
+				
+				el2 = document.createElement("b");
+				el2.textContent = "Product already in cart:  ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.totalNumber;
+				el1.appendChild(el2);
+				
+				//---------------------------------------------
+				
+				el1 = document.createElement("p");
+				cell.appendChild(el1);
+				
+				el2 = document.createElement("b");
+				el2.textContent = "Minimum price for free shipping: ";
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = s.freeShipping;
+				el1.appendChild(el2);
+				
+				el2 = document.createElement("span");
+				el2.textContent = "$";
+				el1.appendChild(el2);
+				
+				//------------------------------------------------
+				
+				el1 = document.createElement("b");
+				el1.textContent = "Spending ranges: ";
+				cell.appendChild(el1);
+					
+				el1 = document.createElement("ul");
+				cell.appendChild(el1);
+				
+				suppliers.spendingRanges.forEach(function(s){
+					el2 = document.createElement("li");
+					el1.appendChild(el2);
+					
+					el3 = document.createElement("p");
+					el2.appendChild(el3);
+					
+					el4 = document.createElement("span");
+					if(s.minimumN !== s.maximumN){
+						el4.textContent = s.minimumN;    
+						el3.appendChild(el4);
+						
+						el4 = document.createElement("span");
+						el4.textContent = "-";
+						el3.appendChild(el4);
+						
+						el4 = document.createElement("span");
+						el4.textContent = s.maximumN;
+						el3.appendChild(el4);
+					}else{
+						el4.textContent = "More than";    
+						el3.appendChild(el4);
+						
+						el4 = document.createElement("span");
+						el4.textContent = s.minimumN;
+						el3.appendChild(el4);
+					}
+					
+					el4 = document.createElement("span");
+					el4.textContent = "products =";
+					el3.appendChild(el4);
+					
+					el4 = document.createElement("span");
+					el4.textContent = s.price;
+					el3.appendChild(el4);
+					
+					el4 = document.createElement("span");
+					el4.textContent = "$";
+					el3.appendChild(el4);
+					
+					el1 = document.createElement("form");
+					el1.id="formForAddToCart";
+					cell.appendChild(el1);	
+					
+					el2 = document.createElement("input");
+					el2.type="number";
+					el2.name = "quantity";
+					el1.appendChild(el2);
+					
+					el2 = document.createElement("input");
+					el2.type="submit";
+					el2.name = "Add to Cart";
+					el1.appendChild(el2);			
+					
+					//TO DO: AGGIUNGERE EVENT LISTENER PER LA FORM
+				});
+				
 				
 			});
 			this.container.style.visibility = "visible";				
 		}
 
 	}
-
 
 })();
 
