@@ -38,6 +38,20 @@
 			 */
 			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("bodyResults"));
 
+
+			/**
+			 * 
+			 * CART PAGE
+			 * 
+			 */
+			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+
+			/**
+			 * 
+			 * ORDER PAGE
+			 * 
+			 */
+			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
 		}
 	}
 
@@ -63,7 +77,7 @@
 						if (req.status == 200) {
 							let products = JSON.parse(req.responseText);
 							self.update(products); 
-						}else if(req.status == 403){
+						}else if(req.status == 400){
 							window.location.href = req.getResponseHeader("Location");
                   			window.sessionStorage.removeItem('mail');
 						}
@@ -157,7 +171,7 @@
 									//gestisco orchestrator, result con quello che mi arriva come risultato dalla chiave di ricerca
 									//con l'orchestrato 
 								}
-								if (req.status == 403) {//qual'è la differenza tra questo errore e quello sotto??
+								if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
 									window.location.href = req.getResponseHeader("Location");
 									window.sessionStorage.removeItem('mail');
 								}
@@ -251,7 +265,7 @@
 							}
 							self.updateSupplier(products, suppliers, productCode); 
 						}
-						if (req.status == 403) {//qual'è la differenza tra questo errore e quello sotto??
+						if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
 							window.location.href = req.getResponseHeader("Location");
 							window.sessionStorage.removeItem('mail');
 						}
@@ -348,6 +362,275 @@
 		}
 
 	}
+
+	function VisualizeCartProduct(alertIn, containerIn, bodyIn){
+		this.alert = alertIn;
+		this.container = containerIn;
+		this.body = bodyIn;
+
+		this.reset = function() {
+			this.container.style.visibility = "hidden";
+		}
+
+		this.show = function(){
+			/////TODO
+		}
+
+		this.update = function(){
+			var row, cell, form, button;
+			this.body.innerHTML="";
+			
+			var self = this;
+			cart.forEach(function(cs){
+
+				row = document.createElement("tr");
+
+					cell = document.createElement("td");
+					cell.textContent = cs.code;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = cs.name;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = cs.totalPrice;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = cs.shippingPrice;
+					row.appendChild(cell);
+
+					//metto bottone
+					cell = document.createElement("td");
+
+						form = document.createElement("form");
+						form.setAttribute("action","#");
+
+							button = document.createElement("button");
+							button.setAttribute("supplier_code",cs.code);
+							button.textContent = "Order";
+							button.addEventListener("click", (e) => {
+								self.createOrder(e.target.getAttribute("supplier_code"));
+							}, false);
+							form.appendChild(button);
+
+						cell.appendChild(form);
+
+					row.appendChild(cell);	
+
+				self.body.appendChild(row);
+
+				var paragraph,span,bold;
+				cs.products.forEach(function(p){
+					row = document.createElement("tr");
+
+						cell = document.createElement("td");
+						cell.setAttribute("colspan",3);
+
+							paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = p.quantity;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " x ";
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = p.name;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " ( product code: ";
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = p.code;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " ) ";
+							paragraph.appendChild(span);
+
+						cell.appendChild(paragraph);	
+
+
+						cell = document.createElement("td");
+						cell.setAttribute("colspan",2);
+
+							bold = document.createElement("b");
+							bold.textContent = p.price;
+
+						cell.appendChild(bold);
+
+							paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = p.price;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " $";
+							paragraph.appendChild(span);
+
+						cell.appendChild(paragraph);	
+					self.body.appendChild(row);
+				});
+
+
+			});
+		}
+
+
+		this.createOrder = function(supplierCode) {
+			var self = this;
+			for(var cartSupplier : cart){
+				if(cartSupplier.code === supplierCode){
+					break;
+				}
+			}
+			var JSONvalue = JSON.stringify(cartSupplier);
+
+			makeCall("POST", "CreateOrder", null,
+				function(req) {
+					if (req.readyState == 4) {
+						let message = req.responseText;
+						if (req.status == 200) {
+							let orders = JSON.parse(req.responseText);
+							if (orders.length == 0) {
+								self.alert.textContent = "You don't have any supplier to visualize";
+								return;
+							}
+							//tolgo cartSupplier da carrello
+							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page 
+						}
+						if (req.status == 400) {
+							window.location.href = req.getResponseHeader("Location");
+							window.sessionStorage.removeItem('mail');
+						}
+						else if (req.status != 200) {
+							self.alert.textContent = "Error - some fields weren't completed correctly";
+							self.reset();
+						}
+					} else {
+						self.alert.textContent = "Something went wrong while exchanging messages with the server";
+					}
+				},JSONvalue
+			);
+		}
+		
+	}
+
+	function VisualizeOrderProduct(alertIn, containerIn, bodyIn){
+		this.alert = alertIn;
+		this.container = containerIn;
+		this.body = bodyIn;
+
+		this.reset = function() {
+			this.container.style.visibility = "hidden";
+		}
+
+		this.show = function(){
+			/////TODO
+		}
+
+		this.update = function(){
+			var row, cell;
+			this.body.innerHTML="";
+			
+			var self = this;
+			orders.forEach(function(order){
+
+				row = document.createElement("tr");
+
+					cell = document.createElement("td");
+					cell.textContent = order.code;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = order.supplierName;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = order.totalPrice;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = order.date;
+					row.appendChild(cell);
+
+					cell = document.createElement("td");
+					cell.textContent = order.address;
+					row.appendChild(cell);
+
+
+				self.body.appendChild(row);
+
+				var paragraph,span,bold;
+				order.products.forEach(function(p){
+					row = document.createElement("tr");
+
+						cell = document.createElement("td");
+						cell.setAttribute("colspan",3);
+
+							paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = p.quantity;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " x ";
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = p.name;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " ( product code: ";
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = p.code;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " ) ";
+							paragraph.appendChild(span);
+
+						cell.appendChild(paragraph);	
+
+
+						cell = document.createElement("td");
+						cell.setAttribute("colspan",2);
+
+							bold = document.createElement("b");
+							bold.textContent = p.price;
+
+						cell.appendChild(bold);
+
+							paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = p.price;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " $";
+							paragraph.appendChild(span);
+
+						cell.appendChild(paragraph);	
+					self.body.appendChild(row);
+				});
+
+
+			});
+		}
+	}
+
 
 
 })();
