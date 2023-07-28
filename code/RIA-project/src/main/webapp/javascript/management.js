@@ -313,10 +313,20 @@
 
 
 		this.updateSupplier = function (products, suppliers, productCode){
-			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4, input;
+			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4, input, div;
 			
 			var self = this;
+			
+			var divsInBody = document.querySelectorAll('#resultBody div');
 
+		    // Iterazione su tutti i div trovati
+		    divsInBody.forEach(function(div) {
+		      if(div.id != productCode){
+				  div.innerHTML="";
+			  }
+		      
+		    });
+				
 			rightRow = document.getElementById("productCode"); 
 
 			i = 0;
@@ -355,8 +365,12 @@
 
 
 			suppliers.forEach(function(s){
+				div = document.createElement("div");
+				div.id = productCode;
+				
 				row = document.createElement("tr"); 
-				row.setAttribute("id", "sup" + s.code);  //lo metto pure io magari è utile 
+				row.setAttribute("id", "sup" + s.code); //lo metto pure io magari è utile 
+				div.appendChild(row)  
 				
 				cell = document.createElement("td");
 				cell.colspan = "3";
@@ -421,7 +435,80 @@
 				el1.appendChild(el2);
 				
 				el2 = document.createElement("span");
-				el2.textContent = s.totalNumber;
+				for(cs of cart ){
+					if(cs.code == s.code)
+						break;
+				}
+				s.totalNumber = 0;
+				for(product in cs.products){
+					s.totalNumber = s.totalNumber + (product * quantity);
+				}
+				el2.textContent = s.totalNumber; 
+				// finestra sovrapposta che parte da questo elemento
+				el2.addEventListener('mouseover', (e) => {
+					el3= document.createElement("overlay");
+					
+					cs.products.forEach(function(p){
+						row = document.createElement("tr");
+
+						cell = document.createElement("td");
+						row.appendChild(cell);
+						
+						paragraph = document.createElement("p");
+						cell.appendChild(paragraph);
+
+						span = document.createElement("span");
+						span.textContent = p.quantity;
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = " x ";
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = p.name;
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = " ( product code: ";
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = p.code;
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = " ) ";
+						paragraph.appendChild(span);
+
+						
+						cell = document.createElement("td");
+						row.appendChild(cell);
+
+						bold = document.createElement("b");
+						bold.textContent = p.price;
+						cell.appendChild(bold);
+
+						paragraph = document.createElement("p");
+						cell.appendChild(paragraph);
+
+						span = document.createElement("span");
+						span.textContent = p.price;
+						paragraph.appendChild(span);
+
+						span = document.createElement("span");
+						span.textContent = " $";
+						paragraph.appendChild(span);
+			
+				});
+					el3.id = "overlay";
+					el3.style.display = 'block';  //forse questo lo toglierò 
+				});
+				
+				el2.addEventListener('mouseout', (e) => {
+					el3= document.getElementById("overlay");
+					overlay.style.display = 'none';  
+				});
 				el1.appendChild(el2);
 				
 				//---------------------------------------------
@@ -504,7 +591,7 @@
 							input.setAttribute("type","submit");
 							input.setAttribute("value","Add To Cart");
 							input.addEventListener("click", (e) => {
-								self.addToCart(e.target.getAttribute("quantity"),p,s); ///////sistemo la cosa dell'e.target
+								self.addToCart(e.target.getAttribute("quantity"),p,s); ///////sistemo la cosa dell'e.target guardo query selector
 							}, false);
 							el1.appendChild(input);
 
@@ -519,13 +606,11 @@
 					el2.type="submit";
 					el2.name = "Add to Cart";
 					el1.appendChild(el2);			
+				});	
 					
-					//TO DO: AGGIUNGERE EVENT LISTENER PER LA FORM
-				});
-				
-				
-			});
 			this.container.style.visibility = "visible";				
+
+			});
 		}
 
 		this.addToCart = function(quantity, product, supplier){
@@ -658,7 +743,8 @@
 							span.textContent = " ) ";
 							paragraph.appendChild(span);
 
-						cell.appendChild(paragraph);	
+						cell.appendChild(paragraph);
+						row.appendChild(cell);
 
 
 						cell = document.createElement("td");
@@ -679,7 +765,8 @@
 							span.textContent = " $";
 							paragraph.appendChild(span);
 
-						cell.appendChild(paragraph);	
+						cell.appendChild(paragraph);
+						row.appendChild(cell);	
 					self.body.appendChild(row);
 				});
 				
@@ -804,7 +891,8 @@
 							span.textContent = " ) ";
 							paragraph.appendChild(span);
 
-						cell.appendChild(paragraph);	
+						cell.appendChild(paragraph);
+						row.appendChild(cell);	
 
 
 						cell = document.createElement("td");
@@ -825,7 +913,8 @@
 							span.textContent = " $";
 							paragraph.appendChild(span);
 
-						cell.appendChild(paragraph);	
+						cell.appendChild(paragraph);
+						row.appendChild(cell);
 					self.body.appendChild(row);
 				});
 			});
@@ -834,6 +923,8 @@
 	}
 	
 };
+
+
 
 
 			
