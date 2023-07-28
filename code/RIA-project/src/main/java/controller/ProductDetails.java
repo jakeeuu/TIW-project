@@ -56,12 +56,12 @@ public class ProductDetails extends HttpServlet {
 		try {
 			productCode = Integer.parseInt(request.getParameter("product_code"));
 			if(productCode < 0 || !productDao.isValidCode(productCode)) {
-				response.setStatus(403);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 				response.getWriter().println("this product code is invalid, click again");
 				return;
 			}
 		}catch(NullPointerException | NumberFormatException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 			response.getWriter().println("this product code is invalid, click again");
 			return;
 		} catch (SQLException e) {
@@ -115,7 +115,7 @@ public class ProductDetails extends HttpServlet {
 		}*/
 		
 		String json = new Gson().toJson(suppliers);
-		response.setStatus(200);
+		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

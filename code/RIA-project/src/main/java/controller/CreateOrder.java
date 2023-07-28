@@ -80,23 +80,23 @@ public class CreateOrder extends HttpServlet {
 								total = total + product.getPrice() * product.getQuantity();
 								totalNumber = totalNumber + product.getQuantity();
 							}else {
-								response.setStatus(403);
+								response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 								response.getWriter().println(product.getName() + " is not sold by " + cartSupplier.getName());
 								return;
 							}
 						}else {
-							response.setStatus(403);
+							response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 							response.getWriter().println("incorrect quantity");
 							return;
 						}
 					}else {
-						response.setStatus(403);
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 						response.getWriter().println("incorrect product code");
 						return;
 					}
 				}
 			}else {
-				response.setStatus(403);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 				response.getWriter().println("incorrect supplier code");
 				return;
 			}
@@ -107,7 +107,7 @@ public class CreateOrder extends HttpServlet {
 		}
         
         if(total != cartSupplier.getTotalPrice()) {
-        	response.setStatus(403);
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 			response.getWriter().println("incorrect total price");
 			return;
         }
@@ -135,7 +135,7 @@ public class CreateOrder extends HttpServlet {
 			try {
 				freeShipping = supplierDao.supplierFreeShipping(cartSupplier.getCode());
 				if(cartSupplier.getTotalPrice() < freeShipping) {
-					response.setStatus(403);
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 					response.getWriter().println("incorrect shipping price");
 					return;
 				}
@@ -144,6 +144,10 @@ public class CreateOrder extends HttpServlet {
 				response.getWriter().println("db error, click again");
 				return;
 			}
+		}else if(!isCartValid) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
+			response.getWriter().println("incorrect shipping price");
+			return;
 		}
         
 		HttpSession session = request.getSession();

@@ -72,7 +72,7 @@ public class GoToOrder extends HttpServlet {
 		}
 		
 		String json = new Gson().toJson(orders);
-		response.setStatus(200);
+		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

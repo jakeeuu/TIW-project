@@ -14,10 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import beans.Product;
 import dao.ProductDao;
 import utils.ConnectionHandler;
+import utils.GetEncoding;
 
 /**
  * Servlet implementation class GoToResults
@@ -48,12 +52,12 @@ public class GoToResults extends HttpServlet {
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			if(keyWord.isEmpty()) {
-				response.setStatus(403);
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 				response.getWriter().println("You have to write something into the search box");
 				return;
 			}	
 		}catch(NullPointerException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 			response.getWriter().println("You have to write something into the search box");
 			return;
 		}
@@ -73,8 +77,28 @@ public class GoToResults extends HttpServlet {
 			return;
 		}
 		
-		String json = new Gson().toJson(products);
-		response.setStatus(200);
+		JsonArray jArray = new JsonArray();
+		JsonObject jSonObject;
+
+		for(Product product : products) {
+				jSonObject = new JsonObject();
+				
+				jSonObject.addProperty("code", product.getCode());
+				jSonObject.addProperty("name" , product.getName());
+				jSonObject.addProperty("minimumPrice", product.getMinimumPrice());
+				jSonObject.addProperty("description" , product.getDescription());
+				jSonObject.addProperty("category" , product.getCategory());
+				try {
+					jSonObject.addProperty("photo" , GetEncoding.getImageEncoding(product.getPhoto() , getServletContext()));
+				} catch(IOException e) {
+					jSonObject.addProperty("photo" , "");
+				}
+				
+				jArray.add(jSonObject);
+		}
+		
+		String json = new GsonBuilder().create().toJson(jArray);
+		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

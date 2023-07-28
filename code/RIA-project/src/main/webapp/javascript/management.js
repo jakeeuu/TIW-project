@@ -105,7 +105,7 @@
 
 					cell = document.createElement("td");
 					img = document.createElement("img");
-					img.src = "imgstiww\\" + p.photo; // al posto di imgstiww metto la cartella in cui tengo le foto (chiedo a fra)
+					img.src = p.photo; 
 
 					img.alt = "image";
 					img.width = 200;///tengo??

@@ -68,7 +68,7 @@ public class CheckLogin extends HttpServlet {
 		}else {
 			
 			request.getSession().setAttribute("user", user);
-			response.setStatus(200);
+			response.setStatus(HttpServletResponse.SC_OK);//200
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().println(mail);
@@ -82,7 +82,7 @@ public class CheckLogin extends HttpServlet {
 			}
 			
 			String json = new Gson().toJson(cart);
-			response.setStatus(200);
+			response.setStatus(HttpServletResponse.SC_OK);//200
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);*/

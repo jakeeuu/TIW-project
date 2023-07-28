@@ -21,6 +21,7 @@ import beans.Product;
 import beans.User;
 import dao.ProductDao;
 import utils.ConnectionHandler;
+import utils.GetEncoding;
 
 /**
  * Servlet implementation class GoToHome
@@ -51,7 +52,6 @@ public class GoToHome extends HttpServlet {
 		ArrayList<Product> products = new ArrayList<Product>();
 		
 		
-		String path;
 		try {
 			products = productDao.produtcsToVisualize(user);
 		}catch(SQLException e) {
@@ -71,16 +71,16 @@ public class GoToHome extends HttpServlet {
 				jSonObject.addProperty("description" , product.getDescription());
 				jSonObject.addProperty("category" , product.getCategory());
 				try {
-					jSonObject.addProperty("photo" , GetEncoding.getImageEncoding(userName + "_" + product.getPhoto() , getServletContext()));
+					jSonObject.addProperty("photo" , GetEncoding.getImageEncoding(product.getPhoto() , getServletContext()));
 				} catch(IOException e) {
-					jSonObject.addProperty("imageContent" , "");
+					jSonObject.addProperty("photo" , "");
 				}
 				
 				jArray.add(jSonObject);
 		}
 		
 		String json = new GsonBuilder().create().toJson(jArray);
-		response.setStatus(200);
+		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);   /// se non va provo con println anzichè write 
