@@ -4,7 +4,7 @@
 
 	window.addEventListener("load", () => {
 		if (sessionStorage.getItem("username") == null) {
-			window.location.href = "index.html";
+			window.location.href = "LoginPage.html";
 		} else {			
 			pageOrchestrator.start();
 			pageOrchestrator.refresh();
@@ -55,17 +55,13 @@
 
 		this.show = function(){
 			let self = this;
-			makeCall("GET", "Home", null,
+			makeCall("GET", "GoToHome", null,
 				function(req) {
 
 					if (req.readyState == 4) {
 						let message = req.responseText;
 						if (req.status == 200) {
 							let products = JSON.parse(req.responseText);
-							if (products.length == 0) {
-								self.alert.textContent = "You don't have any product to visualize";
-								return;
-							}
 							self.update(products); 
 						}else if(req.status == 403){
 							window.location.href = req.getResponseHeader("Location");
@@ -196,7 +192,7 @@
 			this.body.innerHTML="";
 			
 			var self = this;
-
+ 
 			products.forEach(function(p){
 
 				row = document.createElement("tr");
@@ -253,7 +249,7 @@
 								self.alert.textContent = "You don't have any supplier to visualize";
 								return;
 							}
-							self.updateSupplier(products, suppliers); 
+							self.updateSupplier(products, suppliers, productCode); 
 						}
 						if (req.status == 403) {//qual'è la differenza tra questo errore e quello sotto??
 							window.location.href = req.getResponseHeader("Location");
@@ -271,21 +267,91 @@
 		}
 
 
-		this.updateSupplier = function (products, suppliers){
+		this.updateSupplier = function (products, suppliers, productCode){
 			var row, cell, img;
 			this.body.innerHTML="";
 			
 			var self = this;
 
-			products.forEach(function(p){
-				row = document.getElementById(p.code);
+			var rightRow = document.getElementById("productCode"); 
+
+			i = 0;
+			while(products[i].code != productCode){
+				i++
+			}
+
+			var rightProduct = products[i];
+
+			var detailsRow = document.getElementById("moreDetails"); 
+
+			var text = document.getElementById("description");
+			text.textContent = rightProduct.description; //funziona?? fare check
+			detailsRow.appendChild(text);
+
+			var text = document.getElementById("category");
+			text.textContent = rightProduct.category; 
+			detailsRow.appendChild(text);
+
+			var text = document.getElementById("photo");
+			text.textContent = rightProduct.photo;  //da rivedere
+			detailsRow.appendChild(text);
+
+			var nextRow = rightRow.nextElementSibling;
+			rightRow.parentNode.insertBefore(detailsRow, nextRow);
+
+
+			suppliers.forEach(function(s){
+				var row = document.getElementById("bodySupplier"); 
+				row.setAttribute("id", "sup" + s.code);  //lo metto pure io magari è utile 
+				
+				var text = document.getElementById("sup_name");
+				text.textContent = s.name;  
+				row.appendChild(text);
+
+				
+				var text = document.getElementById("sup_score");
+				text.textContent = s.score;  
+				row.appendChild(text);
+
+				var text = document.getElementById("sup_unitaryPrice");
+				text.textContent = s.unitaryPrice;
+				row.appendChild(text);
+
+				var text = document.getElementById("sup_totalProductsPrice");
+				text.textContent = s.totalProductsPrice;
+				row.appendChild(text);
+
+				var text = document.getElementById("sup_totalProductsPrice");
+				text.textContent = s.totalProductsPrice;
+				row.appendChild(text);
+
+				var text = document.getElementById("sup_totalNumber");
+				text.textContent = s.totalNumber;
+				row.appendChild(text);
+
+				var text = document.getElementById("sup_freeShipping");
+				text.textContent = s.freeShipping;
+				row.appendChild(text);
+				
+				/*
+				supplier.spendingRanges.forEach(function(s){
+					var text = document.                            //Continuareeeee
+					row.appendChild(text);
+    						
+				}
+				*/
 				
 
-
+				
 			});
+			this.container.style.visibility = "visible";				
 		}
 
 	}
 
 
 })();
+
+
+
+			

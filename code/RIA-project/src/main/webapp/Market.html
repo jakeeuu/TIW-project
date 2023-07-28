@@ -53,13 +53,6 @@
 						<th>Photo</th></tr>
 				</thead>
 				<tbody id = "prodVisBody">
-					<tr>
-						<td id="pr_code"></td>
-						<td id="pr_name"></td>
-						<td id="pr_description"></td>
-						<td id="pr_category"></td>
-						<td id="pr_photo"></td>
-					</tr> 
 				</tbody>
 			</table>
 		</div>
@@ -89,6 +82,56 @@
 				</thead>
 		
 				<tbody id="bodyResults" >
+	    		 	<tr id = "moreDetails">
+	    		 		<td >
+	    		 			<b>description:</b>
+	    		 			<p id ="description"></p>
+	    		 		</td>
+     					<td>
+     						<b>category:</b>
+     						<p id = "category"></p>
+     					</td>
+     					<td class="image-cell">
+     						<img id="photo">
+     					</td>
+     					
+	    		 	</tr>									
+     				<tr id="bodySupplier">
+     					<td colspan="3">
+     						<!-- metto i campi dei fornitori e anche il bottone per aggiungere al carello-->
+     						<p>
+     							<b>Supplier name: </b><span id="sup_name"></span>
+     						</p>
+     						<p>
+	     						<b>score: </b><span id="sup_score"></span>
+	     						<b>  price: </b><span id="sup_unitaryPrice"></span><span>$</span>
+	     						<b>  Total in cart: </b><span id="sup_totalProductsPrice"></span><span>$</span>
+     						</p>
+     						<p>
+     							<b>Product already in cart: </b><span id="sup_totalNumber"></span>
+     						</p>
+     						<p>
+     							<b>Minimum price for free shipping: </b><span id="sup_freeShipping"></span><span>$</span>
+     						</p>
+     						<b>Spending ranges: </b>
+    						<ul>
+								<li id="spending_ranges">
+									<div id="1" >
+										<p><span id = "minimumN1"></span><span> - </span><span id="maximumN"></span><span> products = </span><span id="price1"></span><span>$</span></p>
+									</div>
+									<div id="2">
+										<p><span>More than </span><span id = "minimumN2"></span><span> products = </span><span id="price2"></span><span>$</span></p>
+									</div>
+								</li>
+							</ul>
+							
+     						<form action="#" th:action="@{/CheckQuantity(product_code=${product.code}, supplier_code=${supplier.code})}" method="POST">
+								<input type="number" name="quantity">
+						 		<input type="submit" value="Add to Cart">
+							</form>
+						
+     					</td>
+     				</tr>	
 				</tbody>
 			</table>
 		</div>
