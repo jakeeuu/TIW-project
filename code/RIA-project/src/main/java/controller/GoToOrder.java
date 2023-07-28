@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import beans.Order;
 import beans.User;
@@ -71,7 +71,8 @@ public class GoToOrder extends HttpServlet {
 			}
 		}
 		
-		String json = new Gson().toJson(orders);
+		String json = new GsonBuilder().setDateFormat("dd-MM-yyyy").create().toJson(orders);
+		
 		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

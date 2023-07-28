@@ -1,6 +1,7 @@
 {
 
 	var pageOrchestrator = new PageOrchestrator();
+	var cart = [];
 
 	window.addEventListener("load", () => {
 		if (sessionStorage.getItem("username") == null) {
@@ -12,6 +13,36 @@
 	}, false);
 
 
+	function CartSupplier(code, name, totalPrice){
+		this.code = code;
+		this.name = name;
+		this.products = [];
+		this.totalPrice = totalPrice;
+		this.shippingPrice = shippingPrice;
+
+		this.setShippingPrice = function(shippingPrice){
+			this.shippingPrice = shippingPrice;
+		}
+
+		this.addProduct = function(product) {
+			this.products.push(product);
+		}
+
+		this.setTotalPrice = function(totalPrice) {
+			this.totalPrice = totalPrice;
+		}
+	}
+
+	function Product(code, name, quantity, price){
+		this.code = code;
+		this.name = name;
+		this.quantity = quantity;
+		this.price = price;
+
+		this.setQuantity = function(quantity){
+			this.quantity = quantity;
+		}
+	}
 
 
 	function PageOrchestrator(){
@@ -282,8 +313,7 @@
 
 
 		this.updateSupplier = function (products, suppliers, productCode){
-			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4;
-			this.body.innerHTML="";
+			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4, input;
 			
 			var self = this;
 
@@ -461,7 +491,23 @@
 					el3.appendChild(el4);
 					
 					el1 = document.createElement("form");
-					el1.id="formForAddToCart";
+						el1.id="formForAddToCart";
+						el1.setAttribute("action","#");
+
+
+							input = document.createElement("input");
+							input.setAttribute("type","number");
+							input.setAttribute("name","quantity");
+							el1.appendChild(input);
+
+							input = document.createElement("input");
+							input.setAttribute("type","submit");
+							input.setAttribute("value","Add To Cart");
+							input.addEventListener("click", (e) => {
+								self.addToCart(e.target.getAttribute("quantity"),p,s); ///////sistemo la cosa dell'e.target
+							}, false);
+							el1.appendChild(input);
+
 					cell.appendChild(el1);	
 					
 					el2 = document.createElement("input");
@@ -480,6 +526,42 @@
 				
 			});
 			this.container.style.visibility = "visible";				
+		}
+
+		this.addToCart = function(quantity, product, supplier){
+			var cartProduct = null;
+			var cartSupplier = null;
+			for(cs of cart){
+				if(cs.code === supplier.code){
+					cartSupplier = cs;
+					break;
+				}
+			}
+
+			if(cartSupplier === null){
+				cartProduct = new Product(product.code,product.name, quantity, product.price);
+				let total = product.price * quantity;
+				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
+				cartSupplier.addProduct(cartProduct);
+			}else{
+				for(p of cartSupplier.products){
+					if(p.code === product.code){
+						cartProduct = p;
+					}
+				}
+
+				if(cartProduct === null){
+					cartProduct = new Product(product.code,product.name, quantity, product.price);
+					cartSupplier.addProduct(cartProduct);
+				}else{
+					let prevQuant = cartProduct.quantity;
+					cartProduct.setQuantity(prevQuant + quantity);
+				}
+				let tmp = cartSupplier.totalPrice;
+				cartSupplier.setTotalPrice(tmp + product.price * quantity);
+			}
+
+			////gestisco lo shipping price
 		}
 
 	}
@@ -608,7 +690,7 @@
 
 		this.createOrder = function(supplierCode) {
 			var self = this;
-			for(var cartSupplier : cart){
+			for(cartSupplier of cart){
 				if(cartSupplier.code === supplierCode){
 					break;
 				}
