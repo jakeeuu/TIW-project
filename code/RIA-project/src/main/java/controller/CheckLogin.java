@@ -46,7 +46,7 @@ public class CheckLogin extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		if (mail == null || mail.isEmpty() || password == null || password.isEmpty()) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 			response.getWriter().println("Missing credential");
 			return;
 		}
@@ -56,14 +56,14 @@ public class CheckLogin extends HttpServlet {
 		try {
 			user = userDao.checkCredentials(mail, password);
 		} catch (SQLException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("Failure in database credential checking");
 			return;
 		}
 		
 		
 		if(user == null){
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
 			response.getWriter().println("Incorrect mail or password");
 		}else {
 			
@@ -73,7 +73,7 @@ public class CheckLogin extends HttpServlet {
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().println(mail);
 			
-			ArrayList<CartSupplier> cart = null;
+			/*ArrayList<CartSupplier> cart = null;
 			if(request.getSession().getAttribute("cart") == null) {
 				cart = new ArrayList<CartSupplier>();
 				request.getSession().setAttribute("cart", cart);
@@ -85,7 +85,7 @@ public class CheckLogin extends HttpServlet {
 			response.setStatus(200);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json);
+			response.getWriter().write(json);*/
 			
 		}
 		

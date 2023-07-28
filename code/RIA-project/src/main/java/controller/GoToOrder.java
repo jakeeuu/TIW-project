@@ -13,26 +13,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
-import beans.Product;
+import beans.Order;
 import beans.User;
+import dao.OrderDao;
 import dao.ProductDao;
 import utils.ConnectionHandler;
 
 /**
- * Servlet implementation class GoToHome
+ * Servlet implementation class GoToOrder
  */
-@WebServlet("/GoToHome")
-public class GoToHome extends HttpServlet {
+@WebServlet("/GoToOrder")
+public class GoToOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection = null;   
+	private Connection connection = null;    
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GoToHome() {
+    public GoToOrder() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,43 +45,37 @@ public class GoToHome extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+		String mail = user.getMail();
+		
+		OrderDao orderDao = new OrderDao(connection);
 		ProductDao productDao = new ProductDao(connection);
-		ArrayList<Product> products = new ArrayList<Product>();
+		ArrayList<Order> orders = new ArrayList<Order>();
 		
-		
-		String path;
 		try {
-			products = productDao.produtcsToVisualize(user);
-		}catch(SQLException e) {
+			orders = orderDao.printOrders(mail);
+		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
-			response.getWriter().println("Not possible to visualize top five products list for a db problem");
+			response.getWriter().println("db error, click again");
 			return;
 		}
 		
-		JsonArray jArray = new JsonArray();
-		JsonObject jSonObject;
-
-		for(Product product : products) {
-				jSonObject = new JsonObject();
-				
-				jSonObject.addProperty("code", product.getCode());
-				jSonObject.addProperty("name" , product.getName());
-				jSonObject.addProperty("description" , product.getDescription());
-				jSonObject.addProperty("category" , product.getCategory());
+		if(orders != null) {
+			for(Order order : orders) {
 				try {
-					jSonObject.addProperty("photo" , GetEncoding.getImageEncoding(userName + "_" + product.getPhoto() , getServletContext()));
-				} catch(IOException e) {
-					jSonObject.addProperty("imageContent" , "");
+					order.setProducts(productDao.productInOrders(order.getCode()));
+				} catch (SQLException e) {
+					response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
+					response.getWriter().println("db error, click again");
+					return;
 				}
-				
-				jArray.add(jSonObject);
+			}
 		}
 		
-		String json = new GsonBuilder().create().toJson(jArray);
+		String json = new Gson().toJson(orders);
 		response.setStatus(200);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);   /// se non va provo con println anzichè write 
+		response.getWriter().write(json);
 	}
 
 	/**
@@ -93,7 +85,6 @@ public class GoToHome extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
 	
 	@Override
 	public void destroy() {

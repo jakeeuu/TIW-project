@@ -65,7 +65,7 @@ public class ProductDetails extends HttpServlet {
 			response.getWriter().println("this product code is invalid, click again");
 			return;
 		} catch (SQLException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db error, click again");
 			return;
 		}
@@ -80,17 +80,17 @@ public class ProductDetails extends HttpServlet {
 				s.setSpendingRanges(spendigRangesDao.findSpendingRanges(s.getCode()));
 			}
 		}catch (SQLException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db error, click again");
 			return;
 		} catch (NullPointerException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("no supplier match for the code");
 			return;
 		}
 		
 		HttpSession session = request.getSession();
-		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
+		//ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		User user = (User) session.getAttribute("user");
 		String mail = user.getMail();
 		
@@ -99,12 +99,12 @@ public class ProductDetails extends HttpServlet {
 		try {
 			productDao.insertInto(mail,productCode,date, time);
 		} catch (SQLException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db error, click again");
 			return;
 		}
 		
-		for(Supplier s : suppliers) {
+		/*for(Supplier s : suppliers) {
 			for(CartSupplier c : cart) {
 				if(c.getCode() == s.getCode()) {
 					float tmp = s.getTotalProductsPrice();
@@ -112,7 +112,7 @@ public class ProductDetails extends HttpServlet {
 					s.setTotalNumber(c.getTotalNumber());
 				}
 			}
-		}
+		}*/
 		
 		String json = new Gson().toJson(suppliers);
 		response.setStatus(200);

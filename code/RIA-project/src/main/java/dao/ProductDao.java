@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import beans.CartSupplier;
 import beans.Product;
 import beans.User;
 
@@ -206,5 +207,46 @@ public class ProductDao {
 				}
 			}
 		}
-	}		
+	}	
+	
+	public boolean areValid(int productCode, String productName) throws SQLException{ 
+		String query= "select count(*) from product where Code = ? and Name = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(productCode) );
+			pstatement.setString(2, productName );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return false;           
+				else {
+					result.next();
+					if (result.getInt("count(*)") == 1) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			}
+		}
+	}
+	
+	public boolean matching(Product product, CartSupplier cartSupplier) throws SQLException{ 
+		String query= "select count(*) from sold_by where ProdCode = ? and Supcode = ? and Price = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(product.getCode()) );
+			pstatement.setString(2, String.valueOf(cartSupplier.getCode()) );
+			pstatement.setString(3, String.valueOf(product.getPrice()) );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return false;           
+				else {
+					result.next();
+					if (result.getInt("count(*)") == 1) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			}
+		}
+	}
 }

@@ -106,5 +106,26 @@ public class SupplierDao {
 			}
 		}
 	}	
+	
+	
+	public boolean areValid(int supCode, String supName) throws SQLException{ 
+		String query= "select count(*) from supplier where Code = ? and Name = ?";
+		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
+			pstatement.setString(1, String.valueOf(supCode) );
+			pstatement.setString(2, supName );
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) 
+					return false;           
+				else {
+					result.next();
+					if (result.getInt("count(*)") == 1) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			}
+		}
+	}
 
 }

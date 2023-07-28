@@ -23,10 +23,11 @@
 </context-param>
 <filter-mapping> 
     <filter-name>loginChecker</filter-name>
-    <url-pattern>/GoToHome</url-pattern>
+    <url-pattern>/GoToHome</url-pattern> 
     <url-pattern>/GoToResults</url-pattern>
+    <url-pattern>/GoToOrder</url-pattern>
     <url-pattern>/ProductDetails</url-pattern> 
-    <url-pattern>/CheckQuantity</url-pattern>
+    <url-pattern>/CreateOrder</url-pattern>
 </filter-mapping>
 <welcome-file-list>
    	<welcome-file>LoginPage.html</welcome-file>

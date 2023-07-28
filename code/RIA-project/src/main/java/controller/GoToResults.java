@@ -64,11 +64,11 @@ public class GoToResults extends HttpServlet {
 		try {
 			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db problem during the search of key word");
 			return;
 		} catch (NullPointerException e) {
-			response.setStatus(403);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("no match was found for the key word");
 			return;
 		}
