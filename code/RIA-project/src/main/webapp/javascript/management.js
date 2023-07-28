@@ -1,4 +1,4 @@
-(function () {
+{
 
 	var pageOrchestrator = new PageOrchestrator();
 
@@ -753,7 +753,7 @@
 		}
 	}
 	
-
+};
 
 
 			
