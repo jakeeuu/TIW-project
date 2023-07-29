@@ -111,7 +111,6 @@
 			let self = this;
 			makeCall("GET", "GoToHome", null,
 				function(req) {
-
 					if (req.readyState == 4) {
 						let message = req.responseText;
 						if (req.status == 200) {
