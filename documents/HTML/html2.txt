@@ -3,7 +3,7 @@ participant GotoHome
 participant ProductDao
 
 
-[->GotoHome : redirect
+[->GotoHome : doGet
 GotoHome->Session:getAttribute("user")
 GotoHome<-Session: user
 GotoHome->ProductDao:new ProductDao()
