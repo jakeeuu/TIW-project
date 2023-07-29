@@ -1,0 +1,27 @@
+title Login
+
+participant CheckLogin
+participant UserDao
+participant Session
+
+
+participant [
+
+[->CheckLogin : doPost
+CheckLogin->UserDao: new UserDao()
+CheckLogin<-UserDao: checkCredentials(mail, password)
+CheckLogin<-UserDao: user || null
+
+alt user != null
+CheckLogin->Session: setAttribute("user", user)
+CheckLogin->Session: getAttribute("cart")
+CheckLogin<-Session:cart
+alt cart == null
+
+CheckLogin->Session: setAttribute("cart", cart)
+end
+CheckLogin->GoToHome:redirect
+else user == null
+CheckLogin->Context:setVariable("error")
+CheckLogin->Template Engine:process("LoginPage.html", ctx, response.getWriter())
+end 

@@ -1,0 +1,19 @@
+title GoToHome
+participant GotoHome
+participant ProductDao
+
+
+[->GotoHome : doGet
+GotoHome->Session:getAttribute("user")
+GotoHome<-Session: user
+GotoHome->ProductDao:new ProductDao()
+alt try
+GotoHome->ProductDao:produtcsToVisualize(user)
+GotoHome<-ProductDao:produtcs
+GotoHome->Context:setVariable("products", products);
+GotoHome->Template Engine:process("HomePahe.html", ctx, response.getWriter());
+else catch
+GotoHome->Context:setVariable("error");
+GotoHome->Template Engine:process("LoginPage.html", ctx, response.getWriter());
+end
+
