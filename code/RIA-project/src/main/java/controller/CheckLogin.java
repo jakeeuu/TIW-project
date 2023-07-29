@@ -6,10 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.gson.Gson;
 
@@ -22,6 +25,7 @@ import utils.ConnectionHandler;
  * Servlet implementation class CheckLogin
  */
 @WebServlet("/CheckLogin")
+@MultipartConfig
 public class CheckLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;   
@@ -42,8 +46,11 @@ public class CheckLogin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String mail = request.getParameter("mail");
-		String password = request.getParameter("password");
+		String mail = null;
+		String password = null;
+		
+		mail = request.getParameter("mail");
+		password = request.getParameter("password");
 		
 		if (mail == null || mail.isEmpty() || password == null || password.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400

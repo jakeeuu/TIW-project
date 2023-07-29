@@ -1,16 +1,16 @@
 (function() {
-    document.getElementById("login").addEventListener("submit", (e) =>{
-		e.preventDefault();
-        let form = e.target;
+    document.getElementById("loginButton").addEventListener('click', (e) =>{
+		var form = e.target.closest("form");
         console.log(form); //utile per il debuggin
 
         if(form.checkValidity() === true){
-            makeCall("POST", 'CheckLogin', form, function (req) {
+			console.log(e.target.closest("form"));
+            makeCall("POST", 'CheckLogin', e.target.closest("form"), function (req) {
                 if(req.readyState === XMLHttpRequest.DONE){
                     let message = req.responseText;
                     switch(req.status){
 						case 200:
-							sessionStorage.setItem('mail', message);
+							sessionStorage.setItem("mail", message);
                 			window.location.href = "Market.html";
                 			break;
               			case 400: // bad request
@@ -24,7 +24,7 @@
                 			break;
                 	}
             	}
-            }, null, false);
+            });
             
         }else{  
             form.reportValidity();

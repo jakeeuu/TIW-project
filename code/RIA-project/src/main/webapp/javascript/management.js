@@ -319,7 +319,7 @@
 			
 			var divsInBody = document.querySelectorAll('#resultBody div');
 
-		    // Iterazione su tutti i div trovati
+		    
 		    divsInBody.forEach(function(div) {
 		      if(div.id != productCode){
 				  div.innerHTML="";

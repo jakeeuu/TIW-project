@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import utils.GetEncoding;
  * Servlet implementation class GoToResults
  */
 @WebServlet("/GoToResults")
+@MultipartConfig
 public class GoToResults extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;  

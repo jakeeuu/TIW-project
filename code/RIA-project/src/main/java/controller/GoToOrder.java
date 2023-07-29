@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import utils.ConnectionHandler;
  * Servlet implementation class GoToOrder
  */
 @WebServlet("/GoToOrder")
+@MultipartConfig
 public class GoToOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;    
