@@ -13,7 +13,7 @@ public class GetEncoding {
 	//Static method that takes from the local storage the image and encodes it into a base64 string
 	public static String getImageEncoding(String fileImage , ServletContext context) throws IOException {
 		
-		String imgFolderPath = context.getInitParameter("imgFolderPathh");
+		String imgFolderPath = context.getInitParameter("imgFolderPath");
 		
 		File file = new File(imgFolderPath + fileImage);
 		
