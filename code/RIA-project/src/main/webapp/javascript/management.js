@@ -18,7 +18,7 @@
 		this.name = name;
 		this.products = [];
 		this.totalPrice = totalPrice;
-		this.shippingPrice = shippingPrice;
+		this.shippingPrice = shippingPrice = null;
 
 		this.setShippingPrice = function(shippingPrice){
 			this.shippingPrice = shippingPrice;
@@ -591,7 +591,7 @@
 							input.setAttribute("type","submit");
 							input.setAttribute("value","Add To Cart");
 							input.addEventListener("click", (e) => {
-								self.addToCart(e.target.getAttribute("quantity"),p,s); ///////sistemo la cosa dell'e.target guardo query selector
+								self.addToCart(el1.querySelector("input[type='number']").getAttribute("quantity"),p,s); //spero funzioni
 							}, false);
 							el1.appendChild(input);
 
@@ -646,7 +646,19 @@
 				cartSupplier.setTotalPrice(tmp + product.price * quantity);
 			}
 
-			////gestisco lo shipping price
+			if(cartSupplier.shippingPrice !== 0){
+				if(cartSupplier.totalPrice >= supplier.freeShipping){
+					cartSupplier.setShippingPrice(0);
+				}else{
+					for(sp of supplier.spendingRanges){
+						if(supplier.totalNumber >= sp.maximumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
+							cartSupplier.setShippingPrice(sp.price);
+						}
+					}
+				}
+			}
+
+			///chiamo orchestrator per andare al carrello
 		}
 
 	}
@@ -795,6 +807,12 @@
 								return;
 							}
 							//tolgo cartSupplier da carrello
+							for(let i = 0; i < cart.length; i++){
+								if( cart[i].code === cartSupplier.code){
+									cart.splice(i,1);
+									break;
+								}
+							}
 							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page 
 						}
 						if (req.status == 400) {
