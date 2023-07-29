@@ -48,12 +48,13 @@ public class CheckQuantity extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
-		
+		String ctxpath = getServletContext().getContextPath();
+		String path = ctxpath + "/GoToCart";
 		
 		Integer quantity = null;
 		Integer supplierCode = null;
 		Integer productCode = null;
-		boolean badRequest = false;
+		String error = null;
 		
 		ProductDao productDao = new ProductDao(connection);
 		SupplierDao supplierDao = new SupplierDao(connection);
@@ -63,18 +64,19 @@ public class CheckQuantity extends HttpServlet {
 			supplierCode = Integer.parseInt(request.getParameter("supplier_code"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
 			if(quantity <= 0 || productCode < 0 || supplierCode < 0 || !productDao.isValidCode(productCode) || !supplierDao.isValidCode(supplierCode)) {
-				badRequest = true;
+				error = "incorrect parameters";
 			}
-		}catch(NumberFormatException | NullPointerException e) {
-			badRequest = true;
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch(NullPointerException e) {
+			error = "missing parameters";
+		}catch(NumberFormatException e) {
+			error = "incorrect parameters";
+		}catch (SQLException e) {
+			error = "db error";
 		}
 		
-		if(badRequest) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect or missing param values");
+		if(error != null) {
+			path = path + "?error=" + error;
+			response.sendRedirect(path);
 			return;
 		}
 		
@@ -90,8 +92,10 @@ public class CheckQuantity extends HttpServlet {
 			newSupplier = supplierDao.infoCartSupplier(productCode, supplierCode);
 			newSupplier.setShippingPrice(-1);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			error = "db error";
+			path = path + "?error=" + error;
+			response.sendRedirect(path);
+			return;
 		}
 		
 		if(cartSupplier == null) {
@@ -141,8 +145,10 @@ public class CheckQuantity extends HttpServlet {
 				try {
 					spendingRanges = spendingRangesDao.findSpendingRanges(supplierCode);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					error = "db error";
+					path = path + "?error=" + error;
+					response.sendRedirect(path);
+					return;
 				}
 				
 				int total = 0;
@@ -161,8 +167,6 @@ public class CheckQuantity extends HttpServlet {
 			}
 		}
 		
-		String ctxpath = getServletContext().getContextPath();
-		String path = ctxpath + "/GoToCart";
 		response.sendRedirect(path);
 	}
 
