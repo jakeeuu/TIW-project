@@ -58,9 +58,9 @@
 			 * HOME PAGE
 			 * 
 			 */
-			visualizeProduct = new VisualizeProduct(alert, document.getElementById("prodVisTable"), document.getElementById("prodVisBody"));
+			var visualizeProduct = new VisualizeProduct(alert, document.getElementById("prodVisTable"), document.getElementById("prodVisBody"));
 			visualizeProduct.show();
-			searchForm = new SearchForm(document.getElementById("searchForm"), alert);
+			var searchForm = new SearchForm(document.getElementById("searchForm"), alert);
 			searchForm.registerEvents(this);
 
 			/**
@@ -68,7 +68,7 @@
 			 * RESULT PAGE
 			 * 
 			 */
-			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("bodyResults"));
+			var visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("bodyResults"));
 
 
 			/**
@@ -76,14 +76,23 @@
 			 * CART PAGE
 			 * 
 			 */
-			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			var visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
 
 			/**
 			 * 
 			 * ORDER PAGE
 			 * 
 			 */
-			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			var visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+
+			/**
+			 * 
+			 * LINK MENU
+			 * 
+			 */
+			document.getElementById("goToHome").addEventListener("click", (e) => {
+				
+			})
 		}
 	}
 
@@ -151,7 +160,7 @@
 					cell = document.createElement("td");
 					img = document.createElement("img");
 					img.src = p.photo; 
-					
+
 					/*
 					img.alt = "image";
 					img.width = 200;///tengo??
