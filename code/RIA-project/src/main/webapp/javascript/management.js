@@ -122,7 +122,7 @@
                   			window.sessionStorage.removeItem('mail');
 						}
 					} else {
-						self.alert.textContent = "Something went wrong while exchanging messages with the server";
+						self.alert.textContent = "Siamo nello stato: " + req.readyState;
 					}
 
 				}
