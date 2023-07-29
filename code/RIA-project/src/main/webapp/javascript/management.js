@@ -103,7 +103,6 @@
 			var self = this;
 			makeCall("GET", "GoToHome", null,
 				function(req) {
-
 					if (req.readyState == 4) {
 						var message = req.responseText;
 						if (req.status == 200) {
