@@ -91,8 +91,29 @@
 			 * 
 			 */
 			document.getElementById("goToHome").addEventListener("click", (e) => {
-				
-			})
+				this.showHome();
+				this.resetResults();
+				this.resetCart();
+				this.resetOrder();
+			}, false);
+
+			document.getElementById("goToCart").addEventListener("click", (e) => {
+				this.showCart();
+				this.resetResults();
+				this.resetHome();
+				this.resetOrder();
+			}, false);
+
+			document.getElementById("goToOrder").addEventListener("click", (e) => {
+				this.showOrder();
+				this.resetResults();
+				this.resetCart();
+				this.resetHome();
+			}, false);
+		}
+
+		this.showHome = function(){
+			thia
 		}
 	}
 
