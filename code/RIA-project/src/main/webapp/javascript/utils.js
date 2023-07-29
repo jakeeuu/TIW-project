@@ -11,10 +11,7 @@ function makeCall(method, url, formElement, callBack , objectToSend , reset = tr
     if (formElement == null && objectToSend == null) {
         request.send();
     } else if(formElement != null){
-		var formdata = new FormData(formElement);
-		console.log(formdata.get("mail")); 
-		console.log(formdata.get("password")); 
-        request.send(formdata); //invia i dati del form
+        request.send(new FormData(formElement)); //invia i dati del form
     } else {
         let toSend = JSON.stringify(objectToSend); //se è stato fornito objectToSend, invia una richiesta con i dati JSON
         request.send(toSend);

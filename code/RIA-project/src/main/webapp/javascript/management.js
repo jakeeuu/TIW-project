@@ -4,11 +4,11 @@
 	var cart = [];
 
 	window.addEventListener("load", () => {
-		if (sessionStorage.getItem("username") == null) {
+		if (sessionStorage.getItem("mail") == null) {
 			window.location.href = "LoginPage.html";
 		} else {			
 			pageOrchestrator.start();
-			pageOrchestrator.refresh();
+			//pageOrchestrator.refresh();
 		} 
 	}, false);
 
@@ -59,6 +59,7 @@
 			 * 
 			 */
 			visualizeProduct = new VisualizeProduct(alert, document.getElementById("prodVisTable"), document.getElementById("prodVisBody"));
+			visualizeProduct.show();
 			searchForm = new SearchForm(document.getElementById("searchForm"), alert);
 			searchForm.registerEvents(this);
 
@@ -106,14 +107,14 @@
 		}
 
 		this.show = function(){
-			let self = this;
+			var self = this;
 			makeCall("GET", "GoToHome", null,
 				function(req) {
 
 					if (req.readyState == 4) {
-						let message = req.responseText;
+						var message = req.responseText;
 						if (req.status == 200) {
-							let products = JSON.parse(req.responseText);
+							var products = JSON.parse(req.responseText);
 							self.update(products); 
 						}else if(req.status == 400){
 							window.location.href = req.getResponseHeader("Location");
@@ -128,7 +129,7 @@
 		}
 
 
-		this.update = function(product){
+		this.update = function(products){
 
 			let row, cell, img;
 			this.body.innerHTML=""; // cosa serve ?? svuota il contenuto della tabella ???
@@ -158,10 +159,12 @@
 					cell = document.createElement("td");
 					img = document.createElement("img");
 					img.src = p.photo; 
-
+					
+					/*
 					img.alt = "image";
 					img.width = 200;///tengo??
 					img.height = 150;///tengo??
+					*/
 
 					cell.appendChild(img);
 
@@ -192,7 +195,7 @@
 		}
 		
 		this.registerEvents = function(orchestrator) {
-			this.searchForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
+			this.searchForm.querySelector("input[type='submit']").addEventListener('click', (e) => {
 				var eventfieldset = e.target.closest("fieldset");
 				if(eventfieldset.elements[0].checkValidity()){
 					var self = this;
