@@ -78,22 +78,7 @@ public class CheckLogin extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);//200
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().println(mail);
-			
-			/*ArrayList<CartSupplier> cart = null;
-			if(request.getSession().getAttribute("cart") == null) {
-				cart = new ArrayList<CartSupplier>();
-				request.getSession().setAttribute("cart", cart);
-			}else {
-				cart = (ArrayList<CartSupplier>) request.getSession().getAttribute("cart");
-			}
-			
-			String json = new Gson().toJson(cart);
-			response.setStatus(HttpServletResponse.SC_OK);//200
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(json);*/
-			
+			response.getWriter().println(mail);		
 		}
 		
 		

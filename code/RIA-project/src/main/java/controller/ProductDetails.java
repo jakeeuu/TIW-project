@@ -92,7 +92,6 @@ public class ProductDetails extends HttpServlet {
 		}
 		
 		HttpSession session = request.getSession();
-		//ArrayList<CartSupplier> cart = (ArrayList<CartSupplier>) session.getAttribute("cart");
 		User user = (User) session.getAttribute("user");
 		String mail = user.getMail();
 		
@@ -105,16 +104,6 @@ public class ProductDetails extends HttpServlet {
 			response.getWriter().println("db error, click again");
 			return;
 		}
-		
-		/*for(Supplier s : suppliers) {
-			for(CartSupplier c : cart) {
-				if(c.getCode() == s.getCode()) {
-					float tmp = s.getTotalProductsPrice();
-					s.setTotalProductsPrice(tmp + c.getTotalPrice());
-					s.setTotalNumber(c.getTotalNumber());
-				}
-			}
-		}*/
 		
 		String json = new Gson().toJson(suppliers);
 		response.setStatus(HttpServletResponse.SC_OK);//200

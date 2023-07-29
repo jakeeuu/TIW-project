@@ -3,7 +3,6 @@
 <head>
 
     <meta charset="ISO-8859-1">
-    <title>Home</title>
 
         
     <link rel="stylesheet" href="CSS/style.css">
@@ -25,7 +24,7 @@
 	</div>
 	
 	
-	<div id="homePage">
+	<div id = "homePage">
 		<h1 class="title">Welcome to the Home Page</h1>
 		<br>
 		
@@ -33,17 +32,17 @@
 	
 		<div class="container">
 			<form action="#" id="searchForm">
-			 	<fieldset>
+			 	<div>
 					Search for a product: <input type="text" name="key_word" required> 
 					<input  type="submit" value="Search" >
-				</fieldset>
+				</div>
 			</form>
 		</div>
 
 		<br>
 	
 	
-		<div class="container">
+		<div class = "container">
 				<table border = "1" id="prodVisTable">
 				<thead>
 					<tr><th>Product code</th>
@@ -58,7 +57,7 @@
 		</div>
 	</div>
 	
-	<div id="resultPage">
+	<div id = "resultPage">
 		<div class = "container">
 			<form action="#" id="goToResults" >
 				Search for a product: <input type="text" name="key_word"> 
@@ -69,10 +68,6 @@
 	
 		<br>
 	
-		
-	
-
-	
 		<div class = "container" >
 			<table border = "1" id="tableResults">
 				<thead>
@@ -81,13 +76,13 @@
 						<th>Minimum price</th>
 				</thead>
 		
-				<tbody id = "resultBody" >	
+				<tbody id = "resultsBody" >	
 				</tbody>
 			</table>
 		</div>
 	</div>
 	
-	<div id="cartPage">
+	<div id = "cartPage">
 		<div class="title">
 			<h1 id="normalTitleCart">Your cart: </h1>
 			<h1 id="emptyTitleCart">Your cart is empty</h1>
@@ -111,8 +106,8 @@
 		</div>
 	</div>
 	
-	<div id="orderPage">
-		<div class="title">
+	<div id = "orderPage">
+		<div class = "title">
 			<h1 id="normalTitleOrders">Your orders: </h1>
 			<h1 id="emptyTitleOrders">You have no orders</h1>
 		</div>

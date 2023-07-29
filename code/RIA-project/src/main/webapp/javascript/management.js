@@ -58,9 +58,9 @@
 			 * HOME PAGE
 			 * 
 			 */
-			var visualizeProduct = new VisualizeProduct(alert, document.getElementById("prodVisTable"), document.getElementById("prodVisBody"));
+			visualizeProduct = new VisualizeProduct(alert, document.getElementById("prodVisTable"), document.getElementById("prodVisBody"));
 			visualizeProduct.show();
-			var searchForm = new SearchForm(document.getElementById("searchForm"), alert);
+			searchForm = new SearchForm(document.getElementById("searchForm"), alert);
 			searchForm.registerEvents(this);
 
 			/**
@@ -68,7 +68,7 @@
 			 * RESULT PAGE
 			 * 
 			 */
-			var visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("bodyResults"));
+			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("resultsBody"));
 
 
 			/**
@@ -76,14 +76,14 @@
 			 * CART PAGE
 			 * 
 			 */
-			var visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
 
 			/**
 			 * 
 			 * ORDER PAGE
 			 * 
 			 */
-			var visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
 
 			/**
 			 * 
@@ -91,29 +91,51 @@
 			 * 
 			 */
 			document.getElementById("goToHome").addEventListener("click", (e) => {
+				this.refresh();
 				this.showHome();
-				this.resetResults();
-				this.resetCart();
-				this.resetOrder();
 			}, false);
 
 			document.getElementById("goToCart").addEventListener("click", (e) => {
+				this.refresh();
 				this.showCart();
-				this.resetResults();
-				this.resetHome();
-				this.resetOrder();
 			}, false);
 
 			document.getElementById("goToOrder").addEventListener("click", (e) => {
+				this.refresh();
 				this.showOrder();
-				this.resetResults();
-				this.resetCart();
-				this.resetHome();
 			}, false);
 		}
 
 		this.showHome = function(){
-			thia
+			document.getElementById("homePage").style.display = "block";
+			visualizeProduct.show();
+		}
+
+		this.showResult = function(products){
+			this.refresh();
+			document.getElementById("resultPage").style.display = "block";
+			visualizeSearchProduct.updateProduct(products);
+		}
+
+		this.showCart = function(){
+			document.getElementById("cartPage").style.display = "block";
+			visualizeCartProduct.show();
+		}
+
+		this.showOrder = function(){
+			document.getElementById("orderPage").style.display = "block";
+			visualizeOrderProduct.show();
+		}
+
+		this.refresh = function(){
+			document.getElementById("homePage").style.display = "none";
+			visualizeProduct.reset();
+			document.getElementById("resultPage").style.display = "none";
+			visualizeSearchProduct.reset();
+			document.getElementById("cartPage").style.display = "none";
+			visualizeCartProduct.reset();
+			document.getElementById("orderPage").style.display = "none";
+			visualizeOrderProduct.reset();
 		}
 	}
 
@@ -207,21 +229,21 @@
 		this.alert = alertIn;
 
 		this.show = function(){
-			var fieldsets = document.querySelectorAll("#" + this.searchForm.id + " fieldset");
-			fieldsets[0].hidden = false;
+			var div = document.querySelector("#" + this.searchForm.id + " div");
+			div.hidden = false;
 		}
 
 		this.reset = function(){
-			var fieldsets = document.querySelectorAll("#" + this.searchForm.id + " fieldset");
-			fieldsets[0].hidden = true;
+			var div = document.querySelector("#" + this.searchForm.id + " div");
+			div.hidden = true;
 		}
 		
 		this.registerEvents = function(orchestrator) {
 			this.searchForm.querySelector("input[type='submit']").addEventListener('click', (e) => {
-				var eventfieldset = e.target.closest("fieldset");
-				if(eventfieldset.elements[0].checkValidity()){
+				var eventform = e.target.closest("form");
+				if(eventform.checkValidity()){
 					var self = this;
-					makeCall("POST", "Result?key_word=" + "/*aggiungo qui la chiave di ricerca del form*/", e.target.closest("form"),
+					makeCall("POST", "GoToResults", e.target.closest("form"),
 						function(req) {
 							if (req.readyState == 4) {
 								var message = req.responseText;
@@ -231,8 +253,7 @@
 										self.alert.textContent = "You don't have any product to visualize";
 										return;
 									}
-									//gestisco orchestrator, result con quello che mi arriva come risultato dalla chiave di ricerca
-									//con l'orchestrato 
+									orchestrator.showResult(products);
 								}
 								if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
 									window.location.href = req.getResponseHeader("Location");
@@ -248,7 +269,7 @@
 						}
 					);
 				}else{
-					eventfieldset.elements[0].reportValidity();
+					eventform.reportValidity();
 				}
 			});	
 		}
@@ -278,7 +299,7 @@
 					linkcell = document.createElement("td");
 			        anchor = document.createElement("a");
 			        linkcell.appendChild(anchor);
-			        linkText = document.createTextNode("p.code");
+			        linkText = document.createTextNode(p.code);
 			        anchor.appendChild(linkText);
 
 			        anchor.setAttribute('product_code',  p.code);
@@ -292,12 +313,12 @@
 					linkcell = document.createElement("td");
 			        anchor = document.createElement("a");
 			        linkcell.appendChild(anchor);
-			        linkText = document.createTextNode("p.name");
+			        linkText = document.createTextNode(p.name);
 			        anchor.appendChild(linkText);
 
 			        anchor.setAttribute('product_code',  p.code);
 			     	anchor.addEventListener("click", (e) => {
-						self.showDetails(e.target.getAttribute("product_code"));
+						self.showDetails(e.target.getAttribute("product_code"),products);
 					}, false);
 			     	anchor.href = "#";//non so a che serve ma tutti lo mettono
 
@@ -359,7 +380,7 @@
 		      
 		    });
 				
-			rightRow = document.getElementById("productCode"); 
+			rightRow = document.getElementById(productCode); 
 
 			i = 0;
 			while(products[i].code != productCode){
@@ -371,7 +392,7 @@
 			detailsRow = document.createElement("tr"); 
 
 			cell = document.createElement("td");
-			des = document.cretateElement("b");
+			des = document.createElement("b");
 			des.textContent = "description:";
 			cell.appendChild(des);
 			text = document.createElement("p");
@@ -380,7 +401,7 @@
 			detailsRow.appendChild(cell);
 
 			cell = document.createElement("td");
-			des = document.cretateElement("b");
+			des = document.createElement("b");
 			des.textContent = "category:";
 			cell.appendChild(des);
 			text = document.createElement("p");
@@ -467,12 +488,14 @@
 				el1.appendChild(el2);
 				
 				el2 = document.createElement("span");
+				cartSup = null;
 				for(cs of cart ){
-					if(cs.code == s.code)
+					if(cs.code === s.code)
+						cartSup = cs;
 						break;
 				}
 				s.totalNumber = 0;
-				for(product in cs.products){
+				for(product in cartSup.products){
 					s.totalNumber = s.totalNumber + (product * quantity);
 				}
 				el2.textContent = s.totalNumber; 
@@ -480,7 +503,7 @@
 				el2.addEventListener('mouseover', (e) => {
 					el3= document.createElement("overlay");
 					
-					cs.products.forEach(function(p){
+					cartSup.products.forEach(function(p){
 						row = document.createElement("tr");
 
 						cell = document.createElement("td");
