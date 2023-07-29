@@ -104,6 +104,27 @@
 				this.refresh();
 				this.showOrder();
 			}, false);
+
+			//LINK AL LOGOUT
+			document.querySelector("a[href='Logout']").addEventListener("click", (e) =>{
+				e.preventDefault();
+		        makeCall("GET", 'Logout', null, function (res) {
+		            if(res.readyState === 4){
+		                let message = res.responseText;
+		                if(res.status === 200){
+		                    sessionStorage.clear();
+		                    window.location.href = "LoginPage.html";
+			            }else if(res.status === 400){
+			            	sessionStorage.clear();
+							window.location.href = res.getResponseHeader("location");
+			            }else{
+			            	document.getElementById("error").textContent = message;
+			            }       
+		            }
+		        }, null, false);
+			},false);
+
+
 		}
 
 		this.showHome = function(){

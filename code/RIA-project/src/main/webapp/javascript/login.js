@@ -1,5 +1,6 @@
 (function() {
     document.getElementById("loginButton").addEventListener('click', (e) =>{
+		e.preventDefault();
 		var form = e.target.closest("form");
         console.log(form); //utile per il debuggin
 
