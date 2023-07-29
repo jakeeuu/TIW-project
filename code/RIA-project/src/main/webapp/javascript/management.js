@@ -83,6 +83,13 @@
 			 * 
 			 */
 			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+
+			/**
+			 * 
+			 * LINK MENU
+			 * 
+			 */
+			
 		}
 	}
 
