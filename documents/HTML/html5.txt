@@ -1,0 +1,23 @@
+title GoToCart
+
+
+participant GoToCart
+participant Request
+
+
+
+[->GoToCart: doGet
+GoToCart->Request: getSession()
+GoToCart<-Request: session
+GoToCart->Session: getAttribute("cart")
+GoToCart<-Session: cart
+GoToCart->Request: getParameter("error")
+GoToCart<-Request: error
+alt error != null
+GoToCart->Context: setVariable("error")
+end
+GoToCart->Context: setVariable("cart")
+GoToCart->Template Engine : process("CartPage.html", ctx, response.getWriter());
+
+
+

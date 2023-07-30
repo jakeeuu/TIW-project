@@ -1,0 +1,30 @@
+title GoToOrder
+
+participant GoToOrder
+
+[->GoToOrder: doGet
+GoToOrder->Request: getSession()
+GoToOrder<-Request: session
+GoToOrder->Request: getAttribute("user")
+GoToOrder<-Request: user
+GoToOrder->OrderDao: new OrderDao()
+GoToOrder->ProductDao: new ProductDao()
+alt try
+GoToOrder->OrderDao: printOrders(mail)
+GoToOrder<-OrderDao: orders
+alt orders != null
+loop orders.size()
+alt try
+GoToOrder->ProductDao: productInOrders(order.getCode())
+GoToOrder<-ProductDao: products
+GoToOrder->GoToOrder: set the products for each order in orders
+else catch
+GoToOrder->Context: setVariable("error")
+end
+end
+end
+GoToOrder->Context: setVariable("orders")
+else catch
+GoToOrder->Context: setVariable("error")
+end
+GoToOrder->Template Engine : process("OrderPage.html", ctx, response.getWriter());
