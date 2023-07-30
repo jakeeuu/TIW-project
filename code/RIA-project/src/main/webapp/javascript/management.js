@@ -6,6 +6,7 @@
 	window.addEventListener("load", () => {
 		if (sessionStorage.getItem("mail") == null) {
 			window.location.href = "LoginPage.html";
+			sessionStorage.setItem("cart", cart);
 		} else {			
 			pageOrchestrator.start();
 			//pageOrchestrator.refresh();
@@ -68,7 +69,7 @@
 			 * RESULT PAGE
 			 * 
 			 */
-			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("resultsBody"));
+			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("resultsBody"), this);
 
 
 			/**
@@ -76,14 +77,14 @@
 			 * CART PAGE
 			 * 
 			 */
-			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"));
 
 			/**
 			 * 
 			 * ORDER PAGE
 			 * 
 			 */
-			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("cartTable"),document.getElementById("bodyCart"));
+			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("orderTable"),document.getElementById("orderBody"));
 
 			/**
 			 * 
@@ -105,7 +106,7 @@
 				this.showOrder();
 			}, false);
 
-			//LINK AL LOGOUT
+			//LOGOUT LINK
 			document.querySelector("a[href='Logout']").addEventListener("click", (e) =>{
 				e.preventDefault();
 		        makeCall("GET", 'Logout', null, function (res) {
@@ -261,6 +262,7 @@
 		
 		this.registerEvents = function(orchestrator) {
 			this.searchForm.querySelector("input[type='submit']").addEventListener('click', (e) => {
+				e.preventDefault;
 				var eventform = e.target.closest("form");
 				if(eventform.checkValidity()){
 					var self = this;
@@ -297,10 +299,11 @@
 	}
 
 
-	function VisualizeSearchProduct(alertIn, containerIn, bodyIn){
+	function VisualizeSearchProduct(alertIn, containerIn, bodyIn, orchestrator){
 		this.alert = alertIn;
 		this.container = containerIn;
 		this.body = bodyIn;
+		this.orchestrator = orchestrator;
 
 		this.reset = function(){
 			this.container.style.visibility = "hidden";
@@ -387,19 +390,16 @@
 
 
 		this.updateSupplier = function (products, suppliers, productCode){
-			var rightRow, cell, text,des, img, rightProduct ,detailsRow, nextRow, row, el1, el2, el3,el4, input, div;
+			var rightRow, cell, text, des, img, rightProduct ,detailsRow, nextRow, row, span, innerSpan, 
+				overlay, paragraph, bold, ul, li, form, input, div;
 			
 			var self = this;
-			
-			var divsInBody = document.querySelectorAll('#resultBody div');
-
-		    
-		    divsInBody.forEach(function(div) {
-		      if(div.id != productCode){
-				  div.innerHTML="";
-			  }
-		      
-		    });
+							
+				
+			div = document.getElementById("productDetails");
+			if(div !== null){
+				this.body.removeChild(div);
+			}
 				
 			rightRow = document.getElementById(productCode); 
 
@@ -412,296 +412,308 @@
 
 			detailsRow = document.createElement("tr"); 
 
-			cell = document.createElement("td");
-			des = document.createElement("b");
-			des.textContent = "description:";
-			cell.appendChild(des);
-			text = document.createElement("p");
-			text.textContent = rightProduct.description; 
-			cell.appendChild(text);
+				cell = document.createElement("td");
+				des = document.createElement("b");
+				des.textContent = "description:";
+				cell.appendChild(des);
+				text = document.createElement("p");
+				text.textContent = rightProduct.description; 
+				cell.appendChild(text);
 			detailsRow.appendChild(cell);
 
-			cell = document.createElement("td");
-			des = document.createElement("b");
-			des.textContent = "category:";
-			cell.appendChild(des);
-			text = document.createElement("p");
-			text.textContent = rightProduct.category; 
-			cell.appendChild(text);
+				cell = document.createElement("td");
+				des = document.createElement("b");
+				des.textContent = "category:";
+				cell.appendChild(des);
+				text = document.createElement("p");
+				text.textContent = rightProduct.category; 
+				cell.appendChild(text);
 			detailsRow.appendChild(cell);
 
-			cell = document.createElement("td");
-			text = document.createElement("img");
-			text.src = rightProduct.photo; 
+				cell = document.createElement("td");
+				img = document.createElement("img");
+				img.src = rightProduct.photo;
+				cell.appendChild(img); 
+			detailsRow.appendChild(cell);
+
+			div = document.createElement("div");
+			div.setAttribute("id","productDetails");
+			div.appendChild(detailsRow);
+
+			self.body.appendChild(div);
 
 			nextRow = rightRow.nextElementSibling;
-			rightRow.parentNode.insertBefore(detailsRow, nextRow);
-
+			self.body.insertBefore(div, nextRow);
 
 			suppliers.forEach(function(s){
-				div = document.createElement("div");
-				div.id = productCode;
 				
-				row = document.createElement("tr"); 
-				row.setAttribute("id", "sup" + s.code); //lo metto pure io magari è utile 
-				div.appendChild(row)  
+				
+				row = document.createElement("tr");
+				div.appendChild(row);  
 				
 				cell = document.createElement("td");
-				cell.colspan = "3";
+				//cell.colspan = "3";
 				row.appendChild(cell);
 				
 				//-----------------------------
 				
-				el1 = document.createElement("p");
-				cell.appendChild(el1);
+					text = document.createElement("p");
+					
+					des = document.createElement("b");
+					des.textContent = "Supplier name: ";
+					text.appendChild(des);
+					
+					span = document.createElement("span");
+					span.textContent = s.name;
+					text.appendChild(span);
 				
-				el2 = document.createElement("b");
-				el2.textContent = "Supplier name: ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = s.name;
-				el1.appendChild(el2);
-				
+				cell.appendChild(text);
 				//--------------------------------------------
-				el1 = document.createElement("p");
-				cell.appendChild(el1);
+					text = document.createElement("p");
+					
+					des = document.createElement("b");
+					des.textContent = "score: ";
+					text.appendChild(des);
+					
+					span = document.createElement("span");
+					span.textContent = s.score;
+					text.appendChild(span);
+					
+					des = document.createElement("b");
+					des.textContent = " price: ";
+					text.appendChild(des);
+					
+					span = document.createElement("span");
+					span.textContent = s.unitaryPrice;
+					text.appendChild(span);
+					
+					span = document.createElement("span");
+					span.textContent = "$";
+					text.appendChild(span);
+					
+					des = document.createElement("b");
+					des.textContent = " Total in cart: ";
+					text.appendChild(des);
+					
+					span = document.createElement("span");
+					span.textContent = s.totalProductsPrice;
+					text.appendChild(span);
+					
+					span = document.createElement("span");
+					span.textContent = "$";
+					text.appendChild(span);
 				
-				el2 = document.createElement("b");
-				el2.textContent = "score: ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = s.score;
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("b");
-				el2.textContent = "price: ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = s.unitaryPrice;
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = "$";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("b");
-				el2.textContent = "Total in cart: ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = s.totalProductsPrice;
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = "$";
-				el1.appendChild(el2);
-				
+				cell.appendChild(text);
 				//---------------------------------------------
 				
-				el1 = document.createElement("p");
-				cell.appendChild(el1);
-				
-				el2 = document.createElement("b");
-				el2.textContent = "Product already in cart:  ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				cartSup = null;
-				for(cs of cart ){
-					if(cs.code === s.code)
-						cartSup = cs;
-						break;
-				}
-				s.totalNumber = 0;
-				for(product in cartSup.products){
-					s.totalNumber = s.totalNumber + (product * quantity);
-				}
-				el2.textContent = s.totalNumber; 
-				// finestra sovrapposta che parte da questo elemento
-				el2.addEventListener('mouseover', (e) => {
-					el3= document.createElement("overlay");
+					text = document.createElement("p");
 					
-					cartSup.products.forEach(function(p){
-						row = document.createElement("tr");
-
-						cell = document.createElement("td");
-						row.appendChild(cell);
-						
-						paragraph = document.createElement("p");
-						cell.appendChild(paragraph);
-
-						span = document.createElement("span");
-						span.textContent = p.quantity;
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = " x ";
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = p.name;
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = " ( product code: ";
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = p.code;
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = " ) ";
-						paragraph.appendChild(span);
-
-						
-						cell = document.createElement("td");
-						row.appendChild(cell);
-
-						bold = document.createElement("b");
-						bold.textContent = p.price;
-						cell.appendChild(bold);
-
-						paragraph = document.createElement("p");
-						cell.appendChild(paragraph);
-
-						span = document.createElement("span");
-						span.textContent = p.price;
-						paragraph.appendChild(span);
-
-						span = document.createElement("span");
-						span.textContent = " $";
-						paragraph.appendChild(span);
-			
-				});
-					el3.id = "overlay";
-					el3.style.display = 'block';  //forse questo lo toglierò 
-				});
-				
-				el2.addEventListener('mouseout', (e) => {
-					el3= document.getElementById("overlay");
-					overlay.style.display = 'none';  
-				});
-				el1.appendChild(el2);
-				
-				//---------------------------------------------
-				
-				el1 = document.createElement("p");
-				cell.appendChild(el1);
-				
-				el2 = document.createElement("b");
-				el2.textContent = "Minimum price for free shipping: ";
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = s.freeShipping;
-				el1.appendChild(el2);
-				
-				el2 = document.createElement("span");
-				el2.textContent = "$";
-				el1.appendChild(el2);
-				
-				//------------------------------------------------
-				
-				el1 = document.createElement("b");
-				el1.textContent = "Spending ranges: ";
-				cell.appendChild(el1);
+					des = document.createElement("b");
+					des.textContent = "Product already in cart:  ";
+					text.appendChild(des);
 					
-				el1 = document.createElement("ul");
-				cell.appendChild(el1);
-				
-				suppliers.spendingRanges.forEach(function(s){
-					el2 = document.createElement("li");
-					el1.appendChild(el2);
-					
-					el3 = document.createElement("p");
-					el2.appendChild(el3);
-					
-					el4 = document.createElement("span");
-					if(s.minimumN !== s.maximumN){
-						el4.textContent = s.minimumN;    
-						el3.appendChild(el4);
-						
-						el4 = document.createElement("span");
-						el4.textContent = "-";
-						el3.appendChild(el4);
-						
-						el4 = document.createElement("span");
-						el4.textContent = s.maximumN;
-						el3.appendChild(el4);
-					}else{
-						el4.textContent = "More than";    
-						el3.appendChild(el4);
-						
-						el4 = document.createElement("span");
-						el4.textContent = s.minimumN;
-						el3.appendChild(el4);
+					span = document.createElement("span");
+					cartSup = null;
+					for(cs of cart ){
+						if(cs.code === s.code){
+							cartSup = cs;
+							break;
+						}
 					}
-					
-					el4 = document.createElement("span");
-					el4.textContent = "products =";
-					el3.appendChild(el4);
-					
-					el4 = document.createElement("span");
-					el4.textContent = s.price;
-					el3.appendChild(el4);
-					
-					el4 = document.createElement("span");
-					el4.textContent = "$";
-					el3.appendChild(el4);
-					
-					el1 = document.createElement("form");
-						el1.id="formForAddToCart";
-						el1.setAttribute("action","#");
 
+					s.totalNumber = 0;
+					if(cartSup !== null){
+							for(product in cartSup.products){
+							s.totalNumber = s.totalNumber + (product * quantity);
+						}
+					}
+					span.textContent = s.totalNumber; 
+					// finestra sovrapposta che parte da questo elemento
+					span.addEventListener('mouseover', (e) => {
+						overlay= document.createElement("overlay");
+						
+						if(cartSup !== null){
+							cartSup.products.forEach(function(p){
+							InnerRow = document.createElement("tr");
 
-							input = document.createElement("input");
-							input.setAttribute("type","number");
-							input.setAttribute("name","quantity");
-							el1.appendChild(input);
+							cell = document.createElement("td");
+							InnerRow.appendChild(cell);
+							
+							paragraph = document.createElement("p");
+							cell.appendChild(paragraph);
 
-							input = document.createElement("input");
-							input.setAttribute("type","submit");
-							input.setAttribute("value","Add To Cart");
-							input.addEventListener("click", (e) => {
-								self.addToCart(el1.querySelector("input[type='number']").getAttribute("quantity"),p,s); //spero funzioni
-							}, false);
-							el1.appendChild(input);
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = p.quantity;
+							paragraph.appendChild(InnerSpan);
 
-					cell.appendChild(el1);	
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = " x ";
+							paragraph.appendChild(InnerSpan);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = p.name;
+							paragraph.appendChild(InnerSpan);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = " ( product code: ";
+							paragraph.appendChild(InnerSpan);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = p.code;
+							paragraph.appendChild(InnerSpan);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = " ) ";
+							paragraph.appendChild(InnerSpan);
+
+							
+							cell = document.createElement("td");
+							InnerRow.appendChild(cell);
+
+							bold = document.createElement("b");
+							bold.textContent = p.price;
+							cell.appendChild(bold);
+
+							paragraph = document.createElement("p");
+							cell.appendChild(paragraph);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = p.price;
+							paragraph.appendChild(InnerSpan);
+
+							InnerSpan = document.createElement("span");
+							InnerSpan.textContent = " $";
+							paragraph.appendChild(InnerSpan);
+							});
+						}
+						
+						overlay.id = "overlay";
+						overlay.style.display = 'block';  //forse questo lo toglierò 
+					});
 					
-					el2 = document.createElement("input");
-					el2.type="number";
-					el2.name = "quantity";
-					el1.appendChild(el2);
+					span.addEventListener('mouseout', (e) => {
+						overlay = document.getElementById("overlay");
+						overlay.style.display = 'none';  
+					});
+					text.appendChild(span);
+				
+				cell.appendChild(text);
+				//---------------------------------------------
+				
+					text = document.createElement("p");
+										
+					des = document.createElement("b");
+					des.textContent = "Minimum price for free shipping: ";
+					text.appendChild(des);
 					
-					el2 = document.createElement("input");
-					el2.type="submit";
-					el2.name = "Add to Cart";
-					el1.appendChild(el2);			
-				});	
+					span = document.createElement("span");
+					span.textContent = s.freeShipping;
+					text.appendChild(span);
 					
-			this.container.style.visibility = "visible";				
+					span = document.createElement("span");
+					span.textContent = "$";
+					text.appendChild(span);
+				
+				cell.appendChild(text);
+
+				//------------------------------------------------
+					des = document.createElement("b");
+					des.textContent = "Spending ranges: ";
+				cell.appendChild(des);
+					
+					ul = document.createElement("ul");
+				
+					s.spendingRanges.forEach(function(sp){
+						li = document.createElement("li");
+						
+							text = document.createElement("p");
+							
+							span = document.createElement("span");
+							if(sp.minimumN !== sp.maximumN){
+								span.textContent = sp.minimumN;    
+								text.appendChild(span);
+								
+								span = document.createElement("span");
+								span.textContent = " - ";
+								text.appendChild(span);
+								
+								span = document.createElement("span");
+								span.textContent = sp.maximumN;
+								text.appendChild(span);
+							}else{
+								span.textContent = "More than ";    
+								text.appendChild(span);
+								
+								span = document.createElement("span");
+								span.textContent = sp.minimumN;
+								text.appendChild(span);
+							}
+							
+							span = document.createElement("span");
+							span.textContent = " products = ";
+							text.appendChild(span);
+							
+							span = document.createElement("span");
+							span.textContent = sp.price;
+							text.appendChild(span);
+							
+							span = document.createElement("span");
+							span.textContent = "$";
+							text.appendChild(span);
+
+						li.appendChild(text);
+
+					ul.appendChild(li);		
+					});
+
+				cell.appendChild(ul);
+
+				form = document.createElement("form");
+					//el1.id="formForAddToCart";
+					form.setAttribute("action","#");
+					form.setAttribute("id",rightProduct.code);
+
+						input = document.createElement("input");
+						input.setAttribute("type","number");
+						input.setAttribute("name","quantity");
+						form.appendChild(input);
+
+						input = document.createElement("input");
+						input.setAttribute("type","submit");
+						input.setAttribute("value","Add To Cart");
+						input.addEventListener("click", (e) => {
+							e.preventDefault;
+							form = document.querySelector("form[id='" + rightProduct.code + "']");
+							self.addToCart(form.querySelector("input[type='number']").value,rightProduct,s);
+						}, false);
+						form.appendChild(input);
+
+				cell.appendChild(form);	
+
+			self.container.style.visibility = "visible";				
 
 			});
 		}
 
 		this.addToCart = function(quantity, product, supplier){
+			console.log(quantity);
+			console.log(product.name);
+			console.log(supplier.name);
 			var cartProduct = null;
 			var cartSupplier = null;
-			for(cs of cart){
-				if(cs.code === supplier.code){
-					cartSupplier = cs;
-					break;
+			if(cart !== null){
+				for(cs of cart){
+					if(cs.code === supplier.code){
+						cartSupplier = cs;
+						break;
+					}
 				}
 			}
+			
 
 			if(cartSupplier === null){
-				cartProduct = new Product(product.code,product.name, quantity, product.price);
-				let total = product.price * quantity;
+				cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+				let total = supplier.unitaryPrice * quantity;
 				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
 				cartSupplier.addProduct(cartProduct);
 			}else{
@@ -733,8 +745,9 @@
 					}
 				}
 			}
-
-			///chiamo orchestrator per andare al carrello
+			cart.push(cartSupplier);
+			orchestrator.refresh();
+			orchestrator.showCart();
 		}
 
 	}
@@ -750,7 +763,7 @@
 		}
 
 		this.show = function(){
-			/////TODO
+			this.update();
 		}
 
 		this.update = function(){
@@ -917,10 +930,35 @@
 		}
 
 		this.show = function(){
-			/////TODO
+			var self = this;
+			makeCall("POST", "GoToOrder",null,
+				function(req) {
+					if (req.readyState == 4) {
+						let message = req.responseText;
+						if (req.status == 200) {
+							let orders = JSON.parse(req.responseText);
+							if (orders.length == 0) {
+								self.alert.textContent = "You don't have any supplier to visualize";
+								return;
+							}
+							self.update(orders);
+						}
+						if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
+							window.location.href = req.getResponseHeader("Location");
+							window.sessionStorage.removeItem('mail');
+						}
+						else if (req.status != 200) {
+							self.alert.textContent = "Error - some fields weren't completed correctly";
+							self.reset();
+						}
+					} else {
+						self.alert.textContent = "Something went wrong while exchanging messages with the server";
+					}
+				}
+			);
 		}
 
-		this.update = function(){
+		this.update = function(orders){
 			var row, cell;
 			this.body.innerHTML="";
 			
