@@ -59,6 +59,7 @@ public class CreateOrder extends HttpServlet {
 		StringBuilder jsonBody = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
+        	System.out.println(line + "\n");
             jsonBody.append(line);
         }
         reader.close();
@@ -67,6 +68,7 @@ public class CreateOrder extends HttpServlet {
         Gson gson = new Gson();
         
         CartSupplier cartSupplier = gson.fromJson(json, CartSupplier.class);
+        System.out.println("ciaooooo : " + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName());
         SupplierDao supplierDao = new SupplierDao(connection);
         ProductDao productDao = new ProductDao(connection);
         

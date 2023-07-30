@@ -6,7 +6,7 @@
 	window.addEventListener("load", () => {
 		if (sessionStorage.getItem("mail") == null) {
 			window.location.href = "LoginPage.html";
-			sessionStorage.setItem("cart", cart);
+			sessionStorage.setItem("cart", JSON.stringify(cart));
 		} else {			
 			pageOrchestrator.start();
 			//pageOrchestrator.refresh();
@@ -514,6 +514,10 @@
 					
 					span = document.createElement("span");
 					cartSup = null;
+					var cart = JSON.parse(sessionStorage.getItem("cart"));
+					if(cart === null){
+						cart = [];
+					}
 					for(cs of cart ){
 						if(cs.code === s.code){
 							cartSup = cs;
@@ -523,8 +527,8 @@
 
 					s.totalNumber = 0;
 					if(cartSup !== null){
-							for(product in cartSup.products){
-							s.totalNumber = s.totalNumber + (product * quantity);
+							for(product of cartSup.products){
+							s.totalNumber = s.totalNumber + product.quantity;
 						}
 					}
 					span.textContent = s.totalNumber; 
@@ -701,6 +705,7 @@
 			console.log(supplier.name);
 			var cartProduct = null;
 			var cartSupplier = null;
+			var cart = JSON.parse(sessionStorage.getItem("cart"));
 			if(cart !== null){
 				for(cs of cart){
 					if(cs.code === supplier.code){
@@ -708,6 +713,8 @@
 						break;
 					}
 				}
+			}else{
+				cart = [];
 			}
 			
 
@@ -716,6 +723,7 @@
 				let total = supplier.unitaryPrice * quantity;
 				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
 				cartSupplier.addProduct(cartProduct);
+				cart.push(cartSupplier);
 			}else{
 				for(p of cartSupplier.products){
 					if(p.code === product.code){
@@ -745,9 +753,9 @@
 					}
 				}
 			}
-			cart.push(cartSupplier);
-			orchestrator.refresh();
-			orchestrator.showCart();
+			sessionStorage.setItem("cart", JSON.stringify(cart));
+			self.orchestrator.refresh();
+			self.orchestrator.showCart();
 		}
 
 	}
@@ -771,113 +779,121 @@
 			this.body.innerHTML="";
 			
 			var self = this;
-			cart.forEach(function(cs){
+			var cart = JSON.parse(sessionStorage.getItem("cart"));
+			if(cart !== null){
+				cart.forEach(function(cs){
 
-				row = document.createElement("tr");
-
-					cell = document.createElement("td");
-					cell.textContent = cs.code;
-					row.appendChild(cell);
-
-					cell = document.createElement("td");
-					cell.textContent = cs.name;
-					row.appendChild(cell);
-
-					cell = document.createElement("td");
-					cell.textContent = cs.totalPrice;
-					row.appendChild(cell);
-
-					cell = document.createElement("td");
-					cell.textContent = cs.shippingPrice;
-					row.appendChild(cell);
-
-					//metto bottone
-					cell = document.createElement("td");
-
-						form = document.createElement("form");
-						form.setAttribute("action","#");
-
-							button = document.createElement("button");
-							button.setAttribute("supplier_code",cs.code);
-							button.textContent = "Order";
-							button.addEventListener("click", (e) => {
-								self.createOrder(e.target.getAttribute("supplier_code"));
-							}, false);
-							form.appendChild(button);
-
-						cell.appendChild(form);
-
-					row.appendChild(cell);	
-
-				self.body.appendChild(row);
-
-				var paragraph,span,bold;
-				cs.products.forEach(function(p){
 					row = document.createElement("tr");
 
 						cell = document.createElement("td");
-						cell.setAttribute("colspan",3);
-
-							paragraph = document.createElement("p");
-
-							span = document.createElement("span");
-							span.textContent = p.quantity;
-							paragraph.appendChild(span);
-
-							span = document.createElement("span");
-							span.textContent = " x ";
-							paragraph.appendChild(span);
-
-							span = document.createElement("span");
-							span.textContent = p.name;
-							paragraph.appendChild(span);
-
-							span = document.createElement("span");
-							span.textContent = " ( product code: ";
-							paragraph.appendChild(span);
-
-							span = document.createElement("span");
-							span.textContent = p.code;
-							paragraph.appendChild(span);
-
-							span = document.createElement("span");
-							span.textContent = " ) ";
-							paragraph.appendChild(span);
-
-						cell.appendChild(paragraph);
+						cell.textContent = cs.code;
 						row.appendChild(cell);
 
+						cell = document.createElement("td");
+						cell.textContent = cs.name;
+						row.appendChild(cell);
 
 						cell = document.createElement("td");
-						cell.setAttribute("colspan",2);
+						cell.textContent = cs.totalPrice;
+						row.appendChild(cell);
 
-							bold = document.createElement("b");
-							bold.textContent = p.price;
+						cell = document.createElement("td");
+						cell.textContent = cs.shippingPrice;
+						row.appendChild(cell);
 
-						cell.appendChild(bold);
+						//metto bottone
+						cell = document.createElement("td");
 
-							paragraph = document.createElement("p");
+							form = document.createElement("form");
+							form.setAttribute("action","#");
 
-							span = document.createElement("span");
-							span.textContent = p.price;
-							paragraph.appendChild(span);
+								button = document.createElement("button");
+								button.setAttribute("supplier_code",cs.code);
+								button.textContent = "Order";
+								button.addEventListener("click", (e) => {
+									self.createOrder(e.target.getAttribute("supplier_code"));
+								}, false);
+								form.appendChild(button);
 
-							span = document.createElement("span");
-							span.textContent = " $";
-							paragraph.appendChild(span);
+							cell.appendChild(form);
 
-						cell.appendChild(paragraph);
 						row.appendChild(cell);	
+
 					self.body.appendChild(row);
+
+					var paragraph,span,bold;
+					cs.products.forEach(function(p){
+						row = document.createElement("tr");
+
+							cell = document.createElement("td");
+							cell.setAttribute("colspan",3);
+
+								paragraph = document.createElement("p");
+
+								span = document.createElement("span");
+								span.textContent = p.quantity;
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = " x ";
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = p.name;
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = " ( product code: ";
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = p.code;
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = " ) ";
+								paragraph.appendChild(span);
+
+							cell.appendChild(paragraph);
+							row.appendChild(cell);
+
+
+							cell = document.createElement("td");
+							cell.setAttribute("colspan",2);
+
+								bold = document.createElement("b");
+								bold.textContent = "product price:";
+
+							cell.appendChild(bold);
+
+								paragraph = document.createElement("p");
+
+								span = document.createElement("span");
+								span.textContent = p.price;
+								paragraph.appendChild(span);
+
+								span = document.createElement("span");
+								span.textContent = " $";
+								paragraph.appendChild(span);
+
+							cell.appendChild(paragraph);
+							row.appendChild(cell);	
+						self.body.appendChild(row);
+					});
+					
 				});
-				
-			});
+			}
+			
 			this.container.style.visibility = "visible";
 		}
 
 
 		this.createOrder = function(supplierCode) {
 			var self = this;
+			var cart = JSON.parse(sessionStorage.getItem("cart"));
+			if(cart === null){
+				cart = [];
+			}
 			for(cartSupplier of cart){
 				if(cartSupplier.code === supplierCode){
 					break;
@@ -1031,7 +1047,7 @@
 						cell.setAttribute("colspan",2);
 
 							bold = document.createElement("b");
-							bold.textContent = p.price;
+							bold.textContent = "product price:";
 
 						cell.appendChild(bold);
 
