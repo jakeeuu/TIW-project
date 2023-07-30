@@ -1,0 +1,31 @@
+title Create Order
+
+[->CreateOrder: doPost
+participant CreateOrder
+
+CreateOrder->Request: getSession()
+CreateOrder<-Request: session
+CreateOrder->Session: getAttribute("user")
+CreateOrder<-Session: user
+CreateOrder->Session: getAttribute("cart")
+CreateOrder<-Session: cart
+CreateOrder->SupplierDao: new SupplierDao()
+CreateOrder->Request: getParameter("supplier_code")
+CreateOrder<-Request: supplier_code
+alt try
+CreateOrder->CreateOrder : checking the validity of the supplier code
+CreateOrder->SupplierDao: isValidCode(supplierCode)
+CreateOrder<-SupplierDao: true || false
+CreateOrder->OrderDao: new OrderDao()
+alt try
+CreateOrder->OrderDao: generalOrderUpdate(user.getMail(), cartSupplier.getName(), total, date, user.getAddress(), cartSupplier.getCode() ,counter)
+CreateOrder->CreateOrder: remove the supplier form the cart
+else catch
+CreateOrder->Request: setParameter("error")
+end
+else catch
+CreateOrder->Request: setParameter("error")
+end
+CreateOrder->GotoOrder: redirect
+
+

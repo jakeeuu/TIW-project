@@ -1,0 +1,61 @@
+title Products Details
+participant Products Details
+
+
+[->Products Details: doGet
+Products Details->Request: getSession()
+Products Details<-Request: session
+Products Details->Session: getAttribute("cart")
+Products Details<-Session: cart
+Products Details->Session: getAttribute("user")
+Products Details<-Session: user
+Products Details->Request: getParameter("key_word")
+Products Details<-Request: key_word
+Products Details->Request: getParameter("product_code")
+Products Details<-Request: product_code
+Products Details->ProductDao:new ProductDao()
+alt try
+Products Details->Products Details: checking product_code
+Products Details->ProductDao: isValidCode(productCode)
+Products Details<-ProductDao: true || false
+alt try
+Products Details->ProductDao: produtcsFromSearch(keyWord)
+Products Details<-ProductDao: products
+Products Details->SupplierDao: new SupplierDao()
+Products Details->SpendingRangesrDao: new SpendingRangesrDao()
+alt try
+Products Details->SupplierDao:findAllSuppliers(productCode)
+Products Details<-SupplierDao: suppliers
+Products Details->Products Details: setting the suppliers of the product
+loop suppliers.size()
+Products Details->SpendingRangesrDao: findSpendingRanges(s.getCode())
+Products Details<-SpendingRangesrDao: spending ranges
+Products Details->Products Details: setting the spending ranges for each supplier
+end
+alt try
+Products Details->ProductDao: insertInto(mail,productCode,date, time)
+Products Details->Products Details:calculation of total prices and number of products per supplier
+Products Details->Context: setVariable("products")
+Products Details->Context: setVariable("keyWord")
+Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
+else catch
+Products Details->Request: setParameter("clickError")
+Products Details->Request: setParameter("key_word")
+Products Details->GoToResults: redirect
+end
+else catch
+Products Details->Request: setParameter("clickError")
+Products Details->Request: setParameter("key_word")
+Products Details->GoToResults: redirect
+end
+else catch
+Products Details->Request: setParameter("clickError")
+Products Details->Request: setParameter("key_word")
+Products Details->GoToResults: redirect
+end
+else catch 
+Products Details->Request: setParameter("clickError")
+Products Details->Request: setParameter("key_word")
+Products Details->GoToResults: redirect
+end
+

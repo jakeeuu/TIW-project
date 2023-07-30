@@ -1,0 +1,12 @@
+title Logout
+
+participant Logout
+
+[->Logout: doGet
+Logout->Request: getSession(false)
+Logout<-Request: session
+alt session != null
+Logout->Session: invalidate()
+end
+Logout->LoginPage: redirect
+

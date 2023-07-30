@@ -1,0 +1,70 @@
+title CheckQuantity
+
+participant CheckQuantity
+participant Request
+
+
+
+[->CheckQuantity: doPost
+CheckQuantity->Request: getSession()
+CheckQuantity<-Request: session
+CheckQuantity->Session: getAttribute("cart")
+CheckQuantity<-Session: cart
+CheckQuantity->ProductDao: new ProductDao()
+CheckQuantity->SupplierDao: new SupplierDao()
+alt try
+CheckQuantity->Request: getParameter("quantity")
+CheckQuantity<-Request: quantity
+CheckQuantity->Request: getParameter("supplier_code")
+CheckQuantity<-Request: supplier_code
+CheckQuantity->Request: getParameter("product_code")
+CheckQuantity<-Request: product_code
+CheckQuantity->CheckQuantity: check quantity,supplier code, product code
+CheckQuantity->ProductDao: isValidCode(productCode)
+CheckQuantity<-ProductDao: true || false
+CheckQuantity->SupplierDao: isValidCode(supplierCode)
+CheckQuantity<-SupplierDao: true || false
+alt try
+CheckQuantity->SupplierDao: infoCartSupplier(productCode, supplierCode)
+CheckQuantity<-SupplierDao: supplier
+CheckQuantity->CheckQuantity: checking if the supplier is already in the cart
+alt not in cart
+CheckQuantity->CheckQuantity: add to cart the supplier
+else already in cart
+alt product already added
+CheckQuantity->CheckQuantity:only increase the quantity
+else product not added
+CheckQuantity->CheckQuantity: add product
+end
+end 
+CheckQuantity->CheckQuantity: checking the shipping price
+alt shipping != 0
+alt try
+CheckQuantity->SupplierDao: supplierFreeShipping(supplierCode)
+CheckQuantity<-SupplierDao: freeShipping
+CheckQuantity->CheckQuantity: checking the total price of the products
+alt totalPrice >= freeShipping
+CheckQuantity->CheckQuantity: setting shippingPrice to 0
+else totalPrice < freeShipping
+CheckQuantity->SpendingRangesDao: new SpendingRanges()
+alt try
+CheckQuantity->SpendingRangesDao: findSpendingRanges(supplierCode)
+CheckQuantity<-SpendingRangesDao: spending ranges
+CheckQuantity->CheckQuantity: looking for the right cost range to add it
+else catch
+CheckQuantity->Request: setParameter("error")
+end
+end
+end
+else catch
+CheckQuantity->Request: setParameter("error")
+end
+else catch
+CheckQuantity->Request: setParameter("error")
+end
+else catch
+CheckQuantity->Request: setParameter("error")
+end
+CheckQuantity->GoToCart: redirect
+
+
