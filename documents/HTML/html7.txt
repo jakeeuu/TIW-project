@@ -5,8 +5,8 @@ participant GoToOrder
 [->GoToOrder: doGet
 GoToOrder->Request: getSession()
 GoToOrder<-Request: session
-GoToOrder->Request: getAttribute("user")
-GoToOrder<-Request: user
+GoToOrder->Session: getAttribute("user")
+GoToOrder<-Session: user
 GoToOrder->OrderDao: new OrderDao()
 GoToOrder->ProductDao: new ProductDao()
 alt try
