@@ -23,25 +23,35 @@
 		</ul>
 	</div>
 	
+	<h1 class="title" id="homeTitle">Welcome to the Home Page</h1>
+	
+	<div class="title" id="cartTitle">
+		<h1 id="normalTitleCart">Your cart: </h1>
+		<h1 id="emptyTitleCart">Your cart is empty</h1>
+	</div>
+	
+	<div class = "title" id="orderTitle">
+		<h1 id="normalTitleOrders">Your orders: </h1>
+		<h1 id="emptyTitleOrders">You have no orders</h1>
+	</div>
+	
+	<br>
+	
+	<p id="id_alert" class="error"></p>
+	<br>
+	
+	<div class="container">
+		<form action="#" id="searchForm">
+		 	<div>
+				Search for a product: <input type="text" name="key_word" required> 
+				<input  type="submit" value="Search" >
+			</div>
+		</form>
+		<br>
+	</div>
 	
 	<div id = "homePage">
-		<h1 class="title">Welcome to the Home Page</h1>
-		<br>
-		
-		<p id="id_alert" class="error"></p>
-	
-		<div class="container">
-			<form action="#" id="searchForm">
-			 	<div>
-					Search for a product: <input type="text" name="key_word" required> 
-					<input  type="submit" value="Search" >
-				</div>
-			</form>
-		</div>
 
-		<br>
-	
-	
 		<div class = "container">
 				<table border = "1" id="prodVisTable">
 				<thead>
@@ -58,15 +68,6 @@
 	</div>
 	
 	<div id = "resultPage">
-		<div class = "container">
-			<form action="#" id="goToResults" >
-				Search for a product: <input type="text" name="key_word"> 
-	 			<input type="submit" value="Search">
-			</form>
-		</div>
-	
-	
-		<br>
 	
 		<div class = "container" >
 			<table border = "1" id="tableResults">
@@ -83,12 +84,6 @@
 	</div>
 	
 	<div id = "cartPage">
-		<div class="title">
-			<h1 id="normalTitleCart">Your cart: </h1>
-			<h1 id="emptyTitleCart">Your cart is empty</h1>
-		</div>
-	
-		
 		
 		<div class = "container">
 			<table border = "1" id="cartTable">
@@ -107,12 +102,6 @@
 	</div>
 	
 	<div id = "orderPage">
-		<div class = "title">
-			<h1 id="normalTitleOrders">Your orders: </h1>
-			<h1 id="emptyTitleOrders">You have no orders</h1>
-		</div>
-		
-		
 		
 		<div class = "container">
 			<table border = "1" id="orderTable">

@@ -9,7 +9,6 @@
 			sessionStorage.setItem("cart", JSON.stringify(cart));
 		} else {			
 			pageOrchestrator.start();
-			//pageOrchestrator.refresh();
 		} 
 	}, false);
 
@@ -19,7 +18,7 @@
 		this.name = name;
 		this.products = [];
 		this.totalPrice = totalPrice;
-		this.shippingPrice = shippingPrice = null;
+		this.shippingPrice = null;
 
 		this.setShippingPrice = function(shippingPrice){
 			this.shippingPrice = shippingPrice;
@@ -31,6 +30,11 @@
 
 		this.setTotalPrice = function(totalPrice) {
 			this.totalPrice = totalPrice;
+		}
+
+		this.setProducts = function(products){
+			this.products.splice(0,this.products.length);
+			this.products = products.slice(0, product.length);
 		}
 	}
 
@@ -63,6 +67,7 @@
 			visualizeProduct.show();
 			searchForm = new SearchForm(document.getElementById("searchForm"), alert);
 			searchForm.registerEvents(this);
+			searchForm.show();
 
 			/**
 			 * 
@@ -70,7 +75,7 @@
 			 * 
 			 */
 			visualizeSearchProduct = new VisualizeSearchProduct(alert, document.getElementById("tableResults"), document.getElementById("resultsBody"), this);
-
+			visualizeSearchProduct.reset();
 
 			/**
 			 * 
@@ -78,14 +83,14 @@
 			 * 
 			 */
 			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"));
-
+			visualizeCartProduct.reset();
 			/**
 			 * 
 			 * ORDER PAGE
 			 * 
 			 */
 			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("orderTable"),document.getElementById("orderBody"));
-
+			visualizeOrderProduct.reset();
 			/**
 			 * 
 			 * LINK MENU
@@ -131,12 +136,15 @@
 		this.showHome = function(){
 			document.getElementById("homePage").style.display = "block";
 			visualizeProduct.show();
+			searchForm.show();
+			
 		}
 
 		this.showResult = function(products){
 			this.refresh();
 			document.getElementById("resultPage").style.display = "block";
 			visualizeSearchProduct.updateProduct(products);
+			searchForm.show();
 		}
 
 		this.showCart = function(){
@@ -149,9 +157,17 @@
 			visualizeOrderProduct.show();
 		}
 
+		this.showOrder = function(orders){
+			this.refresh();
+			document.getElementById("orderPage").style.display = "block";
+			visualizeOrderProduct.update(orders);
+			//inserisco la visualizzazione dei titoli 
+		}
+
 		this.refresh = function(){
 			document.getElementById("homePage").style.display = "none";
 			visualizeProduct.reset();
+			searchForm.reset();
 			document.getElementById("resultPage").style.display = "none";
 			visualizeSearchProduct.reset();
 			document.getElementById("cartPage").style.display = "none";
@@ -171,6 +187,8 @@
 
 		this.reset = function (){
 			this.container.style.visibility = "hidden";
+			document.getElementById("goToHome").setAttribute("class","");
+			document.getElementById("homeTitle").style.visibility = "hidden";
 		}
 
 		this.show = function(){
@@ -181,13 +199,13 @@
 						var message = req.responseText;
 						if (req.status == 200) {
 							var products = JSON.parse(req.responseText);
+							document.getElementById("goToHome").setAttribute("class","active");
+							document.getElementById("homeTitle").style.visibility = "visible";
 							self.update(products); 
 						}else if(req.status == 400){
 							window.location.href = req.getResponseHeader("Location");
                   			window.sessionStorage.removeItem('mail');
 						}
-					} else {
-						self.alert.textContent = "Siamo nello stato: " + req.readyState;
 					}
 
 				}
@@ -686,28 +704,26 @@
 						input.setAttribute("type","submit");
 						input.setAttribute("value","Add To Cart");
 						input.addEventListener("click", (e) => {
-							e.preventDefault;
-							form = document.querySelector("form[id='" + rightProduct.code + "']");
-							self.addToCart(form.querySelector("input[type='number']").value,rightProduct,s);
+							e.preventDefault();
+							let unoo = document.querySelector("form[id='" + rightProduct.code + "']");
+							self.addToCart(unoo.querySelector("input[type='number']").value,rightProduct,s);
 						}, false);
 						form.appendChild(input);
 
 				cell.appendChild(form);	
 
-			self.container.style.visibility = "visible";				
-
 			});
+			self.container.style.visibility = "visible";
 		}
 
 		this.addToCart = function(quantity, product, supplier){
-			console.log(quantity);
-			console.log(product.name);
-			console.log(supplier.name);
+			self = this;
+
 			var cartProduct = null;
 			var cartSupplier = null;
 			var cart = JSON.parse(sessionStorage.getItem("cart"));
 			if(cart !== null){
-				for(cs of cart){
+				for(var cs of cart){
 					if(cs.code === supplier.code){
 						cartSupplier = cs;
 						break;
@@ -717,42 +733,70 @@
 				cart = [];
 			}
 			
-
+			var isNew = false;
 			if(cartSupplier === null){
 				cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
-				let total = supplier.unitaryPrice * quantity;
+				let total = parseFloat(supplier.unitaryPrice) * parseInt(quantity);
 				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
 				cartSupplier.addProduct(cartProduct);
-				cart.push(cartSupplier);
+				isNew = true;
 			}else{
-				for(p of cartSupplier.products){
+				cartSupplier = new CartSupplier(cs.code, cs.name, cs.totalPrice);
+				cartSupplier.setShippingPrice(cs.shippingPrice);
+				var products = [];
+				for(p of cs.products){
+					products.push(new Product(p.code, p.name, p.quantity, p.price));
 					if(p.code === product.code){
 						cartProduct = p;
 					}
 				}
 
 				if(cartProduct === null){
-					cartProduct = new Product(product.code,product.name, quantity, product.price);
-					cartSupplier.addProduct(cartProduct);
+					cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+					//cartSupplier.addProduct(cartProduct);
+					//cartSupplier.products.push(cartProduct);
+					products.push(cartProduct);
 				}else{
-					let prevQuant = cartProduct.quantity;
-					cartProduct.setQuantity(prevQuant + quantity);
+					let prevQuant = parseInt(cartProduct.quantity);
+					cartProduct = new Product(product.code,product.name, prevQuant + parseInt(quantity), supplier.unitaryPrice);
+					//cartProduct.setQuantity(prevQuant + quantity);
+					//cartProduct.quantity = prevQuant + quantity;
+					for(let i = 0; i < products.length; i++){
+						if(products[i].code = cartProduct.code){
+							products.splice(i,1,cartProduct);
+						}
+					}
 				}
-				let tmp = cartSupplier.totalPrice;
-				cartSupplier.setTotalPrice(tmp + product.price * quantity);
+				cartSupplier.setProducts(products);
+				let tmp = parseFloat(cartSupplier.totalPrice);
+				cartSupplier.setTotalPrice(tmp + parseFloat(supplier.unitaryPrice) * parseInt(quantity));
+				//cartSupplier.totalPrice = tmp + product.price * quantity;
 			}
 
 			if(cartSupplier.shippingPrice !== 0){
 				if(cartSupplier.totalPrice >= supplier.freeShipping){
 					cartSupplier.setShippingPrice(0);
+					//cartSupplier.shippingPrice = 0;
 				}else{
 					for(sp of supplier.spendingRanges){
 						if(supplier.totalNumber >= sp.maximumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
 							cartSupplier.setShippingPrice(sp.price);
+							//cartSupplier.shippingPrice = sp.price;
 						}
 					}
 				}
 			}
+
+			if(isNew){
+				cart.push(cartSupplier);
+			}else{
+				for(let i = 0; i < cart.length; i++){
+					if(cart[i].code = cartSupplier.code){
+						cart.splice(i,1,cartSupplier);
+					}
+				}
+			}
+
 			sessionStorage.setItem("cart", JSON.stringify(cart));
 			self.orchestrator.refresh();
 			self.orchestrator.showCart();
@@ -768,10 +812,12 @@
 
 		this.reset = function() {
 			this.container.style.visibility = "hidden";
+			document.getElementById("cartTitle").style.display = "none";
 		}
 
 		this.show = function(){
 			this.update();
+			
 		}
 
 		this.update = function(){
@@ -780,6 +826,10 @@
 			
 			var self = this;
 			var cart = JSON.parse(sessionStorage.getItem("cart"));
+			
+			let title = document.getElementById("cartTitle");
+			title.style.display = "block";
+
 			if(cart !== null){
 				cart.forEach(function(cs){
 
@@ -882,9 +932,17 @@
 					});
 					
 				});
+				this.container.style.visibility = "visible";
+				title.querySelector("#emptyTitleCart").style.display = "block";
+				title.querySelector("#normalTitleCart").style.display = "none";
+			}else{
+				title.querySelector("#emptyTitleCart").style.display = "none";
+				title.querySelector("#normalTitleCart").style.display = "block";
 			}
+
 			
-			this.container.style.visibility = "visible";
+			
+			
 		}
 
 
@@ -918,7 +976,8 @@
 									break;
 								}
 							}
-							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page 
+							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page
+							self.orchestrator.showOrder(orders); 
 						}
 						if (req.status == 400) {
 							window.location.href = req.getResponseHeader("Location");
@@ -943,6 +1002,10 @@
 
 		this.reset = function() {
 			this.container.style.visibility = "hidden";
+			let title = document.getElementById("orderTitle")
+			title.style.display = "none";
+			title.querySelector("#emptyTitleOrders").style.display = "none";
+			title.querySelector("#normalTitleOrders").style.display = "none";
 		}
 
 		this.show = function(){
@@ -953,10 +1016,15 @@
 						let message = req.responseText;
 						if (req.status == 200) {
 							let orders = JSON.parse(req.responseText);
+							let title = document.getElementById("orderTitle");
+							title.style.display = "block";
 							if (orders.length == 0) {
-								self.alert.textContent = "You don't have any supplier to visualize";
+								title.querySelector("#emptyTitleOrders").style.display = "block";
+								title.querySelector("#normalTitleOrders").style.display = "none";
 								return;
 							}
+							title.querySelector("#emptyTitleOrders").style.display = "none";
+							title.querySelector("#normalTitleOrders").style.display = "block";
 							self.update(orders);
 						}
 						if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
@@ -967,8 +1035,6 @@
 							self.alert.textContent = "Error - some fields weren't completed correctly";
 							self.reset();
 						}
-					} else {
-						self.alert.textContent = "Something went wrong while exchanging messages with the server";
 					}
 				}
 			);
