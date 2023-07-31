@@ -1,0 +1,39 @@
+title Login
+
+participant "LoginPage.html \n login.js" as participantMultiline
+participant CheckLogin #cyan
+participant Request #cyan
+participant UserDao #cyan
+participant Session #cyan
+
+
+
+
+[->participantMultiline: submit
+participantMultiline->CheckLogin: doPost(mail,password)
+CheckLogin->Request: getParameter("mail")
+CheckLogin<-Request: mail
+CheckLogin->Request: getParameter("password")
+CheckLogin<-Request: password
+CheckLogin->CheckLogin: checking mail and password
+alt mail != null && passowrd != null
+CheckLogin->UserDao: new UserDao()
+alt try
+CheckLogin->UserDao: checkCredentials(mail, password)
+CheckLogin<-UserDao: user
+alt user != null
+CheckLogin->Request:getSession()
+CheckLogin<-Request: session
+CheckLogin->Session: setAttribute("user")
+CheckLogin-->participantMultiline : status code 200
+participantMultiline->SessionStorage:setItem('mail', mail)
+participantMultiline->Window: location = Market.html
+else user == null
+CheckLogin-->participantMultiline: status code 400
+end
+else catch
+CheckLogin-->participantMultiline: status code 500
+end
+else mail == null || password == null
+CheckLogin-->participantMultiline: status code 400
+end

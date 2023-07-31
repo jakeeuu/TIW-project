@@ -1,0 +1,49 @@
+title Products Details
+
+
+participant "Market(VisualizeSearchProduct) \n manegement.js" as participantMultiline
+participant ProductsDetails #cyan
+participant ProductDao #cyan
+participant Request #cyan
+participant SupplierDao #cyan
+participant SpendingRangesDao #cyan
+participant Session #cyan
+
+participant [
+
+[->participantMultiline: click
+participantMultiline->ProductsDetails:doPost(productCode)
+ProductsDetails->ProductDao: new ProductDao()
+ProductsDetails->Request: getParameter("product_code")
+ProductsDetails<-Request: productcode
+ProductsDetails->ProductsDetails: checking the product code
+alt try
+ProductsDetails->ProductDao:isValidCode(productCode)
+ProductsDetails<-ProductDao: true || false
+ProductsDetails->SupplierDao: new SupplierDao()
+ProductsDetails->SpendingRangesDao: new SpendingRangesDao()
+alt try
+ProductsDetails->SupplierDao: findAllSuppliers(productCode)
+ProductsDetails<-SupplierDao: suppliers
+loop supplier.size()
+ProductsDetails->SpendingRangesDao: findSpendingRanges(s.getCode())
+ProductsDetails<-SpendingRangesDao: spending ranges
+end
+ProductsDetails->Request: getSession()
+ProductsDetails<-Request: session
+ProductsDetails->Session: getAttribute("user")
+ProductsDetails<-Session: user
+alt try
+ProductsDetails->ProductDao: insertInto(mail,productCode,date, time)
+ProductsDetails->ProductsDetails: create json objects that contain the suppliers
+ProductsDetails-->participantMultiline: status code 200
+participantMultiline->participantMultiline: updateSupplier(products, suppliers, productCode)
+else catch 
+ProductsDetails-->participantMultiline: status code 500
+end
+else catch
+ProductsDetails-->participantMultiline: status code 500
+end
+else catch
+ProductsDetails-->participantMultiline: status code 400 || 500
+end

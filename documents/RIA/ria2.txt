@@ -1,0 +1,22 @@
+title PageOrchestrator
+
+participant "Market.html \n management.js" as participantMultiline
+
+[->participantMultiline: load
+
+participantMultiline->PageOrchestrator: start()
+PageOrchestrator->VisualizeProduct: new VisualizeProduct()
+PageOrchestrator->VisualizeProduct: show()
+PageOrchestrator->SearchForm: new SearchForm()
+PageOrchestrator->SearchForm: registerEvents(this)
+PageOrchestrator->SearchForm:show()
+PageOrchestrator->VisualizeSearchProduct: new VisualizeSearchProduct()
+PageOrchestrator->VisualizeSearchProduct:reset()
+PageOrchestrator->VisualizeCartProduct:new VisualizeCartProduct()
+PageOrchestrator->VisualizeCartProduct:reset()
+PageOrchestrator->VisualizeOrderProduct: new VisualizeOrderProduct()
+PageOrchestrator->VisualizeOrderProduct:reset()
+PageOrchestrator->PageOrchestrator: getElementById("goToHome").addEventListener("click")
+PageOrchestrator->PageOrchestrator: getElementById("goToCart").addEventListener("click")
+PageOrchestrator->PageOrchestrator: getElementById("goToOrder").addEventListener("click")
+PageOrchestrator->PageOrchestrator:querySelector("a[href='Logout']").addEventListener("click")

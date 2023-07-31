@@ -1,0 +1,37 @@
+title GoToOrder
+
+participant [
+participant GoToOrder #cyan
+participant Request #cyan
+participant Session #cyan
+participant OrderDao #cyan
+participant ProductDao #cyan
+participant "Market(VisualizeCartProduct) \n management.js" as participantMultiline
+
+[->GoToOrder: doGet
+GoToOrder->Request:getSession()
+GoToOrder<-Request: session
+GoToOrder->Session: getAttribute("user")
+GoToOrder<-Session: user
+GoToOrder->OrderDao: new OrderDao()
+GoToOrder->ProductDao: new ProductDao()
+alt try
+GoToOrder->OrderDao: printOrders(mail)
+GoToOrder<-OrderDao: orders
+alt orders != null
+loop orders.size()
+alt try
+GoToOrder->ProductDao: productInOrders(order.getCode())
+GoToOrder<-ProductDao: products
+GoToOrder->GoToOrder: set the products in the orders
+else catch
+GoToOrder-->participantMultiline: status code 500
+end
+end
+end
+GoToOrder-->participantMultiline: status code 200
+participantMultiline->participantMultiline: remove the cartSupplier from the cart
+participantMultiline->PageOrchestrator: showOrder(orders)
+else catch
+GoToOrder-->participantMultiline: status code 500
+end

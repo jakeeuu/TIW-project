@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ifml="http://www.omg.org/spec/IFML/20140301" xmlns:ifmldi="http://www.omg.org/spec/IFML/20130218/IFML-DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.omg.org/spec/UML/20110701/">
+  <ifml:IFMLModel>
+    <interactionFlowModel xmi:type="ifml:InteractionFlowModel" xmi:id="_myModel">
+      <interactionFlowModelElements xmi:type="ifml:ViewContainer" xmi:id="ViewContainer_0j06elh" uml:name="LoginPage">
+        <inInteractionFlows>Flow_1n8xxrb</inInteractionFlows>
+        <viewElements xmi:type="ifml:Form" xmi:id="ViewComponent_0s4tlzt" uml:name="Login">
+          <parameters xmi:type="ifml:SimpleField" xmi:id="SimpleField_0e7uskj" uml:name="mail" />
+          <parameters xmi:type="ifml:SimpleField" xmi:id="SimpleField_1vfpxiu" uml:name="password" />
+          <viewElementEvents xmi:type="ifml:ViewElementEvent" xmi:id="Event_1wjx0ad" uml:name="submit">
+            <outInteractionFlows>Flow_0pgjbas</outInteractionFlows>
+          </viewElementEvents>
+        </viewElements>
+      </interactionFlowModelElements>
+      <interactionFlowModelElements xmi:type="ifml:Action" xmi:id="Action_09i53b1" uml:name="CheckLogin">
+        <inInteractionFlows>Flow_0pgjbas</inInteractionFlows>
+        <actionEvents xmi:type="ifml:ActionEvent" xmi:id="Event_1vy64vh" uml:name="invalid credential">
+          <outInteractionFlows>Flow_1n8xxrb</outInteractionFlows>
+        </actionEvents>
+        <actionEvents xmi:type="ifml:ActionEvent" xmi:id="Event_1cr2j7o" uml:name="success">
+          <outInteractionFlows>Flow_059gsed</outInteractionFlows>
+        </actionEvents>
+      </interactionFlowModelElements>
+      <interactionFlowModelElements xmi:type="ifml:NavigationFlow" xmi:id="Flow_0pgjbas" sourceInteractionFlowElement="Event_1wjx0ad" targetInteractionFlowElement="Action_09i53b1" />
+      <interactionFlowModelElements xmi:type="ifml:NavigationFlow" xmi:id="Flow_1n8xxrb" sourceInteractionFlowElement="Event_1vy64vh" targetInteractionFlowElement="ViewContainer_0j06elh" />
+      <interactionFlowModelElements xmi:type="ifml:ViewContainer" xmi:id="ViewContainer_02zofi6" uml:name="Market">
+        <inInteractionFlows>Flow_1esruee</inInteractionFlows>
+        <viewElements xmi:type="ifml:Form" xmi:id="ViewComponent_1bb5ktv" uml:name="SearchForm">
+          <parameters xmi:type="ifml:SimpleField" xmi:id="SimpleField_1gvdxlb" uml:name="keyword" />
+        </viewElements>
+        <viewElements xmi:type="ifml:List" xmi:id="ViewComponent_0fhn23u" uml:name="last five producst">
+          <parameters xmi:type="ifml:Parameter" xmi:id="Parameter_1myhrux" name="code, name, description, category, photo" />
+        </viewElements>
+        <viewElements xmi:type="ifml:Details" xmi:id="ViewComponent_113vhih" uml:name="products">
+          <parameters xmi:type="ifml:Parameter" xmi:id="Parameter_18k7wdf" name="description, category, photo" />
+          <parameters xmi:type="ifml:Parameter" xmi:id="Parameter_1r1o1ce" name="supName, supScore, supUnitaryPrice" />
+          <parameters xmi:type="ifml:Parameter" xmi:id="Parameter_0bz06jr" name="totalProductPrice, totalNumber,freeShipping" />
+        </viewElements>
+      </interactionFlowModelElements>
+      <interactionFlowModelElements xmi:type="ifml:Action" xmi:id="Action_0e7zrnf" uml:name="GoToHome">
+        <inInteractionFlows>Flow_059gsed</inInteractionFlows>
+        <actionEvents xmi:type="ifml:ActionEvent" xmi:id="Event_0uw88da">
+          <outInteractionFlows>Flow_1esruee</outInteractionFlows>
+        </actionEvents>
+      </interactionFlowModelElements>
+      <interactionFlowModelElements xmi:type="ifml:NavigationFlow" xmi:id="Flow_059gsed" sourceInteractionFlowElement="Event_1cr2j7o" targetInteractionFlowElement="Action_0e7zrnf" />
+      <interactionFlowModelElements xmi:type="ifml:NavigationFlow" xmi:id="Flow_1esruee" sourceInteractionFlowElement="Event_0uw88da" targetInteractionFlowElement="ViewContainer_02zofi6" />
+    </interactionFlowModel>
+  </ifml:IFMLModel>
+  <ifmldi:IFMLDiagram modelElement="_myModel">
+    <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="ViewContainer_0j06elh_di" modelElement="ViewContainer_0j06elh">
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Form_1xnx91h_di" modelElement="ViewComponent_0s4tlzt">
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="SimpleField_0e7uskj_di" modelElement="SimpleField_0e7uskj">
+          <bounds xmi:type="dc:Bounds" x="210" y="181" width="188" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="SimpleField_1vfpxiu_di" modelElement="SimpleField_1vfpxiu">
+          <bounds xmi:type="dc:Bounds" x="210" y="221" width="188" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Event_1wjx0ad_di" modelElement="Event_1wjx0ad">
+          <bounds xmi:type="dc:Bounds" x="408" y="149" width="20" height="20" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel">
+            <bounds xmi:type="dc:Bounds" x="372" y="165" width="34" height="14" />
+          </ownedLabel>
+        </ownedElement>
+        <bounds xmi:type="dc:Bounds" x="190" y="141" width="228" height="140" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+      </ownedElement>
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Event_1wjx0ad_di" modelElement="Event_1wjx0ad">
+        <bounds xmi:type="dc:Bounds" x="408" y="149" width="20" height="20" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel">
+          <bounds xmi:type="dc:Bounds" x="372" y="165" width="34" height="14" />
+        </ownedLabel>
+      </ownedElement>
+      <bounds xmi:type="dc:Bounds" x="154" y="100" width="300" height="200" />
+      <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Action_09i53b1_di" modelElement="Action_09i53b1">
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Event_1vy64vh_di" modelElement="Event_1vy64vh">
+        <bounds xmi:type="dc:Bounds" x="575" y="205" width="20" height="20" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel">
+          <bounds xmi:type="dc:Bounds" x="501" y="193" width="82" height="14" />
+        </ownedLabel>
+      </ownedElement>
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Event_1cr2j7o_di" modelElement="Event_1cr2j7o">
+        <bounds xmi:type="dc:Bounds" x="658" y="205" width="20" height="20" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel">
+          <bounds xmi:type="dc:Bounds" x="676" y="193" width="40" height="14" />
+        </ownedLabel>
+      </ownedElement>
+      <bounds xmi:type="dc:Bounds" x="588" y="188" width="80" height="60" />
+      <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLConnection" xmi:id="Flow_0pgjbas_di" modelElement="Flow_0pgjbas" id="Flow_0pgjbas_di">
+      <waypoint xmi:type="dc:Point" x="428" y="159" />
+      <waypoint xmi:type="dc:Point" x="628" y="159" />
+      <waypoint xmi:type="dc:Point" x="628" y="188" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLConnection" xmi:id="Flow_1n8xxrb_di" modelElement="Flow_1n8xxrb" id="Flow_1n8xxrb_di">
+      <waypoint xmi:type="dc:Point" x="575" y="215" />
+      <waypoint xmi:type="dc:Point" x="454" y="215" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="ViewContainer_02zofi6_di" modelElement="ViewContainer_02zofi6">
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Form_12grtju_di" modelElement="ViewComponent_1bb5ktv">
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="SimpleField_1gvdxlb_di" modelElement="SimpleField_1gvdxlb">
+          <bounds xmi:type="dc:Bounds" x="-45" y="483" width="172" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <bounds xmi:type="dc:Bounds" x="-65" y="443" width="212" height="100" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+      </ownedElement>
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="List_1rmmpqn_di" modelElement="ViewComponent_0fhn23u">
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Parameter_1myhrux_di" modelElement="Parameter_1myhrux">
+          <bounds xmi:type="dc:Bounds" x="197" y="483" width="305" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <bounds xmi:type="dc:Bounds" x="177" y="443" width="345" height="100" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+      </ownedElement>
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Details_1i6vc2t_di" modelElement="ViewComponent_113vhih">
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Parameter_18k7wdf_di" modelElement="Parameter_18k7wdf">
+          <bounds xmi:type="dc:Bounds" x="-31" y="704" width="278" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Parameter_1r1o1ce_di" modelElement="Parameter_1r1o1ce">
+          <bounds xmi:type="dc:Bounds" x="-31" y="744" width="278" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Parameter_0bz06jr_di" modelElement="Parameter_0bz06jr">
+          <bounds xmi:type="dc:Bounds" x="-31" y="784" width="278" height="30" />
+          <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+        </ownedElement>
+        <bounds xmi:type="dc:Bounds" x="-51" y="581" width="318" height="263" />
+        <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+      </ownedElement>
+      <bounds xmi:type="dc:Bounds" x="-85" y="393" width="1248" height="457" />
+      <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Action_0e7zrnf_di" modelElement="Action_0e7zrnf">
+      <ownedElement xmi:type="ifmldi:IFMLNode" xmi:id="Event_0uw88da_di" modelElement="Event_0uw88da">
+        <bounds xmi:type="dc:Bounds" x="824" y="238" width="20" height="20" />
+      </ownedElement>
+      <bounds xmi:type="dc:Bounds" x="787" y="185" width="80" height="60" />
+      <ownedLabel xmi:type="ifmldi:IFMLLabel" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLConnection" xmi:id="Flow_059gsed_di" modelElement="Flow_059gsed" id="Flow_059gsed_di">
+      <waypoint xmi:type="dc:Point" x="678" y="215" />
+      <waypoint xmi:type="dc:Point" x="787" y="215" />
+    </ownedElement>
+    <ownedElement xmi:type="ifmldi:IFMLConnection" xmi:id="Flow_1esruee_di" modelElement="Flow_1esruee" id="Flow_1esruee_di">
+      <waypoint xmi:type="dc:Point" x="834" y="258" />
+      <waypoint xmi:type="dc:Point" x="834" y="326" />
+      <waypoint xmi:type="dc:Point" x="642" y="326" />
+      <waypoint xmi:type="dc:Point" x="642" y="393" />
+    </ownedElement>
+  </ifmldi:IFMLDiagram>
+</xmi:XMI>

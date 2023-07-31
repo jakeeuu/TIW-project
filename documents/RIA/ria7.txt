@@ -1,0 +1,17 @@
+title Logout
+
+participant "Market \n management.js" as participantMultiline
+participant Logout #cyan
+participant Request #cyan
+participant Session #cyan
+
+
+[->participantMultiline: click
+participantMultiline->Logout: doGet
+Logout->Request: getSession()
+alt session != null
+Logout->Session: invalidate()
+end
+Logout-->participantMultiline: status code 200
+participantMultiline->Session Storage: clear()
+participantMultiline->Window: location=LoginPage.html

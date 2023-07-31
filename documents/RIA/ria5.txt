@@ -1,0 +1,55 @@
+title Create Order
+
+participant "Market(VisualizeCartProduct) \n management.js" as participantMultiline
+participant CreateOrder #cyan
+participant ProductDao #cyan
+participant SupplierDao #cyan
+participant SpendingRangesDao #cyan
+participant Request #cyan
+participant Session #cyan
+participant OrderDao #cyan
+participant GoToOrder #cyan
+
+[->participantMultiline: submit
+participantMultiline->CreateOrder: doPost(cartSupplier)
+CreateOrder->ProductDao: new ProductDao()
+CreateOrder->SupplierDao: new SupplierDao()
+alt try
+CreateOrder->CreateOrder: checking the code of the cartSupplier
+CreateOrder->SupplierDao: areValid(cartSupplier.getCode(), cartSupplier.getName())
+CreateOrder<-SupplierDao: true ||false
+loop cartSupplier.getProducts.size()
+CreateOrder->CreateOrder: checking the code of the products and the quantity
+CreateOrder->ProductDao: areValid(product.getCode(), product.getName())
+CreateOrder<-ProductDao: true ||false
+CreateOrder->ProductDao:matching(product, cartSupplier)
+CreateOrder<-ProductDao: true ||false
+CreateOrder->CreateOrder: calculation of total and totalNumber
+end
+CreateOrder->SpendingRangesDao: new SpendingRanges()
+alt try
+CreateOrder->SpendingRangesDao: findSpendingRanges(cartSupplier.getCode())
+CreateOrder<-SpendingRangesDao: spending ranges
+CreateOrder->CreateOrder: look for the correct shipping costs
+CreateOrder->SupplierDao: supplierFreeShipping(cartSupplier.getCode())
+CreateOrder<-SupplierDao: freeShipping
+alt there isn't one and TotalPrice() < freeShipping
+CreateOrder-->participantMultiline: status code 400 || 500
+end
+CreateOrder->Request: getSession()
+CreateOrder<-Request: session
+CreateOrder->Session: getAttribute("user")
+CreateOrder<-Session: user
+CreateOrder->OrderDao: new OrderDao()
+alt try
+CreateOrder->OrderDao: generalOrderUpdate(user.getMail(), cartSupplier.getName(), orderTotal, date, user.getAddress(), cartSupplier.getCode() ,counter)
+CreateOrder->GoToOrder: forward
+else catch
+CreateOrder-->participantMultiline: status code 500
+end
+else catch
+CreateOrder-->participantMultiline: status code 500
+end
+else catch
+CreateOrder-->participantMultiline: status code 400 || 500
+end
