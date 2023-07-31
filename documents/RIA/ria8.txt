@@ -1,0 +1,27 @@
+title GotoHome
+
+participant "Market(VisualizeProduct) \n management.js" as participantMultiline
+
+participant GoToHome #cyan
+participant Request #cyan
+participant Session #cyan
+participant ProductDao #cyan
+
+[->participantMultiline: click
+participantMultiline->GoToHome: doGet
+GoToHome->Request: getSession()
+GoToHome<-Request: session
+GoToHome->Session:getAttribute("user")
+GoToHome<-Session: user
+GoToHome->ProductDao: new ProductDao()
+alt try
+GoToHome->ProductDao: produtcsToVisualize(user)
+GoToHome<-ProductDao: products
+loop products.size()
+GoToHome->GoToHome: create a jsonObject containing the products
+end
+GoToHome-->participantMultiline: set status code 200
+participantMultiline->participantMultiline: update(products)
+else catch
+GoToHome-->participantMultiline: set status code 500
+end

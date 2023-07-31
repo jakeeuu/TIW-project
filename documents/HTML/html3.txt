@@ -15,11 +15,6 @@ GoToResults->ProductDao: new ProductDao()
 alt try
 GoToResults->ProductDao: produtcsFromSearch(keyWord)
 GoToResults<-ProductDao: produtcs
-GoToResults->Request:getParameter("click_error")
-GoToResults<-Request: click_error || null
-alt click_error != null
-GoToResults->Context: setVariable("click_error")
-end
 GoToResults->Context: setVariable("products")
 GoToResults->Context: setVariable("key_word")
 else catch

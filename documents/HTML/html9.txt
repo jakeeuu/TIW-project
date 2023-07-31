@@ -39,23 +39,18 @@ Products Details->Context: setVariable("products")
 Products Details->Context: setVariable("keyWord")
 Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
 else catch
-Products Details->Request: setParameter("clickError")
-Products Details->Request: setParameter("key_word")
-Products Details->GoToResults: redirect
+Products Details->Context: setVariable("error")
+Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
 end
 else catch
-Products Details->Request: setParameter("clickError")
-Products Details->Request: setParameter("key_word")
-Products Details->GoToResults: redirect
+Products Details->Context: setVariable("error")
+Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
 end
 else catch
-Products Details->Request: setParameter("clickError")
-Products Details->Request: setParameter("key_word")
-Products Details->GoToResults: redirect
+Products Details->Context: setVariable("error")
+Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
 end
 else catch 
-Products Details->Request: setParameter("clickError")
-Products Details->Request: setParameter("key_word")
-Products Details->GoToResults: redirect
+Products Details->Context: setVariable("error")
+Products Details->Template Engine: process("ResultPage.html", ctx, response.getWriter());
 end
-

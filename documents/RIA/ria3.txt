@@ -1,0 +1,25 @@
+title GoToResults
+
+participant "Market(SearchForm) \n management.js" as participantMultiline
+participant GoToResults #cyan
+participant Request #cyan
+participant ProductDao #cyan
+
+[->participantMultiline: submit
+participantMultiline->GoToResults:  doPost(key_word)
+alt try
+GoToResults->Request: getParameter("key_word")
+GoToResults<-Request: key word
+GoToResults->ProductDao: new ProductDao()
+alt try
+GoToResults->ProductDao: produtcsFromSearch(keyWord)
+GoToResults<-ProductDao: products
+GoToResults->GoToResults: create a jsonObject contains products
+GoToResults-->participantMultiline: status code 200
+participantMultiline->PageOrchestrator: showResult(products)
+else catch
+GoToResults-->participantMultiline: status code 500
+end
+else cath
+GoToResults-->participantMultiline: status code 400
+end
