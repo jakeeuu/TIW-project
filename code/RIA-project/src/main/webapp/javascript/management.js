@@ -133,6 +133,7 @@
 		}
 
 		this.showHome = function(){
+			document.getElementById("goToHome").parentNode.setAttribute("class","active");
 			document.getElementById("homePage").style.display = "block";
 			visualizeProduct.show();
 			searchForm.show();
@@ -147,30 +148,36 @@
 		}
 
 		this.showCart = function(){
+			document.getElementById("goToCart").parentNode.setAttribute("class","active");
 			document.getElementById("cartPage").style.display = "block";
 			visualizeCartProduct.show();
 		}
 
 		this.showOrder = function(){
+			document.getElementById("goToOrder").parentNode.setAttribute("class","active");
 			document.getElementById("orderPage").style.display = "block";
 			visualizeOrderProduct.show();
 		}
 
 		this.showOrders = function(orders){
 			this.refresh();
+			document.getElementById("goToOrder").parentNode.setAttribute("class","active");
 			document.getElementById("orderPage").style.display = "block";
 			visualizeOrderProduct.update(orders);
 			//inserisco la visualizzazione dei titoli 
 		}
 
 		this.refresh = function(){
+			document.getElementById("goToHome").parentNode.setAttribute("class","");
 			document.getElementById("homePage").style.display = "none";
 			visualizeProduct.reset();
 			searchForm.reset();
 			document.getElementById("resultPage").style.display = "none";
 			visualizeSearchProduct.reset();
+			document.getElementById("goToCart").parentNode.setAttribute("class","");
 			document.getElementById("cartPage").style.display = "none";
 			visualizeCartProduct.reset();
+			document.getElementById("goToOrder").parentNode.setAttribute("class","");
 			document.getElementById("orderPage").style.display = "none";
 			visualizeOrderProduct.reset();
 		}
@@ -198,7 +205,6 @@
 						var message = req.responseText;
 						if (req.status == 200) {
 							var products = JSON.parse(req.responseText);
-							document.getElementById("goToHome").setAttribute("class","active");
 							document.getElementById("homeTitle").style.visibility = "visible";
 							self.update(products); 
 						}else if(req.status == 400){
@@ -406,14 +412,16 @@
 
 		this.updateSupplier = function (products, suppliers, productCode){
 			var rightRow, cell, text, des, img, rightProduct ,detailsRow, nextRow, row, span, innerSpan, 
-				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content, cartSup, title;
+				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content, cartSup, title, rows;
 			
-			var self = this;
-							
-				
-			div = document.getElementById("productDetails");
-			if(div !== null){
-				this.body.removeChild(div);
+			var self = this;				
+	
+			rows = document.querySelectorAll("#productDetails");
+			if(rows !== null){
+				for(row of rows){
+					this.body.removeChild(row);
+					row.remove();
+				}
 			}
 				
 			rightRow = document.getElementById(productCode); 
@@ -451,23 +459,23 @@
 				cell.appendChild(img); 
 			detailsRow.appendChild(cell);
 
-			div = document.createElement("div");
-			div.setAttribute("id","productDetails");
-			div.appendChild(detailsRow);
-
-			self.body.appendChild(div);
-
+			detailsRow.setAttribute("id","productDetails");
+			self.body.appendChild(detailsRow);
 			nextRow = rightRow.nextElementSibling;
-			self.body.insertBefore(div, nextRow);
+			self.body.insertBefore(detailsRow, nextRow);
 
 			suppliers.forEach(function(s){
 				
 				
 				row = document.createElement("tr");
-				div.appendChild(row);  
-				
+
+				row.setAttribute("id","productDetails");
+				self.body.appendChild(row);
+				nextRow = detailsRow.nextElementSibling;
+				self.body.insertBefore(row, nextRow);
+
 				cell = document.createElement("td");
-				cell.colspan = "3";
+				cell.setAttribute("colspan",3);
 				row.appendChild(cell);
 				
 				//-----------------------------
