@@ -553,10 +553,12 @@
 						content = document.createElement("div");
 						content.id="contentWindow";
 						newWindow.appendChild(content);
-						table = document.createElement("table");
-						content.appendChild(table);
+					
 						
 						if(cartSup !== null){
+							table = document.createElement("table");
+							content.appendChild(table);
+						
 							cartSup.products.forEach(function(p){
 							InnerRow = document.createElement("tr");
 							table.appendChild(InnerRow);
@@ -612,6 +614,10 @@
 							paragraph.appendChild(InnerSpan);
 							});
 							
+						}else{
+							table = document.createElement("p");
+							table.textContent = "there are no products from the same supplier in the cart";
+							content.appendChild(table);
 						}
 						
 						newWindow.style.display = "block";
