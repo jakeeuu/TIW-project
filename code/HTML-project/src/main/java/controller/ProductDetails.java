@@ -63,29 +63,27 @@ public class ProductDetails extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-		String path = servletContext.getContextPath() + "/GoToResults";
+		String path = "/WEB-INF/Resultspage.html";
 		String keyWord = null;
 		Integer productCode = null;
 		
 		ProductDao productDao = new ProductDao(connection);
-		String clickError = null;
+		String error = null;
 		
 		
 		try {
 			keyWord = StringEscapeUtils.escapeJava(request.getParameter("key_word"));
 			productCode = Integer.parseInt(request.getParameter("product_code"));
-			if(productCode < 0 || !productDao.isValidCode(productCode)) 
-				clickError = "this product code is invalid, click again";
-			if(keyWord.isEmpty())
-				response.sendRedirect(path);
+			if(productCode < 0 || !productDao.isValidCode(productCode) || keyWord.isEmpty()) 
+				error = "invalid parameters, click again";
 		}catch(NullPointerException | NumberFormatException e) {
-			clickError = "this product code is invalid, click again";
+			error = "invalid parameters, click again";
 		} catch (SQLException e) {
-			clickError = "db error, click again";
+			error = "db error, click again";
 		}
-		if(clickError!=null) {
-			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
-			response.sendRedirect(path);
+		if(error!=null) {
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		}
 		
@@ -95,9 +93,9 @@ public class ProductDetails extends HttpServlet {
 		try {
 			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
-			clickError = "db error, click again";
-			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
-			response.sendRedirect(path);
+			error = "db error, click again";
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		} catch (NullPointerException e) {
 			path = path + "?key_word=" + keyWord;
@@ -118,13 +116,13 @@ public class ProductDetails extends HttpServlet {
 				s.setSpendingRanges(spendigRangesDao.findSpendingRanges(s.getCode()));
 			}
 		}catch (SQLException e) {
-			clickError = "db error, click again";
+			error = "db error, click again";
 		} catch (NullPointerException e) {
-			clickError = "no supplier match for the code";
+			error = "no supplier match for the code";
 		}
-		if(clickError!=null) {
-			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
-			response.sendRedirect(path);
+		if(error!=null) {
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		}
 		
@@ -139,9 +137,9 @@ public class ProductDetails extends HttpServlet {
 		try {
 			productDao.insertInto(mail,productCode,date, time);
 		} catch (SQLException e) {
-			clickError = "db error, click again";
-			path = path + "?key_word=" + keyWord + "&click_error=" + clickError;
-			response.sendRedirect(path);
+			error = "db error, click again";
+			ctx.setVariable("error", error);
+			templateEngine.process(path, ctx, response.getWriter());
 			return;
 		}
 		
@@ -155,7 +153,6 @@ public class ProductDetails extends HttpServlet {
 			}
 		}
 		
-		path = "/WEB-INF/Resultspage.html";
 		ctx.setVariable("products", products);
 		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
