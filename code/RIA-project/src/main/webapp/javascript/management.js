@@ -409,7 +409,7 @@
 
 		this.updateSupplier = function (products, suppliers, productCode){
 			var rightRow, cell, text, des, img, rightProduct ,detailsRow, nextRow, row, span, innerSpan, 
-				overlay, paragraph, bold, ul, li, form, input, div;
+				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content;
 			
 			var self = this;
 							
@@ -552,11 +552,18 @@
 					span.textContent = s.totalNumber; 
 					// finestra sovrapposta che parte da questo elemento
 					span.addEventListener('mouseover', (e) => {
-						overlay= document.createElement("overlay");
+						newWindow = document.getElementById("newWindow");
+						content = document.createElement("div");
+						content.id="contentWindow";
+						newWindow.appendChild(content);
+						table = document.createElement("table");
+						content.appendChild(table);
 						
 						if(cartSup !== null){
 							cartSup.products.forEach(function(p){
 							InnerRow = document.createElement("tr");
+							table.appendChild(InnerRow);
+							
 
 							cell = document.createElement("td");
 							InnerRow.appendChild(cell);
@@ -607,16 +614,20 @@
 							InnerSpan.textContent = " $";
 							paragraph.appendChild(InnerSpan);
 							});
+							
 						}
 						
-						overlay.id = "overlay";
-						overlay.style.display = 'block';  //forse questo lo toglierò 
+						newWindow.style.display = "block";
+						
+						  
 					});
 					
+					
 					span.addEventListener('mouseout', (e) => {
-						overlay = document.getElementById("overlay");
-						overlay.style.display = 'none';  
+						newWindow.style.display = "none";
+						newWindow.removeChild(content);
 					});
+					
 					text.appendChild(span);
 				
 				cell.appendChild(text);
