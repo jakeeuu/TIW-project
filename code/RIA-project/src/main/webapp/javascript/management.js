@@ -536,10 +536,7 @@
 					
 					for(cs of cart ){
 						if(cs.code === s.code){
-							console.log("ho trovato un supplier presente nel carrello");
-							console.log(cs.code);
 							cartSup = cs;
-							console.log(cartSup.code);
 							break;
 						}
 					}
@@ -549,18 +546,31 @@
 					s.totalNumber = 0;
 					if(cartSup !== null){
 							for(product of cartSup.products){
-							s.totalNumber = s.totalNumber + product.quantity;
+							s.totalNumber = parseInt(s.totalNumber) + parseInt(product.quantity);
 						}
 					}
 					span.textContent = s.totalNumber;
-					if( cartSup !== null)
-						span.setAttribute("cartSup", JSON.stringify(cartSup));
+					if(cartSup !== null)
+						span.setAttribute("cartSup", cartSup.code);
 			
 					// finestra sovrapposta che parte da questo elemento
 					span.addEventListener('mouseover', (e) => {
+						e.preventDefault();
 						let cartSup = null;
-						if(e.target.hasAttribute("cartSup"))
-							cartSup = JSON.parse(e.target.getAttribute("cartSup"));
+						
+						var cart = JSON.parse(sessionStorage.getItem("cart"));
+						if(cart === null){
+							cart = [];
+						}
+						
+						if(e.target.hasAttribute("cartSup")){
+							for(cs of cart){
+								if(cs.code == e.target.getAttribute("cartSup")){
+									cartSup = cs;
+									break;
+								}
+							}
+						}	
 							
 						newWindow = document.getElementById("newWindow");
 						content = document.createElement("div");
@@ -648,6 +658,7 @@
 					
 					
 					span.addEventListener('mouseout', (e) => {
+						e.preventDefault();
 						newWindow.style.display = "none";
 						newWindow.removeChild(content);
 						content.remove();
