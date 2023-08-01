@@ -43,10 +43,6 @@
 		this.name = name;
 		this.quantity = quantity;
 		this.price = price;
-
-		this.setQuantity = function(quantity){
-			this.quantity = quantity;
-		}
 	}
 
 
@@ -97,16 +93,19 @@
 			 * 
 			 */
 			document.getElementById("goToHome").addEventListener("click", (e) => {
+				e.preventDefault();
 				this.refresh();
 				this.showHome();
 			}, false);
 
 			document.getElementById("goToCart").addEventListener("click", (e) => {
+				e.preventDefault();
 				this.refresh();
 				this.showCart();
 			}, false);
 
 			document.getElementById("goToOrder").addEventListener("click", (e) => {
+				e.preventDefault();
 				this.refresh();
 				this.showOrder();
 			}, false);
@@ -157,7 +156,7 @@
 			visualizeOrderProduct.show();
 		}
 
-		this.showOrder = function(orders){
+		this.showOrders = function(orders){
 			this.refresh();
 			document.getElementById("orderPage").style.display = "block";
 			visualizeOrderProduct.update(orders);
@@ -280,7 +279,7 @@
 		
 		this.registerEvents = function(orchestrator) {
 			this.searchForm.querySelector("input[type='submit']").addEventListener('click', (e) => {
-				e.preventDefault;
+				e.preventDefault();
 				var eventform = e.target.closest("form");
 				if(eventform.checkValidity()){
 					var self = this;
@@ -304,8 +303,6 @@
 									self.alert.textContent = "Error - some fields weren't completed correctly";
 									self.reset();
 								}
-							} else {
-								self.alert.textContent = "Something went wrong while exchanging messages with the server";
 							}
 						}
 					);
@@ -346,6 +343,7 @@
 
 			        anchor.setAttribute('product_code',  p.code);
 			     	anchor.addEventListener("click", (e) => {
+			     		e.preventDefault();
 						self.showDetails(e.target.getAttribute("product_code"),products);
 					}, false);
 			     	anchor.href = "#";//non so a che serve ma tutti lo mettono
@@ -360,6 +358,7 @@
 
 			        anchor.setAttribute('product_code',  p.code);
 			     	anchor.addEventListener("click", (e) => {
+			     		e.preventDefault();
 						self.showDetails(e.target.getAttribute("product_code"),products);
 					}, false);
 			     	anchor.href = "#";//non so a che serve ma tutti lo mettono
@@ -399,8 +398,6 @@
 							self.alert.textContent = "Error - some fields weren't completed correctly";
 							self.reset();
 						}
-					} else {
-						self.alert.textContent = "Something went wrong while exchanging messages with the server";
 					}
 				}
 			);
@@ -470,7 +467,7 @@
 				div.appendChild(row);  
 				
 				cell = document.createElement("td");
-				//cell.colspan = "3";
+				cell.colspan = "3";
 				row.appendChild(cell);
 				
 				//-----------------------------
@@ -702,9 +699,8 @@
 				cell.appendChild(ul);
 
 				form = document.createElement("form");
-					//el1.id="formForAddToCart";
 					form.setAttribute("action","#");
-					form.setAttribute("id",rightProduct.code);
+					form.setAttribute("id",s.code);
 
 						input = document.createElement("input");
 						input.setAttribute("type","number");
@@ -716,8 +712,8 @@
 						input.setAttribute("value","Add To Cart");
 						input.addEventListener("click", (e) => {
 							e.preventDefault();
-							let unoo = document.querySelector("form[id='" + rightProduct.code + "']");
-							self.addToCart(unoo.querySelector("input[type='number']").value,rightProduct,s);
+							let cartForm = document.querySelector("form[id='" + s.code + "']");
+							self.addToCart(cartForm.querySelector("input[type='number']").value,rightProduct,s);
 						}, false);
 						form.appendChild(input);
 
@@ -730,87 +726,88 @@
 		this.addToCart = function(quantity, product, supplier){
 			self = this;
 
-			var cartProduct = null;
-			var cartSupplier = null;
-			var cart = JSON.parse(sessionStorage.getItem("cart"));
-			if(cart !== null){
-				for(var cs of cart){
-					if(cs.code === supplier.code){
-						cartSupplier = cs;
-						break;
+			if(parseInt(quantity) > 0 && !isNaN(parseInt(quantity))){
+				var cartProduct = null;
+				var cartSupplier = null;
+				var cart = JSON.parse(sessionStorage.getItem("cart"));
+				if(cart !== null){
+					for(var cs of cart){
+						if(cs.code === supplier.code){
+							cartSupplier = cs;
+							break;
+						}
+					}
+				}else{
+					cart = [];
+				}
+				
+				var isNew = false;
+				if(cartSupplier === null){
+					cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+					let total = parseFloat(supplier.unitaryPrice) * parseInt(quantity);
+					cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
+					cartSupplier.addProduct(cartProduct);
+					isNew = true;
+				}else{
+					cartSupplier = new CartSupplier(cs.code, cs.name, cs.totalPrice);
+					cartSupplier.setShippingPrice(cs.shippingPrice);
+					var products = [];
+					for(p of cs.products){
+						products.push(new Product(p.code, p.name, p.quantity, p.price));
+						if(p.code === product.code){
+							cartProduct = p;
+						}
+					}
+
+					if(cartProduct === null){
+						cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+						products.push(cartProduct);
+
+					}else{
+						let prevQuant = parseInt(cartProduct.quantity);
+						cartProduct = new Product(product.code,product.name, prevQuant + parseInt(quantity), supplier.unitaryPrice);
+
+						for(let i = 0; i < products.length; i++){
+							if(products[i].code === cartProduct.code){
+								products.splice(i,1,cartProduct);
+							}
+						}
+					}
+					cartSupplier.setProducts(products);
+					let tmp = parseFloat(cartSupplier.totalPrice);
+					cartSupplier.setTotalPrice(tmp + parseFloat(supplier.unitaryPrice) * parseInt(quantity));
+				}
+
+				if(cartSupplier.shippingPrice !== 0){
+					if(cartSupplier.totalPrice >= supplier.freeShipping){
+						cartSupplier.setShippingPrice(0);
+					}else{
+						supplier.totalNumber = supplier.totalNumber + parseInt(quantity);
+						for(sp of supplier.spendingRanges){
+							if(supplier.totalNumber >= sp.minimumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
+								cartSupplier.setShippingPrice(sp.price);
+							}
+						}
 					}
 				}
+
+				if(isNew){
+					cart.push(cartSupplier);
+				}else{
+					for(let i = 0; i < cart.length; i++){
+						if(cart[i].code === cartSupplier.code){
+							cart.splice(i,1,cartSupplier);
+						}
+					}
+				}
+
+				sessionStorage.setItem("cart", JSON.stringify(cart));
+				self.orchestrator.refresh();
+				self.orchestrator.showCart();
 			}else{
-				cart = [];
+				self.alert.textContent = "you have to write a number > 0 in the quantity box";
 			}
 			
-			var isNew = false;
-			if(cartSupplier === null){
-				cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
-				let total = parseFloat(supplier.unitaryPrice) * parseInt(quantity);
-				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
-				cartSupplier.addProduct(cartProduct);
-				isNew = true;
-			}else{
-				cartSupplier = new CartSupplier(cs.code, cs.name, cs.totalPrice);
-				cartSupplier.setShippingPrice(cs.shippingPrice);
-				var products = [];
-				for(p of cs.products){
-					products.push(new Product(p.code, p.name, p.quantity, p.price));
-					if(p.code === product.code){
-						cartProduct = p;
-					}
-				}
-
-				if(cartProduct === null){
-					cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
-					//cartSupplier.addProduct(cartProduct);
-					//cartSupplier.products.push(cartProduct);
-					products.push(cartProduct);
-				}else{
-					let prevQuant = parseInt(cartProduct.quantity);
-					cartProduct = new Product(product.code,product.name, prevQuant + parseInt(quantity), supplier.unitaryPrice);
-					//cartProduct.setQuantity(prevQuant + quantity);
-					//cartProduct.quantity = prevQuant + quantity;
-					for(let i = 0; i < products.length; i++){
-						if(products[i].code = cartProduct.code){
-							products.splice(i,1,cartProduct);
-						}
-					}
-				}
-				cartSupplier.setProducts(products);
-				let tmp = parseFloat(cartSupplier.totalPrice);
-				cartSupplier.setTotalPrice(tmp + parseFloat(supplier.unitaryPrice) * parseInt(quantity));
-				//cartSupplier.totalPrice = tmp + product.price * quantity;
-			}
-
-			if(cartSupplier.shippingPrice !== 0){
-				if(cartSupplier.totalPrice >= supplier.freeShipping){
-					cartSupplier.setShippingPrice(0);
-					//cartSupplier.shippingPrice = 0;
-				}else{
-					for(sp of supplier.spendingRanges){
-						if(supplier.totalNumber >= sp.maximumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
-							cartSupplier.setShippingPrice(sp.price);
-							//cartSupplier.shippingPrice = sp.price;
-						}
-					}
-				}
-			}
-
-			if(isNew){
-				cart.push(cartSupplier);
-			}else{
-				for(let i = 0; i < cart.length; i++){
-					if(cart[i].code = cartSupplier.code){
-						cart.splice(i,1,cartSupplier);
-					}
-				}
-			}
-
-			sessionStorage.setItem("cart", JSON.stringify(cart));
-			self.orchestrator.refresh();
-			self.orchestrator.showCart();
 		}
 
 	}
@@ -872,6 +869,7 @@
 								button.setAttribute("supplier_code",cs.code);
 								button.textContent = "Order";
 								button.addEventListener("click", (e) => {
+									e.preventDefault();
 									self.createOrder(e.target.getAttribute("supplier_code"));
 								}, false);
 								form.appendChild(button);
@@ -944,11 +942,11 @@
 					
 				});
 				this.container.style.visibility = "visible";
-				title.querySelector("#emptyTitleCart").style.display = "block";
-				title.querySelector("#normalTitleCart").style.display = "none";
-			}else{
 				title.querySelector("#emptyTitleCart").style.display = "none";
 				title.querySelector("#normalTitleCart").style.display = "block";
+			}else{
+				title.querySelector("#emptyTitleCart").style.display = "block";
+				title.querySelector("#normalTitleCart").style.display = "none";
 			}
 
 			
@@ -988,7 +986,7 @@
 								}
 							}
 							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page
-							self.orchestrator.showOrder(orders); 
+							self.orchestrator.showOrders(orders); 
 						}
 						if (req.status == 400) {
 							window.location.href = req.getResponseHeader("Location");
@@ -998,8 +996,6 @@
 							self.alert.textContent = "Error - some fields weren't completed correctly";
 							self.reset();
 						}
-					} else {
-						self.alert.textContent = "Something went wrong while exchanging messages with the server";
 					}
 				},JSONvalue);
 		}
@@ -1029,7 +1025,7 @@
 							let orders = JSON.parse(req.responseText);
 							let title = document.getElementById("orderTitle");
 							title.style.display = "block";
-							if (orders.length == 0) {
+							if (orders.length === 0) {
 								title.querySelector("#emptyTitleOrders").style.display = "block";
 								title.querySelector("#normalTitleOrders").style.display = "none";
 								return;
