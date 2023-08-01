@@ -156,7 +156,7 @@
 			visualizeOrderProduct.show();
 		}
 
-		this.showOrder = function(orders){
+		this.showOrders = function(orders){
 			this.refresh();
 			document.getElementById("orderPage").style.display = "block";
 			visualizeOrderProduct.update(orders);
@@ -467,7 +467,7 @@
 				div.appendChild(row);  
 				
 				cell = document.createElement("td");
-				//cell.colspan = "3";
+				cell.colspan = "3";
 				row.appendChild(cell);
 				
 				//-----------------------------
@@ -715,83 +715,88 @@
 		this.addToCart = function(quantity, product, supplier){
 			self = this;
 
-			var cartProduct = null;
-			var cartSupplier = null;
-			var cart = JSON.parse(sessionStorage.getItem("cart"));
-			if(cart !== null){
-				for(var cs of cart){
-					if(cs.code === supplier.code){
-						cartSupplier = cs;
-						break;
+			if(parseInt(quantity) > 0 && !isNaN(parseInt(quantity))){
+				var cartProduct = null;
+				var cartSupplier = null;
+				var cart = JSON.parse(sessionStorage.getItem("cart"));
+				if(cart !== null){
+					for(var cs of cart){
+						if(cs.code === supplier.code){
+							cartSupplier = cs;
+							break;
+						}
+					}
+				}else{
+					cart = [];
+				}
+				
+				var isNew = false;
+				if(cartSupplier === null){
+					cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+					let total = parseFloat(supplier.unitaryPrice) * parseInt(quantity);
+					cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
+					cartSupplier.addProduct(cartProduct);
+					isNew = true;
+				}else{
+					cartSupplier = new CartSupplier(cs.code, cs.name, cs.totalPrice);
+					cartSupplier.setShippingPrice(cs.shippingPrice);
+					var products = [];
+					for(p of cs.products){
+						products.push(new Product(p.code, p.name, p.quantity, p.price));
+						if(p.code === product.code){
+							cartProduct = p;
+						}
+					}
+
+					if(cartProduct === null){
+						cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
+						products.push(cartProduct);
+
+					}else{
+						let prevQuant = parseInt(cartProduct.quantity);
+						cartProduct = new Product(product.code,product.name, prevQuant + parseInt(quantity), supplier.unitaryPrice);
+
+						for(let i = 0; i < products.length; i++){
+							if(products[i].code === cartProduct.code){
+								products.splice(i,1,cartProduct);
+							}
+						}
+					}
+					cartSupplier.setProducts(products);
+					let tmp = parseFloat(cartSupplier.totalPrice);
+					cartSupplier.setTotalPrice(tmp + parseFloat(supplier.unitaryPrice) * parseInt(quantity));
+				}
+
+				if(cartSupplier.shippingPrice !== 0){
+					if(cartSupplier.totalPrice >= supplier.freeShipping){
+						cartSupplier.setShippingPrice(0);
+					}else{
+						supplier.totalNumber = supplier.totalNumber + parseInt(quantity);
+						for(sp of supplier.spendingRanges){
+							if(supplier.totalNumber >= sp.minimumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
+								cartSupplier.setShippingPrice(sp.price);
+							}
+						}
 					}
 				}
+
+				if(isNew){
+					cart.push(cartSupplier);
+				}else{
+					for(let i = 0; i < cart.length; i++){
+						if(cart[i].code === cartSupplier.code){
+							cart.splice(i,1,cartSupplier);
+						}
+					}
+				}
+
+				sessionStorage.setItem("cart", JSON.stringify(cart));
+				self.orchestrator.refresh();
+				self.orchestrator.showCart();
 			}else{
-				cart = [];
+				self.alert.textContent = "you have to write a number > 0 in the quantity box";
 			}
 			
-			var isNew = false;
-			if(cartSupplier === null){
-				cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
-				let total = parseFloat(supplier.unitaryPrice) * parseInt(quantity);
-				cartSupplier = new CartSupplier(supplier.code,supplier.name,total);
-				cartSupplier.addProduct(cartProduct);
-				isNew = true;
-			}else{
-				cartSupplier = new CartSupplier(cs.code, cs.name, cs.totalPrice);
-				cartSupplier.setShippingPrice(cs.shippingPrice);
-				var products = [];
-				for(p of cs.products){
-					products.push(new Product(p.code, p.name, p.quantity, p.price));
-					if(p.code === product.code){
-						cartProduct = p;
-					}
-				}
-
-				if(cartProduct === null){
-					cartProduct = new Product(product.code,product.name, quantity, supplier.unitaryPrice);
-					products.push(cartProduct);
-
-				}else{
-					let prevQuant = parseInt(cartProduct.quantity);
-					cartProduct = new Product(product.code,product.name, prevQuant + parseInt(quantity), supplier.unitaryPrice);
-
-					for(let i = 0; i < products.length; i++){
-						if(products[i].code === cartProduct.code){
-							products.splice(i,1,cartProduct);
-						}
-					}
-				}
-				cartSupplier.setProducts(products);
-				let tmp = parseFloat(cartSupplier.totalPrice);
-				cartSupplier.setTotalPrice(tmp + parseFloat(supplier.unitaryPrice) * parseInt(quantity));
-			}
-
-			if(cartSupplier.shippingPrice !== 0){
-				if(cartSupplier.totalPrice >= supplier.freeShipping){
-					cartSupplier.setShippingPrice(0);
-				}else{
-					supplier.totalNumber = supplier.totalNumber + parseInt(quantity);
-					for(sp of supplier.spendingRanges){
-						if(supplier.totalNumber >= sp.minimumN && (supplier.totalNumber <= sp.maximumN || sp.minimumN === sp.maximumN)){
-							cartSupplier.setShippingPrice(sp.price);
-						}
-					}
-				}
-			}
-
-			if(isNew){
-				cart.push(cartSupplier);
-			}else{
-				for(let i = 0; i < cart.length; i++){
-					if(cart[i].code === cartSupplier.code){
-						cart.splice(i,1,cartSupplier);
-					}
-				}
-			}
-
-			sessionStorage.setItem("cart", JSON.stringify(cart));
-			self.orchestrator.refresh();
-			self.orchestrator.showCart();
 		}
 
 	}
@@ -926,11 +931,11 @@
 					
 				});
 				this.container.style.visibility = "visible";
-				title.querySelector("#emptyTitleCart").style.display = "block";
-				title.querySelector("#normalTitleCart").style.display = "none";
-			}else{
 				title.querySelector("#emptyTitleCart").style.display = "none";
 				title.querySelector("#normalTitleCart").style.display = "block";
+			}else{
+				title.querySelector("#emptyTitleCart").style.display = "block";
+				title.querySelector("#normalTitleCart").style.display = "none";
 			}
 
 			
@@ -970,7 +975,7 @@
 								}
 							}
 							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page
-							self.orchestrator.showOrder(orders); 
+							self.orchestrator.showOrders(orders); 
 						}
 						if (req.status == 400) {
 							window.location.href = req.getResponseHeader("Location");
