@@ -406,7 +406,7 @@
 
 		this.updateSupplier = function (products, suppliers, productCode){
 			var rightRow, cell, text, des, img, rightProduct ,detailsRow, nextRow, row, span, innerSpan, 
-				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content;
+				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content, cartSup, title;
 			
 			var self = this;
 							
@@ -533,12 +533,18 @@
 					if(cart === null){
 						cart = [];
 					}
+					
 					for(cs of cart ){
 						if(cs.code === s.code){
+							console.log("ho trovato un supplier presente nel carrello");
+							console.log(cs.code);
 							cartSup = cs;
+							console.log(cartSup.code);
 							break;
 						}
 					}
+					
+					
 
 					s.totalNumber = 0;
 					if(cartSup !== null){
@@ -546,80 +552,95 @@
 							s.totalNumber = s.totalNumber + product.quantity;
 						}
 					}
-					span.textContent = s.totalNumber; 
+					span.textContent = s.totalNumber;
+					if( cartSup !== null)
+						span.setAttribute("cartSup", JSON.stringify(cartSup));
+			
 					// finestra sovrapposta che parte da questo elemento
 					span.addEventListener('mouseover', (e) => {
+						let cartSup = null;
+						if(e.target.hasAttribute("cartSup"))
+							cartSup = JSON.parse(e.target.getAttribute("cartSup"));
+							
 						newWindow = document.getElementById("newWindow");
 						content = document.createElement("div");
 						content.id="contentWindow";
-						newWindow.appendChild(content);
-					
 						
 						if(cartSup !== null){
+							title = document.createElement("h1");
+							title.textContent = "These are the other products in the cart from the same supplier";
+							title.setAttribute("class", "title");
+							content.appendChild(title);
+							
+							div = document.createElement("div");
+							div.setAttribute("class", "container");
+							content.appendChild(div);
+							
 							table = document.createElement("table");
-							content.appendChild(table);
+							div.appendChild(table);
 						
 							cartSup.products.forEach(function(p){
-							InnerRow = document.createElement("tr");
-							table.appendChild(InnerRow);
-							
-
-							cell = document.createElement("td");
-							InnerRow.appendChild(cell);
-							
-							paragraph = document.createElement("p");
-							cell.appendChild(paragraph);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = p.quantity;
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = " x ";
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = p.name;
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = " ( product code: ";
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = p.code;
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = " ) ";
-							paragraph.appendChild(InnerSpan);
-
-							
-							cell = document.createElement("td");
-							InnerRow.appendChild(cell);
-
-							bold = document.createElement("b");
-							bold.textContent = p.price;
-							cell.appendChild(bold);
-
-							paragraph = document.createElement("p");
-							cell.appendChild(paragraph);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = p.price;
-							paragraph.appendChild(InnerSpan);
-
-							InnerSpan = document.createElement("span");
-							InnerSpan.textContent = " $";
-							paragraph.appendChild(InnerSpan);
+								InnerRow = document.createElement("tr");
+								table.appendChild(InnerRow);
+								
+	
+								cell = document.createElement("td");
+								InnerRow.appendChild(cell);				
+								paragraph = document.createElement("p");
+								cell.appendChild(paragraph);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = p.quantity;
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = " x ";
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = p.name;
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = " ( product code: ";
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = p.code;
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = " ) ";
+								paragraph.appendChild(InnerSpan);
+	
+								
+								cell = document.createElement("td");
+								InnerRow.appendChild(cell);
+	
+								bold = document.createElement("b");
+								bold.textContent = "product price: ";
+								cell.appendChild(bold);
+	
+								paragraph = document.createElement("p");
+								cell.appendChild(paragraph);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = p.price;
+								paragraph.appendChild(InnerSpan);
+	
+								InnerSpan = document.createElement("span");
+								InnerSpan.textContent = " $";
+								paragraph.appendChild(InnerSpan);
 							});
 							
 						}else{
-							table = document.createElement("p");
-							table.textContent = "there are no products from the same supplier in the cart";
-							content.appendChild(table);
+							title = document.createElement("h1");
+							title.textContent = "there are no products from the same supplier in the cart";
+							title.setAttribute("class", "title");
+							content.appendChild(title);
 						}
 						
+						newWindow.appendChild(content);
 						newWindow.style.display = "block";
 						
 						  
@@ -629,6 +650,7 @@
 					span.addEventListener('mouseout', (e) => {
 						newWindow.style.display = "none";
 						newWindow.removeChild(content);
+						content.remove();
 					});
 					
 					text.appendChild(span);
