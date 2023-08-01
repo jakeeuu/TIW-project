@@ -406,14 +406,16 @@
 
 		this.updateSupplier = function (products, suppliers, productCode){
 			var rightRow, cell, text, des, img, rightProduct ,detailsRow, nextRow, row, span, innerSpan, 
-				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content, cartSup, title;
+				 paragraph, bold, ul, li, form, input, div, table ,newWindow, content, cartSup, title, rows;
 			
-			var self = this;
-							
-				
-			div = document.getElementById("productDetails");
-			if(div !== null){
-				this.body.removeChild(div);
+			var self = this;				
+	
+			rows = document.querySelectorAll("#productDetails");
+			if(rows !== null){
+				for(row of rows){
+					this.body.removeChild(row);
+					row.remove();
+				}
 			}
 				
 			rightRow = document.getElementById(productCode); 
@@ -451,23 +453,23 @@
 				cell.appendChild(img); 
 			detailsRow.appendChild(cell);
 
-			div = document.createElement("div");
-			div.setAttribute("id","productDetails");
-			div.appendChild(detailsRow);
-
-			self.body.appendChild(div);
-
+			detailsRow.setAttribute("id","productDetails");
+			self.body.appendChild(detailsRow);
 			nextRow = rightRow.nextElementSibling;
-			self.body.insertBefore(div, nextRow);
+			self.body.insertBefore(detailsRow, nextRow);
 
 			suppliers.forEach(function(s){
 				
 				
 				row = document.createElement("tr");
-				div.appendChild(row);  
-				
+
+				row.setAttribute("id","productDetails");
+				self.body.appendChild(row);
+				nextRow = detailsRow.nextElementSibling;
+				self.body.insertBefore(row, nextRow);
+
 				cell = document.createElement("td");
-				cell.colspan = "3";
+				cell.setAttribute("colspan",3);
 				row.appendChild(cell);
 				
 				//-----------------------------
