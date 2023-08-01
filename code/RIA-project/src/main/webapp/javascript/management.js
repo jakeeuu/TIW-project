@@ -1005,7 +1005,6 @@
 					break;
 				}
 			}
-			var JSONvalue = JSON.stringify(cartSupplier);
 
 			makeCall("POST", "CreateOrder", null,
 				function(req) {
@@ -1013,6 +1012,7 @@
 						let message = req.responseText;
 						if (req.status == 200) {
 							let orders = JSON.parse(req.responseText);
+							console.log(orders);
 							if (orders.length == 0) {
 								self.alert.textContent = "You don't have any supplier to visualize";
 								return;
@@ -1036,7 +1036,7 @@
 							self.reset();
 						}
 					}
-				},JSONvalue);
+				},cartSupplier);
 		}
 		
 	}
