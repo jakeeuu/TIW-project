@@ -93,9 +93,6 @@ public class GoToResults extends HttpServlet {
 			return;
 		}
 		
-		String clickError = StringEscapeUtils.escapeJava(request.getParameter("click_error"));
-		if(clickError != null)
-			ctx.setVariable("clickError", clickError);
 		ctx.setVariable("products", products);
 		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
