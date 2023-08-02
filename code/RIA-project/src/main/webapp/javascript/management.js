@@ -870,7 +870,7 @@
 		}
 
 		this.update = function(){
-			var row, cell, form, button;
+			var row, cell, form, button, paragraph, span, bold;
 			this.body.innerHTML="";
 			
 			var self = this;
@@ -893,11 +893,31 @@
 						row.appendChild(cell);
 
 						cell = document.createElement("td");
-						cell.textContent = cs.totalPrice;
+						paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = cs.totalPrice;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " $";
+							paragraph.appendChild(span);
+							
+						cell.appendChild(paragraph);
 						row.appendChild(cell);
 
 						cell = document.createElement("td");
-						cell.textContent = cs.shippingPrice;
+						paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = cs.shippingPrice;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " $";
+							paragraph.appendChild(span);
+							
+						cell.appendChild(paragraph);
 						row.appendChild(cell);
 
 						//metto bottone
@@ -921,7 +941,6 @@
 
 					self.body.appendChild(row);
 
-					var paragraph,span,bold;
 					cs.products.forEach(function(p){
 						row = document.createElement("tr");
 
@@ -1084,7 +1103,7 @@
 		}
 
 		this.update = function(orders){
-			var row, cell;
+			var row, cell, paragraph, span, bold;
 			this.body.innerHTML="";
 			
 			let title = document.getElementById("orderTitle");
@@ -1106,7 +1125,17 @@
 					row.appendChild(cell);
 
 					cell = document.createElement("td");
-					cell.textContent = order.totalPrice;
+						paragraph = document.createElement("p");
+
+							span = document.createElement("span");
+							span.textContent = order.totalPrice;
+							paragraph.appendChild(span);
+
+							span = document.createElement("span");
+							span.textContent = " $";
+							paragraph.appendChild(span);
+
+						cell.appendChild(paragraph);
 					row.appendChild(cell);
 
 					cell = document.createElement("td");
@@ -1120,7 +1149,6 @@
 
 				self.body.appendChild(row);
 
-				var paragraph,span,bold;
 				order.products.forEach(function(p){
 					row = document.createElement("tr");
 
