@@ -253,12 +253,6 @@
 					img = document.createElement("img");
 					img.src = p.photo; 
 
-					/*
-					img.alt = "image";
-					img.width = 200;///tengo??
-					img.height = 150;///tengo??
-					*/
-
 					cell.appendChild(img);
 
 				row.appendChild(cell);
@@ -350,7 +344,7 @@
 			     		e.preventDefault();
 						self.showDetails(e.target.getAttribute("product_code"),products);
 					}, false);
-			     	anchor.href = "#";//non so a che serve ma tutti lo mettono
+			     	anchor.href = "#";
 
 				row.appendChild(linkcell);
 
@@ -365,7 +359,7 @@
 			     		e.preventDefault();
 						self.showDetails(e.target.getAttribute("product_code"),products);
 					}, false);
-			     	anchor.href = "#";//non so a che serve ma tutti lo mettono
+			     	anchor.href = "#";
 
 			    row.appendChild(linkcell);
 
@@ -557,7 +551,7 @@
 					if(cartSup !== null)
 						span.setAttribute("cartSup", cartSup.code);
 			
-					// finestra sovrapposta che parte da questo elemento
+					
 					span.addEventListener('mouseover', (e) => {
 						e.preventDefault();
 						let cartSup = null;
@@ -923,7 +917,7 @@
 						cell.appendChild(paragraph);
 						row.appendChild(cell);
 
-						//metto bottone
+						
 						cell = document.createElement("td");
 
 							form = document.createElement("form");
@@ -1043,7 +1037,7 @@
 								title.querySelector("#normalTitleOrders").style.display = "none";
 								return;
 							}
-							//tolgo cartSupplier da carrello
+							
 							for(let i = 0; i < cart.length; i++){
 								if( cart[i].code === cartSupplier.code){
 									cart.splice(i,1);
@@ -1051,7 +1045,7 @@
 									break;
 								}
 							}
-							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page
+							
 							self.orchestrator.showOrders(orders); 
 						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");

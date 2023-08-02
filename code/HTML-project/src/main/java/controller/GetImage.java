@@ -50,15 +50,12 @@ public class GetImage extends HttpServlet {
 			return;
 		}
 		
-		//Set headers for browser
+	
 		response.setHeader("Content-Type", getServletContext().getMimeType(fileName));
 		response.setHeader("Content-Length", String.valueOf(file.length()));
-		
-		//inline     -> the user will watch the image immediately
-		//filename   -> used to indicate a fileName if the user wants to save the file
 		response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
 		
-		//Copy the file to the output stream
+		
 		Files.copy(file.toPath(), response.getOutputStream());	
 	}
 
