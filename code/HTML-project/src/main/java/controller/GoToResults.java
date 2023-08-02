@@ -83,7 +83,9 @@ public class GoToResults extends HttpServlet {
 			products = productDao.produtcsFromSearch(keyWord);
 		} catch (SQLException e) {
 			error = "db problem during the search of key word";
-		} catch (NullPointerException e) {
+		}
+		
+		if(products == null) {
 			error = "no match was found for the key word";
 		}
 	

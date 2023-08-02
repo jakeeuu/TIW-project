@@ -73,11 +73,14 @@ public class GoToResults extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db problem during the search of key word");
 			return;
-		} catch (NullPointerException e) {
+		}
+		
+		if(products == null) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("no match was found for the key word");
 			return;
 		}
+			
 		
 		JsonArray jArray = new JsonArray();
 		JsonObject jSonObject;
