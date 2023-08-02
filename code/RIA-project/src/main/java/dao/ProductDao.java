@@ -230,7 +230,7 @@ public class ProductDao {
 	}
 	
 	public boolean matching(Product product, CartSupplier cartSupplier) throws SQLException{ 
-		String query= "select count(*) from sold_by where ProdCode = ? and Supcode = ? and Price = ?";
+		String query= "select count(*) from sold_by where ProdCode = ? and Supcode = ? and ABS(Price - ?) < 0.01";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, String.valueOf(product.getCode()) );
 			pstatement.setString(2, String.valueOf(cartSupplier.getCode()) );

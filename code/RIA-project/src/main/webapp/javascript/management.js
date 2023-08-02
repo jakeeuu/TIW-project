@@ -308,6 +308,7 @@
 						}
 					);
 				}else{
+					this.alert.textContent = "You have to write something in the search box";
 					eventform.reportValidity();
 				}
 			});	
@@ -1002,7 +1003,7 @@
 				cart = [];
 			}
 			for(var cartSupplier of cart){
-				if(cartSupplier.code === supplierCode){
+				if(cartSupplier.code == supplierCode){
 					break;
 				}
 			}
