@@ -97,7 +97,9 @@ public class ProductDetails extends HttpServlet {
 			ctx.setVariable("error", error);
 			templateEngine.process(path, ctx, response.getWriter());
 			return;
-		} catch (NullPointerException e) {
+		} 
+		
+		if(products == null) {
 			path = path + "?key_word=" + keyWord;
 			response.sendRedirect(path);
 		}
@@ -108,18 +110,23 @@ public class ProductDetails extends HttpServlet {
 				product = p;
 		}
 		
+		ArrayList<Supplier> suppliers = new ArrayList<Supplier>();
 		SupplierDao supplierDao = new SupplierDao(connection);
 		SpendingRangesDao spendigRangesDao = new SpendingRangesDao(connection);
 		try {
-			product.setSuppliers(supplierDao.findAllSuppliers(productCode));
+			suppliers = supplierDao.findAllSuppliers(productCode);
+			product.setSuppliers(suppliers);
 			for(Supplier s : product.getSuppliers()) {
 				s.setSpendingRanges(spendigRangesDao.findSpendingRanges(s.getCode()));
 			}
 		}catch (SQLException e) {
 			error = "db error, click again";
-		} catch (NullPointerException e) {
+		} 
+		
+		if(suppliers == null) {
 			error = "no supplier match for the code";
 		}
+		
 		if(error!=null) {
 			ctx.setVariable("error", error);
 			templateEngine.process(path, ctx, response.getWriter());

@@ -104,26 +104,5 @@ public class OrderDao {
 		}
 	}
 	
-	public HashMap<Integer,Integer> productsQuantity (int orderCode)throws SQLException {
-		HashMap<Integer, Integer> quantity = new HashMap<Integer, Integer>();
-		String query = "select ProductCode, Quantity \r\n"
-						+"from composed \r\n" 
-						+"where OrderCode = ? \r\n"
-						+"group by ProductCode";
-		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setString(1, String.valueOf(orderCode));
-			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) 
-					return null;
-				else {
-					while(result.next()) {
-						quantity.put(Integer.parseInt(result.getString("ProductCode")), Integer.parseInt(result.getString("Quantity")));
-					}
-					return quantity;
-				}
-			}
-		}
-	}
-	
 	
 }

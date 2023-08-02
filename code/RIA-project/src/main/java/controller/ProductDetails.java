@@ -85,7 +85,9 @@ public class ProductDetails extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("db error, click again");
 			return;
-		} catch (NullPointerException e) {
+		} 
+		
+		if(suppliers == null) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);//500
 			response.getWriter().println("no supplier match for the code");
 			return;

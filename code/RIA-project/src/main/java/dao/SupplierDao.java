@@ -45,52 +45,7 @@ public class SupplierDao {
 		}
 	}
 	
-	public CartSupplier infoCartSupplier(int prodCode, int supCode) throws SQLException{
-		String query = "Select Price, P.Name, S.Name \r\n"
-						+"from (product P join sold_by  on P.Code=ProdCode) join supplier S on S.Code=SupCode \r\n"
-						+"where P.Code = ? and S.Code=?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setString(1, String.valueOf(prodCode));
-			pstatement.setString(2, String.valueOf(supCode));
-			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) 
-					return null;           
-				else {
-					result.next();
-					CartSupplier cSup = new CartSupplier();
-					cSup.setCode(supCode);
-					cSup.setName(result.getString("S.Name"));
-					Product product = new Product();
-					cSup.setProduct(product);
-					product.setName(result.getString("P.Name"));
-					product.setCode(prodCode);
-					cSup.setTotalPrice(Float.parseFloat(result.getString("Price")));
-					product.setPrice(Float.parseFloat(result.getString("Price")));
-					product.setQuantity(1);
-					return cSup;
-				}
-			}
-		}
-	}
 	
-	public boolean isValidCode(int supCode) throws SQLException{ 
-		String query= "select count(*) from supplier where Code = ?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setString(1, String.valueOf(supCode) );
-			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) 
-					return false;           
-				else {
-					result.next();
-					if (result.getInt("count(*)") == 1) {
-						return true;
-					}else {
-						return false;
-					}
-				}
-			}
-		}
-	}
 	
 	public Float supplierFreeShipping(int supCode) throws SQLException{ 
 		String query= "select FreeShipping from supplier where Code = ?";

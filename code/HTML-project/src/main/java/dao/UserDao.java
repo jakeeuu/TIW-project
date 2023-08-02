@@ -35,20 +35,4 @@ public class UserDao {
 		}
 	}
 	
-	public String searchAddress(String mailUser)throws SQLException{
-		String query = "Select Address from user where Mail = ?";
-		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
-			pstatement.setString(1, mailUser);
-			try (ResultSet result = pstatement.executeQuery();) {
-				if (!result.isBeforeFirst()) 
-					return null;           
-				else {
-					result.next();
-					return result.getString("Address");
-						
-					
-				}
-			}
-		}
-	}
 }
