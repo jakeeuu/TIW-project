@@ -78,7 +78,7 @@
 			 * CART PAGE
 			 * 
 			 */
-			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"));
+			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"),this);
 			visualizeCartProduct.reset();
 			/**
 			 * 
@@ -860,10 +860,11 @@
 	}
 
 
-	function VisualizeCartProduct(alertIn, containerIn, bodyIn){
+	function VisualizeCartProduct(alertIn, containerIn, bodyIn, orchestratorIn){
 		this.alert = alertIn;
 		this.container = containerIn;
 		this.body = bodyIn;
+		this.orchestrator = orchestratorIn;
 
 		this.reset = function() {
 			this.container.style.visibility = "hidden";
