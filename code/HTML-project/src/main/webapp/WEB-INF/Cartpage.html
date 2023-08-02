@@ -38,8 +38,8 @@
 					<tr>
 		     			<td th:text="${cartSupplier.code}"></td>
 		     			<td th:text="${cartSupplier.name}"></td>
-		     			<td th:text="${cartSupplier.totalPrice}"></td>
-		     			<td th:text="${cartSupplier.shippingPrice}"></td>
+		     			<td><p><span th:text="${cartSupplier.totalPrice}"></span><span> $</span></p></td>
+		     			<td><p><span th:text="${cartSupplier.shippingPrice}"></span><span> $</span></p></td>
 		     			<td>
 			     			<form action="#" th:action="@{/CreateOrder}" method="POST">
 			     				<button type="submit" name="supplier_code" th:value="${cartSupplier.code} ">Order</button>
