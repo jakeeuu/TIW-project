@@ -1064,7 +1064,7 @@
 						let message = req.responseText;
 						if (req.status == 200) {
 							let orders = JSON.parse(req.responseText);
-							if (orders.length === 0) {
+							if (orders === null) {
 								let title = document.getElementById("orderTitle");
 								title.style.display = "block";
 								title.querySelector("#emptyTitleOrders").style.display = "block";

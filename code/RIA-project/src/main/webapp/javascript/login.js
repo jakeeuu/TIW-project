@@ -1,6 +1,7 @@
 (function() {
     document.getElementById("loginButton").addEventListener('click', (e) =>{
 		e.preventDefault();
+		sessionStorage.removeItem("cart");
 		var form = e.target.closest("form");
 
         if(form.checkValidity() === true){
