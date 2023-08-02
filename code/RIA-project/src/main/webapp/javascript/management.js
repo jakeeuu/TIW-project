@@ -78,7 +78,7 @@
 			 * CART PAGE
 			 * 
 			 */
-			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"),this);
+			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"), this);
 			visualizeCartProduct.reset();
 			/**
 			 * 
@@ -223,7 +223,7 @@
 		this.update = function(products){
 
 			let row, cell, img;
-			this.body.innerHTML=""; // cosa serve ?? svuota il contenuto della tabella ???
+			this.body.innerHTML="";
 
 			let self = this;
 
@@ -297,10 +297,6 @@
 								var message = req.responseText;
 								if (req.status == 200) {
 									let products = JSON.parse(req.responseText);
-									if (products.length == 0) {
-										self.alert.textContent = "You don't have any product to visualize";
-										return;
-									}
 									orchestrator.showResult(products);
 								}else if (req.status == 403) {
 									window.location.href = req.getResponseHeader("Location");
@@ -882,7 +878,7 @@
 			let title = document.getElementById("cartTitle");
 			title.style.display = "block";
 
-			if(cart !== null){
+			if(cart !== null && cart.length > 0){
 				cart.forEach(function(cs){
 
 					row = document.createElement("tr");
@@ -1005,7 +1001,7 @@
 			if(cart === null){
 				cart = [];
 			}
-			for(cartSupplier of cart){
+			for(var cartSupplier of cart){
 				if(cartSupplier.code === supplierCode){
 					break;
 				}
@@ -1017,15 +1013,18 @@
 						let message = req.responseText;
 						if (req.status == 200) {
 							let orders = JSON.parse(req.responseText);
-							console.log(orders);
 							if (orders.length == 0) {
-								self.alert.textContent = "You don't have any supplier to visualize";
+								let title = document.getElementById("orderTitle");
+								title.style.display = "block";
+								title.querySelector("#emptyTitleOrders").style.display = "block";
+								title.querySelector("#normalTitleOrders").style.display = "none";
 								return;
 							}
 							//tolgo cartSupplier da carrello
 							for(let i = 0; i < cart.length; i++){
 								if( cart[i].code === cartSupplier.code){
 									cart.splice(i,1);
+									sessionStorage.setItem("cart", JSON.stringify(cart));
 									break;
 								}
 							}
@@ -1064,15 +1063,13 @@
 						let message = req.responseText;
 						if (req.status == 200) {
 							let orders = JSON.parse(req.responseText);
-							let title = document.getElementById("orderTitle");
-							title.style.display = "block";
 							if (orders.length === 0) {
+								let title = document.getElementById("orderTitle");
+								title.style.display = "block";
 								title.querySelector("#emptyTitleOrders").style.display = "block";
 								title.querySelector("#normalTitleOrders").style.display = "none";
 								return;
 							}
-							title.querySelector("#emptyTitleOrders").style.display = "none";
-							title.querySelector("#normalTitleOrders").style.display = "block";
 							self.update(orders);
 						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");
@@ -1088,6 +1085,11 @@
 		this.update = function(orders){
 			var row, cell;
 			this.body.innerHTML="";
+			
+			let title = document.getElementById("orderTitle");
+			title.style.display = "block";
+			title.querySelector("#emptyTitleOrders").style.display = "none";
+			title.querySelector("#normalTitleOrders").style.display = "block";
 			
 			var self = this;
 			orders.forEach(function(order){
