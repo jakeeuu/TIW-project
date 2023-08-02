@@ -194,7 +194,8 @@
 		this.reset = function (){
 			this.container.style.visibility = "hidden";
 			document.getElementById("goToHome").setAttribute("class","");
-			document.getElementById("homeTitle").style.visibility = "hidden";
+			let title = document.getElementById("homeTitle");
+			title.style.display = "none";
 		}
 
 		this.show = function(){
@@ -205,7 +206,8 @@
 						var message = req.responseText;
 						if (req.status == 200) {
 							var products = JSON.parse(req.responseText);
-							document.getElementById("homeTitle").style.visibility = "visible";
+							let title = document.getElementById("homeTitle");
+							title.style.display = "block";
 							self.update(products); 
 						}else if(req.status == 403){
 							window.location.href = req.getResponseHeader("Location");
@@ -390,6 +392,7 @@
 								self.alert.textContent = "You don't have any supplier to visualize";
 								return;
 							}
+							self.alert.textContent = "";
 							self.updateSupplier(products, suppliers, productCode); 
 						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");
