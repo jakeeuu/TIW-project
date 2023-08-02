@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.sql.Date;
 
 import beans.Product;
@@ -108,7 +107,7 @@ public class ProductDao {
 			pstatement.setString(2, "%" + keyWord + "%");
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
-					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
+					return null;
 				else {
 					while(result.next()) {
 						Product product = new Product();

@@ -47,7 +47,7 @@ public class LoginChecker extends HttpFilter implements Filter {
 
 		HttpSession session = req.getSession();
 		if (session.isNew() || session.getAttribute("user") == null) {
-			res.setStatus(403);
+			res.setStatus(HttpServletResponse.SC_FORBIDDEN);//403
 			res.setHeader("Location", loginpath);
 			return;
 		}

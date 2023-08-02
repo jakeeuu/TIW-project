@@ -20,7 +20,7 @@ public class OrderDao {
 	public void insertOrder(String mailUser, String supName,float total, Date date, String address,int supCode) throws SQLException {
 		String query = "insert into orders (Code, MailUser, Supplier, Total, Date, Address, SupCode) values(?,?,?,?,?,?,?)";
 		try(PreparedStatement pstatement = connection.prepareStatement(query);){
-			pstatement.setString(1, null); //prova per l'autoincremento
+			pstatement.setString(1, null);
 			pstatement.setString(2, mailUser);
 			pstatement.setString(3, supName);
 			pstatement.setString(4, String.valueOf(total));

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -85,7 +84,7 @@ public class GoToHome extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);//200
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);   /// se non va provo con println anzichè write 
+		response.getWriter().write(json);
 	}
 
 	/**
