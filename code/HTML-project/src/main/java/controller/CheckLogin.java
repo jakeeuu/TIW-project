@@ -90,10 +90,8 @@ public class CheckLogin extends HttpServlet {
 			path = "/LoginPage.html";
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
-			if(request.getSession().getAttribute("cart") == null) {
-				ArrayList<CartSupplier> cart = new ArrayList<CartSupplier>();
-				request.getSession().setAttribute("cart", cart);
-			}
+			ArrayList<CartSupplier> cart = new ArrayList<CartSupplier>();
+			request.getSession().setAttribute("cart", cart);
 			
 			request.getSession().setAttribute("user", user);
 			path = servletContext.getContextPath() + "/GoToHome";
