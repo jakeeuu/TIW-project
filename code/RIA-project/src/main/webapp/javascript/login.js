@@ -12,10 +12,10 @@
 							sessionStorage.setItem("mail", message);
                 			window.location.href = "Market.html";
                 			break;
-              			case 400: // bad request
+              			case 400:
             				document.getElementById("error").textContent = message;
                 			break;
-              			case 500: // server error
+              			case 500:
             				document.getElementById("error").textContent = message;
                 			break;
                 	}

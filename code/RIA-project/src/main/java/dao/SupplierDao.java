@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import beans.CartSupplier;
-import beans.Product;
 import beans.Supplier;
 
 public class SupplierDao {
@@ -27,7 +25,7 @@ public class SupplierDao {
 			pstatement.setString(1, String.valueOf(code));
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
-					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
+					return null;
 				else {
 					while(result.next()) {
 						Supplier supplier = new Supplier();

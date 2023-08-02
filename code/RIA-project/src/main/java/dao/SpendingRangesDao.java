@@ -22,7 +22,7 @@ public class SpendingRangesDao {
 			pstatement.setString(1, String.valueOf(SupCode));
 			try (ResultSet result = pstatement.executeQuery();) {
 				if (!result.isBeforeFirst()) 
-					return null;           ///////////////////////SE LA QUERY NON PESCA NULLA DAL DB COSA FACCIO ???
+					return null;
 				else {
 					while(result.next()) {
 						SpendingRanges spendingrange = new SpendingRanges();

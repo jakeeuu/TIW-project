@@ -19,9 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import beans.CartSupplier;
@@ -72,12 +69,8 @@ public class CreateOrder extends HttpServlet {
         Gson gson = new Gson();
         
         try {
-        	System.out.println("questo è il mio json" + json);
         	cartSupplier = gson.fromJson(json, CartSupplier.class);
-        	System.out.println("ciaooooo : " + cartSupplier.getCode() + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName() + cartSupplier.getTotalPrice()+ cartSupplier.getShippingPrice());
-
-            //System.out.println(cartSupplier);
-            //System.out.println("ciaooooo : " + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName());
+            
             SupplierDao supplierDao = new SupplierDao(connection);
             ProductDao productDao = new ProductDao(connection);
             
@@ -182,17 +175,14 @@ public class CreateOrder extends HttpServlet {
     			return;
     		}
     		
-    		System.out.println("sono arrivata qui");
-    		System.out.println(request);
-    		System.out.println(response);
-    		
     		String path = "/GoToOrder";
     		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
     		dispatcher.forward(request, response);
     		
         } catch (JsonSyntaxException e) {
-        	System.out.println("abbiamo un errore"); // mettere come errore
-        	
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//400
+			response.getWriter().println("incorrect json");
+			return;
         }
         
         

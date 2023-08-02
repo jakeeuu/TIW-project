@@ -19,11 +19,9 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import beans.Order;
-import beans.Product;
 import beans.User;
 import dao.OrderDao;
 import dao.ProductDao;
-import dao.SupplierDao;
 import utils.ConnectionHandler;
 
 /**
