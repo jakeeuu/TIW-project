@@ -119,7 +119,7 @@
 		                if(res.status === 200){
 		                    sessionStorage.clear();
 		                    window.location.href = "LoginPage.html";
-			            }else if(res.status === 400){
+			            }else if(res.status === 403){
 			            	sessionStorage.clear();
 							window.location.href = res.getResponseHeader("location");
 			            }else{
@@ -164,10 +164,10 @@
 			document.getElementById("goToOrder").parentNode.setAttribute("class","active");
 			document.getElementById("orderPage").style.display = "block";
 			visualizeOrderProduct.update(orders);
-			//inserisco la visualizzazione dei titoli 
 		}
 
 		this.refresh = function(){
+			alert.textContent = "";
 			document.getElementById("goToHome").parentNode.setAttribute("class","");
 			document.getElementById("homePage").style.display = "none";
 			visualizeProduct.reset();
@@ -207,9 +207,11 @@
 							var products = JSON.parse(req.responseText);
 							document.getElementById("homeTitle").style.visibility = "visible";
 							self.update(products); 
-						}else if(req.status == 400){
+						}else if(req.status == 403){
 							window.location.href = req.getResponseHeader("Location");
                   			window.sessionStorage.removeItem('mail');
+						}else{
+							self.alert.textContent = message;
 						}
 					}
 
@@ -300,14 +302,11 @@
 										return;
 									}
 									orchestrator.showResult(products);
-								}
-								if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
+								}else if (req.status == 403) {
 									window.location.href = req.getResponseHeader("Location");
 									window.sessionStorage.removeItem('mail');
-								}
-								else if (req.status != 200) {
-									self.alert.textContent = "Error - some fields weren't completed correctly";
-									self.reset();
+								}else{
+									self.alert.textContent = message;
 								}
 							}
 						}
@@ -395,14 +394,11 @@
 								return;
 							}
 							self.updateSupplier(products, suppliers, productCode); 
-						}
-						if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
+						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");
 							window.sessionStorage.removeItem('mail');
-						}
-						else if (req.status != 200) {
-							self.alert.textContent = "Error - some fields weren't completed correctly";
-							self.reset();
+						}else{
+							self.alert.textContent = message;
 						}
 					}
 				}
@@ -1034,14 +1030,11 @@
 							}
 							/////quando mi arriva la risposta chiamo l'orchestrator che mi mostra la order page
 							self.orchestrator.showOrders(orders); 
-						}
-						if (req.status == 400) {
+						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");
 							window.sessionStorage.removeItem('mail');
-						}
-						else if (req.status != 200) {
-							self.alert.textContent = "Error - some fields weren't completed correctly";
-							self.reset();
+						}else{
+							self.alert.textContent = message;
 						}
 					}
 				},cartSupplier);
@@ -1080,14 +1073,11 @@
 							title.querySelector("#emptyTitleOrders").style.display = "none";
 							title.querySelector("#normalTitleOrders").style.display = "block";
 							self.update(orders);
-						}
-						if (req.status == 400) {//qual'è la differenza tra questo errore e quello sotto??
+						}else if (req.status == 403) {
 							window.location.href = req.getResponseHeader("Location");
 							window.sessionStorage.removeItem('mail');
-						}
-						else if (req.status != 200) {
-							self.alert.textContent = "Error - some fields weren't completed correctly";
-							self.reset();
+						}else{
+							self.alert.textContent = message;
 						}
 					}
 				}
