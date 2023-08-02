@@ -49,6 +49,8 @@ public class GoToOrder extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		String mail = user.getMail();
 		
+		System.out.println("ora sono in GotoOrder");
+		
 		OrderDao orderDao = new OrderDao(connection);
 		ProductDao productDao = new ProductDao(connection);
 		ArrayList<Order> orders = new ArrayList<Order>();

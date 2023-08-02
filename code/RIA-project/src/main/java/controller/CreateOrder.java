@@ -64,18 +64,17 @@ public class CreateOrder extends HttpServlet {
         String line;
         CartSupplier cartSupplier = null;
         while ((line = reader.readLine()) != null) {
-        	System.out.println(line + "\n");
             jsonBody.append(line);
         }
         reader.close();
         
         String json = jsonBody.toString();
-        System.out.println(json);
         Gson gson = new Gson();
         
         try {
+        	System.out.println("questo è il mio json" + json);
         	cartSupplier = gson.fromJson(json, CartSupplier.class);
-        	System.out.println("ciaooooo : " + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName());
+        	System.out.println("ciaooooo : " + cartSupplier.getCode() + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName() + cartSupplier.getTotalPrice()+ cartSupplier.getShippingPrice());
 
             //System.out.println(cartSupplier);
             //System.out.println("ciaooooo : " + cartSupplier.getName() + cartSupplier.getProducts().get(0).getName());
@@ -183,8 +182,11 @@ public class CreateOrder extends HttpServlet {
     			return;
     		}
     		
-    		String ctxpath = getServletContext().getContextPath();
-    		String path = ctxpath + "/GoToOrder";
+    		System.out.println("sono arrivata qui");
+    		System.out.println(request);
+    		System.out.println(response);
+    		
+    		String path = "/GoToOrder";
     		RequestDispatcher dispatcher = request.getRequestDispatcher(path);
     		dispatcher.forward(request, response);
     		
