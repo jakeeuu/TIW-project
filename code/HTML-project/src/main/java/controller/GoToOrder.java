@@ -95,13 +95,6 @@ public class GoToOrder extends HttpServlet {
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
 	
 	@Override
 	public void destroy() {
