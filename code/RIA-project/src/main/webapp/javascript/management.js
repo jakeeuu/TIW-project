@@ -80,6 +80,7 @@
 			 */
 			visualizeCartProduct = new VisualizeCartProduct(alert, document.getElementById("cartTable"),document.getElementById("cartBody"), this);
 			visualizeCartProduct.reset();
+			
 			/**
 			 * 
 			 * ORDER PAGE
@@ -87,6 +88,7 @@
 			 */
 			visualizeOrderProduct = new VisualizeOrderProduct(alert, document.getElementById("orderTable"),document.getElementById("orderBody"));
 			visualizeOrderProduct.reset();
+			
 			/**
 			 * 
 			 * LINK MENU
