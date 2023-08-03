@@ -47,11 +47,12 @@ public class GoToResults extends HttpServlet {
 		this.templateEngine.setTemplateResolver(templateResolver);
 		templateResolver.setSuffix(".html");
 	}
+	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		String keyWord = null;
 		String error = null;
@@ -95,14 +96,6 @@ public class GoToResults extends HttpServlet {
 		ctx.setVariable("products", products);
 		ctx.setVariable("keyWord", keyWord);
 		templateEngine.process(path, ctx, response.getWriter());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 
 	
