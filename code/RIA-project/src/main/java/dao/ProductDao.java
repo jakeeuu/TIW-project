@@ -23,7 +23,7 @@ public class ProductDao {
 		ArrayList<Product> products = new ArrayList<Product>();
 		String query = "SELECT ProdCode, Name, Description,Category,Photo \r\n"
 						+"FROM productVisualized PR \r\n"
-						+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where Date > PR.Date or (Date = PR.Date and Time > PR.TIME) and Mail = ?) \r\n"
+						+"WHERE Mail = ? and 4>= (select count(*) from Productvisualized where (Date > PR.Date or Date = PR.Date and Time > PR.TIME) and Mail = ?) \r\n"
 						+"Order by Date DESC , Time DESC";
 		try (PreparedStatement pstatement = connection.prepareStatement(query);) {
 			pstatement.setString(1, user.getMail());
