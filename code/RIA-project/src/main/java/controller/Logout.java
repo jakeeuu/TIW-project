@@ -36,12 +36,5 @@ public class Logout extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);//Code 200
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
 
 }

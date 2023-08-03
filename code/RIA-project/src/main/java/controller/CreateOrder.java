@@ -50,12 +50,11 @@ public class CreateOrder extends HttpServlet {
     public void init() throws ServletException {
 		connection = ConnectionHandler.getConnection(getServletContext());
 	}
-
+	
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 		StringBuilder jsonBody = new StringBuilder();
         String line;
@@ -184,17 +183,6 @@ public class CreateOrder extends HttpServlet {
 			response.getWriter().println("incorrect json");
 			return;
         }
-        
-        
-	}
-	
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
 	
 	@Override
