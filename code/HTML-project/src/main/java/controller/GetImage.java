@@ -50,13 +50,24 @@ public class GetImage extends HttpServlet {
 			return;
 		}
 		
-	
+		//Set headers for browser
 		response.setHeader("Content-Type", getServletContext().getMimeType(fileName));
 		response.setHeader("Content-Length", String.valueOf(file.length()));
+		
+		//inline     -> the user will watch the image immediately
+		//filename   -> used to indicate a fileName if the user wants to save the file
 		response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
 		
-		
+		//Copy the file to the output stream
 		Files.copy(file.toPath(), response.getOutputStream());	
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

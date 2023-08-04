@@ -11,7 +11,7 @@
 	display: flex;
   	justify-content: center;
   	align-items: center;
-  	flex-direction: column; 
+  	flex-direction: column; /* Imposta il layout in colonna */
   	height: 70vh;
 }
 
@@ -48,7 +48,7 @@ ul#menu li {
     width: 150px;
     height: 30px;
     margin: 2px;
-    float: left; 
+    float: left; /* elementi su singola riga */
 }
 ul#menu li a {
     color: #fff;
@@ -71,12 +71,12 @@ ul#menu li.active, ul#menu li:hover {
 }
 
 .image-cell {
-  width: 20%; 
+  width: 20%; /* Imposta la larghezza della colonna delle immagini al 30% della larghezza della tabella */
 }
 
 img {
-  width: 100%; 
-  height: auto; 
-  display: block; 
-  margin: 0 auto; 
+  width: 100%; /* Imposta la larghezza dell'immagine al 100% della larghezza della cella delle immagini */
+  height: auto; /* L'altezza verrà calcolata in modo proporzionale mantenendo l'aspetto originale */
+  display: block; /* Consente di centrare l'immagine orizzontalmente nella cella */
+  margin: 0 auto; /* Centra l'immagine orizzontalmente nella cella */
 }
